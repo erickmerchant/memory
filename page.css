@@ -1,0 +1,21 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font: inherit;
+	max-inline-size: 100%;
+}
+
+html {
+	block-size: 100%;
+	font-family: system-ui, sans-serif;
+	color-scheme: light;
+	font-size: 125%;
+}
+
+body {
+	min-block-size: 100%;
+	display: grid;
+	place-content: safe center;
+	container-type: inline-size;
+}
