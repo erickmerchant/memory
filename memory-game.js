@@ -1,12 +1,12 @@
 class MemoryGame extends HTMLElement {
 	connectedCallback() {
 		let characters = [
-			{text: "🐰", color: "var(--gray)"},
-			{text: "🐶", color: "var(--blue)"},
-			{text: "🐸", color: "var(--green)"},
-			{text: "🐱", color: "var(--yellow)"},
-			{text: "🦊", color: "var(--orange)"},
-			{text: "🐻", color: "var(--red)"},
+			{text: "🐰", color: "gray"},
+			{text: "🐶", color: "blue"},
+			{text: "🐸", color: "green"},
+			{text: "🐱", color: "yellow"},
+			{text: "🦊", color: "orange"},
+			{text: "🐻", color: "red"},
 		];
 
 		characters = characters
@@ -29,7 +29,7 @@ class MemoryGame extends HTMLElement {
 
 			back.append(character.text);
 
-			back.style.setProperty("--front-background", character.color);
+			back.style.setProperty("--front-background", `var(--${character.color}`);
 
 			faces.append(front, back);
 

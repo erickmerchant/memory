@@ -72,7 +72,7 @@ button {
 	inline-size: auto;
 	aspect-ratio: 5 / 7;
 	transform: rotateY(0deg);
-	transition: transform 1s;
+	transition: transform 0.75s;
 
 	&:where(:empty) {
 		&::before {
@@ -87,7 +87,7 @@ button {
 		inset-block-start: 0;
 		border-radius: 0.5rem;
 		box-shadow: 0 0 0.5cqmin 0 oklab(0 0 0 / 0.1);
-		transition: transform 1s;
+		transition: transform 0.75s;
 		transform-style: preserve-3d;
 		background: oklch(90% 0.2 300);
 		font-size: calc(45cqi / var(--columns));
