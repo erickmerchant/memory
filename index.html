@@ -5,6 +5,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Memory</title>
 		<link rel="stylesheet" href="./page.css" />
+		<script type="importmap">
+			{
+				"imports": {
+					"vanilla-kit": "./vendor/vanilla-kit/lib.js"
+				}
+			}
+		</script>
 		<script type="module" src="./memory-game.js"></script>
 	</head>
 	<body>
@@ -12,7 +19,7 @@
 			<template shadowrootmode="open">
 				<link rel="stylesheet" href="./memory-game.css" />
 
-				<div>
+				<memory-cards>
 					<button></button>
 					<button></button>
 					<button></button>
@@ -27,7 +34,7 @@
 					<button></button>
 					<button></button>
 					<button></button>
-				</div>
+				</memory-cards>
 			</template>
 		</memory-game>
 	</body>

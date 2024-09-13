@@ -1,5 +1,11 @@
+import {watch, $, html} from "vanilla-kit";
+
+let {div, span} = html;
+
 class MemoryGame extends HTMLElement {
 	connectedCallback() {
+		let state = watch({completed: false});
+
 		let characters = [
 			{text: "🐰", color: "gray"},
 			{text: "🐶", color: "blue"},
@@ -8,66 +14,83 @@ class MemoryGame extends HTMLElement {
 			{text: "🦊", color: "orange"},
 			{text: "🐻", color: "red"},
 		];
+		let incomplete = 6;
 
 		characters = characters
 			.concat(characters)
 			.map((character) => ({...character, order: Math.random()}))
-			.toSorted((a, b) => a.order - b.order);
+			.toSorted((a, b) => a.order - b.order)
+			.map((c) => watch({...c, locked: false, flipped: false}));
 
 		let shadow = this.shadowRoot;
 		let cards = shadow.querySelectorAll("button");
 
-		let firstCard = null;
+		let first = null;
 
-		for (let card of cards) {
-			let faces = document.createElement("div");
-			let front = document.createElement("span");
-			let back = document.createElement("span");
-			let character = characters.shift();
+		for (let i = 0; i < cards.length; i++) {
+			let card = cards[i];
+			let character = characters[i];
 
-			front.append("🦉");
+			$(card)
+				.on("click", () => {
+					let current = character;
 
-			back.append(character.text);
+					if (current.locked) return;
 
-			back.style.setProperty("--front-background", `var(--${character.color}`);
+					current.flipped = !current.flipped;
 
-			faces.append(front, back);
+					if (first) {
+						if (first === current) {
+							current.flipped = false;
+						} else {
+							first.locked = true;
+							current.locked = true;
 
-			card.append(faces);
+							if (first.text !== current.text) {
+								setTimeout(
+									(first, current) => {
+										first.flipped = false;
+										first.locked = false;
+										current.flipped = false;
+										current.locked = false;
+									},
+									1000,
+									first,
+									current
+								);
+							} else {
+								incomplete -= 1;
 
-			card.addEventListener("click", () => {
-				if (card.classList.contains("locked")) return;
-
-				card.classList.toggle("flipped");
-
-				let currentCard = card;
-
-				if (firstCard) {
-					if (firstCard === currentCard) {
-						firstCard.className = "";
-						currentCard.className = "";
-					} else {
-						firstCard.classList.toggle("locked", true);
-						currentCard.classList.toggle("locked", true);
-
-						if (firstCard.textContent !== currentCard.textContent) {
-							setTimeout(
-								(firstCard, currentCard) => {
-									firstCard.className = "";
-									currentCard.className = "";
-								},
-								1000,
-								firstCard,
-								currentCard
-							);
+								if (!incomplete) {
+									state.completed = true;
+								} else {
+									first.matched = true;
+									current.matched = true;
+								}
+							}
 						}
 					}
-				}
 
-				firstCard = firstCard ? null : currentCard;
-			});
+					first = first ? null : current;
+				})
+				.children(
+					div()
+						.classes("faces", {
+							matched: () => character.matched,
+							completed: () => state.completed,
+							flipped: () => character.flipped,
+						})
+						.children(
+							span().classes("front").children("🦉"),
+							span()
+								.classes("back")
+								.styles({"--front-background": `var(--${character.color}`})
+								.children(span().classes("text").children(character.text))
+						)
+				);
 		}
 	}
 }
 
 customElements.define("memory-game", MemoryGame);
+customElements.define("memory-cards", class extends HTMLElement {});
