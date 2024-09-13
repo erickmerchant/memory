@@ -73,14 +73,22 @@ button {
 	aspect-ratio: 5 / 7;
 
 	&:where(:empty) {
+		border-radius: 0.5rem;
+		box-shadow: 0 0 0.5cqmin 0 oklab(0 0 0 / 0.1);
+		background: oklch(90% 0.2 300);
+		font-size: calc(45cqi / var(--columns));
+		block-size: 100%;
+		inline-size: 100%;
+		display: block;
+		place-content: center;
+
 		&::before {
 			content: "🦉";
 		}
 	}
 }
 
-.faces,
-:where(button):empty::before {
+.faces {
 	position: absolute;
 	inset-inline-start: 0;
 	inset-block-start: 0;
