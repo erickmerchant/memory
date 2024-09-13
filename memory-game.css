@@ -7,80 +7,117 @@
 }
 
 :host {
-	max-inline-size: 100cqi !important;
-	padding: var(--gap) !important;
+	display: grid;
+	block-size: 100%;
+	inline-size: 100%;
+	container-type: inline-size;
+	place-content: safe center;
+
+	--gray: oklch(90% 0 0);
+	--purple: oklch(90% 0.2 300);
+	--blue: oklch(90% 0.2 210);
+	--green: oklch(90% 0.2 150);
+	--yellow: oklch(90% 0.2 90);
+	--orange: oklch(90% 0.2 60);
+	--red: oklch(90% 0.2 30);
+}
+
+:host > :where(div) {
+	max-inline-size: 100cqi;
+	padding: var(--gap);
 	display: grid;
 	place-content: safe center;
 	max-block-size: 100cqb;
 	gap: var(--gap);
 	grid-template-columns: repeat(var(--columns), 1fr);
-	aspect-ratio: 5 / 7;
-	container-type: inline-size;
 
-	--gap: 2cqmin;
-	--background: oklch(90% 0.4 100);
-	--foreground: oklab(100% 0 0);
+	--gap: 1.5cqmin;
+	--columns: 1;
 
-	@media (aspect-ratio > 5/7) {
-		block-size: 100cqb;
+	@media (aspect-ratio <= 10/42) {
+		inline-size: 100cqi;
+		aspect-ratio: 10/42;
+
+		--columns: 2;
 	}
 
-	@media (aspect-ratio <= 5/7) {
+	@media (aspect-ratio > 10/42) and (aspect-ratio <= 15/28) {
 		inline-size: 100cqi;
+		aspect-ratio: 15/28;
+
+		--columns: 3;
+	}
+
+	@media (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
+		block-size: 100cqb;
+		aspect-ratio: 20/21;
+
+		--columns: 4;
+	}
+
+	@media (aspect-ratio > 20/21) {
+		block-size: 100cqb;
+		aspect-ratio: 30/14;
+
+		--columns: 6;
 	}
 }
 
-memory-card {
+button {
+	appearance: none;
+	border: none;
+	background: transparent;
 	display: block;
 	position: relative;
 	inline-size: auto;
 	aspect-ratio: 5 / 7;
-	/* perspective: 22rem; */
+	transform: rotateY(0deg);
+	transition: transform 1s;
 
 	&:where(:empty) {
 		&::before {
-			display: block;
-			content: "";
+			content: "🦉";
 		}
 	}
 
-	> *,
+	:where(div),
 	&:where(:empty)::before {
 		position: absolute;
-		width: 100%;
-		height: 100%;
+		inset-inline-start: 0;
+		inset-block-start: 0;
 		border-radius: 0.5rem;
-		box-shadow: 0 0 1em oklab(0 0 0 / 0.1);
-		transition: transform 2s;
+		box-shadow: 0 0 0.5cqmin 0 oklab(0 0 0 / 0.1);
+		transition: transform 1s;
 		transform-style: preserve-3d;
-		background: var(--background);
-		color: var(--foreground);
-	}
-}
-
-.flipped {
-	transform: rotateY(180deg);
-	transition: transform 2s;
-}
-
-.side {
-	position: absolute;
-	height: 100%;
-	width: 100%;
-	border-radius: 0.5rem;
-	backface-visibility: hidden;
-	font-size: 2rem;
-	display: grid;
-	place-content: center;
-
-	&:where(:first-child) {
-		background: var(--background);
-		color: var(--foreground);
+		background: oklch(90% 0.2 300);
+		font-size: calc(45cqi / var(--columns));
+		block-size: 100%;
+		inline-size: 100%;
 	}
 
-	&:where(:last-child) {
+	:where(span) {
+		display: grid;
+		place-content: center;
+		position: absolute;
+		inset-inline-start: 0;
+		inset-block-start: 0;
+		block-size: 100%;
+		inline-size: 100%;
+		border-radius: 0.5rem;
+
+		&:where(:first-child) {
+			backface-visibility: hidden;
+			background: var(--purple);
+		}
+
+		&:where(:last-child) {
+			backface-visibility: hidden;
+			transform: rotateY(180deg);
+			background: var(--front-background);
+		}
+	}
+
+	&:where(.flipped) > * {
 		transform: rotateY(180deg);
-		background: var(--foreground);
-		color: var(--background);
 	}
 }

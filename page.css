@@ -16,6 +16,6 @@ html {
 body {
 	min-block-size: 100%;
 	display: grid;
+	grid-template-columns: 1fr;
 	place-content: safe center;
-	container-type: inline-size;
 }
