@@ -1,11 +1,5 @@
-import {watch, $, html} from "vanilla-kit";
-
-let {div, span} = html;
-
 class MemoryGame extends HTMLElement {
 	connectedCallback() {
-		let state = watch({completed: false});
-
 		let characters = [
 			{text: "🐰", color: "gray"},
 			{text: "🐶", color: "blue"},
@@ -19,75 +13,73 @@ class MemoryGame extends HTMLElement {
 		characters = characters
 			.concat(characters)
 			.map((character) => ({...character, order: Math.random()}))
-			.toSorted((a, b) => a.order - b.order)
-			.map((c) => watch({...c, locked: false, flipped: false}));
+			.toSorted((a, b) => a.order - b.order);
 
 		let shadow = this.shadowRoot;
-		let cards = shadow.querySelectorAll("button");
+		let cards = shadow.querySelector("memory-cards");
 
-		let first = null;
+		let previous = null;
 
-		for (let i = 0; i < cards.length; i++) {
-			let card = cards[i];
-			let character = characters[i];
+		for (let current of cards.querySelectorAll("button")) {
+			let character = characters.shift();
 
-			$(card)
-				.on("click", () => {
-					let current = character;
+			current.addEventListener("click", () => {
+				if (current.classList.contains("locked")) return;
 
-					if (current.locked) return;
+				current.classList.toggle("flipped");
 
-					current.flipped = !current.flipped;
+				if (previous) {
+					if (previous === current) {
+						current.classList.remove("flipped");
+					} else {
+						previous.classList.add("locked");
+						current.classList.add("locked");
 
-					if (first) {
-						if (first === current) {
-							current.flipped = false;
+						if (previous.textContent !== current.textContent) {
+							setTimeout(
+								(previous, current) => {
+									previous.classList.remove("flipped");
+									previous.classList.remove("locked");
+									current.classList.remove("flipped");
+									current.classList.remove("locked");
+								},
+								1000,
+								previous,
+								current
+							);
 						} else {
-							first.locked = true;
-							current.locked = true;
+							incomplete -= 1;
 
-							if (first.text !== current.text) {
-								setTimeout(
-									(first, current) => {
-										first.flipped = false;
-										first.locked = false;
-										current.flipped = false;
-										current.locked = false;
-									},
-									1000,
-									first,
-									current
-								);
+							if (!incomplete) {
+								cards.classList.add("completed");
 							} else {
-								incomplete -= 1;
-
-								if (!incomplete) {
-									state.completed = true;
-								} else {
-									first.matched = true;
-									current.matched = true;
-								}
+								previous.classList.add("matched");
+								current.classList.add("matched");
 							}
 						}
 					}
+				}
 
-					first = first ? null : current;
-				})
-				.children(
-					div()
-						.classes("faces", {
-							matched: () => character.matched,
-							completed: () => state.completed,
-							flipped: () => character.flipped,
-						})
-						.children(
-							span().classes("front").children("🦉"),
-							span()
-								.classes("back")
-								.styles({"--front-background": `var(--${character.color}`})
-								.children(span().classes("text").children(character.text))
-						)
-				);
+				previous = previous ? null : current;
+			});
+
+			let faces = document.createElement("div");
+			let front = document.createElement("span");
+			let back = document.createElement("span");
+			let text = document.createElement("span");
+
+			faces.className = "faces";
+			front.className = "front";
+			back.className = "back";
+			text.className = "text";
+
+			back.style.setProperty("--front-background", `var(--${character.color}`);
+
+			front.append("🦉");
+			text.append(character.text);
+			back.append(text);
+			faces.append(front, back);
+			current.append(faces);
 		}
 	}
 }

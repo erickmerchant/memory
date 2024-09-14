@@ -98,28 +98,25 @@ button {
 	font-size: calc(45cqi / var(--columns));
 	block-size: 100%;
 	inline-size: 100%;
-}
-
-.faces {
 	transform-style: preserve-3d;
 	transform: rotateY(0deg);
 	transition-duration: 0.25s;
 	transition-property: transform;
 	transition-timing-function: linear;
-}
 
-.flipped {
-	transform: rotateY(180deg);
-}
+	:where(.flipped) & {
+		transform: rotateY(180deg);
+	}
 
-.matched {
-	transform: rotateY(540deg);
-	transition-duration: 0.75s;
-}
+	:where(.matched) & {
+		transform: rotateY(540deg);
+		transition-duration: 0.75s;
+	}
 
-.completed {
-	transform: rotateY(1260deg);
-	transition-duration: 1.75s;
+	:where(.completed) & {
+		transform: rotateY(1260deg);
+		transition-duration: 1.75s;
+	}
 }
 
 .front,

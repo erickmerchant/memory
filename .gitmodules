@@ -1,3 +1,0 @@
-[submodule "vendor/vanilla-kit"]
-	path = vendor/vanilla-kit
-	url = git@github.com:erickmerchant/vanilla-kit.git
