@@ -11,7 +11,7 @@
 	display: grid;
 	block-size: 100%;
 	inline-size: 100%;
-	container-type: inline-size;
+	container-type: size;
 	place-content: safe center;
 
 	--gray: oklch(90% 0 0);
@@ -35,28 +35,28 @@ memory-cards {
 	--gap: 1.5cqmin;
 	--columns: 1;
 
-	@media (aspect-ratio <= 10/42) {
+	@container (aspect-ratio <= 10/42) {
 		inline-size: 100cqi;
 		aspect-ratio: 10/42;
 
 		--columns: 2;
 	}
 
-	@media (aspect-ratio > 10/42) and (aspect-ratio <= 15/28) {
+	@container (aspect-ratio > 10/42) and (aspect-ratio <= 15/28) {
 		inline-size: 100cqi;
 		aspect-ratio: 15/28;
 
 		--columns: 3;
 	}
 
-	@media (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
+	@container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
 		block-size: 100cqb;
 		aspect-ratio: 20/21;
 
 		--columns: 4;
 	}
 
-	@media (aspect-ratio > 20/21) {
+	@container (aspect-ratio > 20/21) {
 		block-size: 100cqb;
 		aspect-ratio: 30/14;
 
@@ -101,7 +101,7 @@ button {
 	inline-size: 100%;
 	transform-style: preserve-3d;
 	transform: rotateY(0deg);
-	transition-duration: 0.25s;
+	transition-duration: 0.2s;
 	transition-property: transform;
 	transition-timing-function: linear;
 
@@ -111,12 +111,12 @@ button {
 
 	:where(.matched) & {
 		transform: rotateY(540deg);
-		transition-duration: 0.75s;
+		transition-duration: 0.4s;
 	}
 
 	:where(.completed) & {
-		transform: rotateY(1260deg);
-		transition-duration: 1.75s;
+		transform: rotateY(900deg);
+		transition-duration: 0.4s;
 	}
 }
 
