@@ -67,7 +67,7 @@ memory-cards {
 button {
 	appearance: none;
 	border: none;
-	background: transparent;
+	border-radius: 0.5rem;
 	display: block;
 	position: relative;
 	inline-size: auto;
@@ -111,12 +111,12 @@ button {
 
 	:where(.matched) & {
 		transform: rotateY(540deg);
-		transition-duration: 0.4s;
+		transition-duration: 0.6s;
 	}
 
 	:where(.completed) & {
-		transform: rotateY(900deg);
-		transition-duration: 0.4s;
+		transform: rotateY(1620deg);
+		transition-duration: 1.8s;
 	}
 }
 
