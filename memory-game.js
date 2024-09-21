@@ -1,5 +1,6 @@
 class MemoryGame extends HTMLElement {
 	#incomplete = 0;
+	#locked = new Set();
 
 	connectedCallback() {
 		let characters = [
@@ -25,54 +26,61 @@ class MemoryGame extends HTMLElement {
 
 		for (let current of cards.querySelectorAll("button")) {
 			let character = characters.shift();
-			let faces = document.createElement("div");
 			let front = document.createElement("span");
-			let back = document.createElement("span");
+
+			front.className = "front";
+			front.append("🦉");
+
 			let text = document.createElement("span");
 
+			text.className = "text";
+			text.append(character.text);
+
+			let back = document.createElement("span");
+
+			back.className = "back";
+			back.style.setProperty("--back-background", `var(--${character.color}`);
+			back.append(text);
+
+			let faces = document.createElement("div");
+
+			faces.className = "faces";
+			faces.append(front, back);
+
+			current.append(faces);
 			current.addEventListener("click", () => {
-				if (current.classList.contains("locked")) return;
+				current.classList.add("clicked");
+
+				if (this.#locked.has(current)) return;
 
 				current.classList.toggle("flipped", previous !== current);
 
 				if (previous && previous !== current) {
 					faces.addEventListener(
-						"transitionend",
-						this.#getTransitionEnd(current, previous, cards),
+						"animationend",
+						this.#getAnimationEnd(current, previous, cards),
 						{once: true, capture: true}
 					);
 				}
 
 				previous = previous ? null : current;
 			});
-
-			faces.className = "faces";
-			front.className = "front";
-			back.className = "back";
-			text.className = "text";
-
-			back.style.setProperty("--back-background", `var(--${character.color}`);
-
-			front.append("🦉");
-			text.append(character.text);
-			back.append(text);
-			faces.append(front, back);
-			current.append(faces);
 		}
 	}
 
-	#getTransitionEnd(current, previous, cards) {
+	#getAnimationEnd(current, previous, cards) {
 		return () => {
-			previous.classList.add("locked");
-			current.classList.add("locked");
+			this.#locked.add(current);
+			this.#locked.add(previous);
 
 			if (previous.textContent !== current.textContent) {
 				setTimeout(
 					(previous, current) => {
+						this.#locked.delete(current);
+						this.#locked.delete(previous);
+
 						previous.classList.remove("flipped");
-						previous.classList.remove("locked");
 						current.classList.remove("flipped");
-						current.classList.remove("locked");
 					},
 					1000,
 					previous,
@@ -86,7 +94,7 @@ class MemoryGame extends HTMLElement {
 
 				if (!this.#incomplete) {
 					cards.addEventListener(
-						"transitionend",
+						"animationend",
 						() => {
 							cards.classList.add("completed");
 						},

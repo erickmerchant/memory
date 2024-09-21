@@ -1,3 +1,59 @@
+@keyframes clicked {
+	0% {
+		transform: rotateY(180deg) scale(1);
+	}
+
+	50% {
+		transform: rotateY(90deg) scale(1.03125);
+	}
+
+	100% {
+		transform: rotateY(0deg) scale(1);
+	}
+}
+
+@keyframes flipped {
+	0% {
+		transform: rotateY(0deg) scale(1);
+	}
+
+	50% {
+		transform: rotateY(90deg) scale(1.03125);
+	}
+
+	100% {
+		transform: rotateY(180deg) scale(1);
+	}
+}
+
+@keyframes matched {
+	0% {
+		transform: rotateY(180deg) scale(1);
+	}
+
+	50% {
+		transform: rotateY(360deg) scale(1.03125);
+	}
+
+	100% {
+		transform: rotateY(540deg) scale(1);
+	}
+}
+
+@keyframes completed {
+	0% {
+		transform: rotateY(540deg) scale(1);
+	}
+
+	50% {
+		transform: rotateY(1080deg) scale(1.03125);
+	}
+
+	100% {
+		transform: rotateY(1620deg) scale(1);
+	}
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -100,23 +156,27 @@ button {
 	block-size: 100%;
 	inline-size: 100%;
 	transform-style: preserve-3d;
-	transform: rotateY(0deg);
-	transition-duration: 0.2s;
-	transition-property: transform;
-	transition-timing-function: linear;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+
+	:where(.clicked) & {
+		animation-name: clicked;
+		animation-duration: 0.2s;
+	}
 
 	:where(.flipped) & {
-		transform: rotateY(180deg);
+		animation-name: flipped;
+		animation-duration: 0.2s;
 	}
 
 	:where(.matched) & {
-		transform: rotateY(540deg);
-		transition-duration: 0.6s;
+		animation-name: matched;
+		animation-duration: 0.6s;
 	}
 
 	:where(.completed) & {
-		transform: rotateY(1620deg);
-		transition-duration: 1.8s;
+		animation-name: completed;
+		animation-duration: 1.8s;
 	}
 }
 
