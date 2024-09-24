@@ -69,19 +69,11 @@
 	inline-size: 100%;
 	container-type: size;
 	place-content: safe center;
-
-	--gray: oklch(90% 0 0);
-	--purple: oklch(90% 0.2 300);
-	--blue: oklch(90% 0.2 210);
-	--green: oklch(90% 0.2 150);
-	--yellow: oklch(90% 0.2 90);
-	--orange: oklch(90% 0.2 60);
-	--red: oklch(90% 0.2 30);
 }
 
 memory-cards {
 	max-inline-size: 100cqi;
-	padding: var(--gap);
+	padding-block: var(--gap);
 	display: grid;
 	place-content: safe center;
 	max-block-size: 100cqb;

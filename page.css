@@ -12,10 +12,34 @@ html {
 	font-family: system-ui, sans-serif;
 	color-scheme: light;
 	font-size: 125%;
+
+	--gray: oklch(90% 0 0);
+	--purple: oklch(90% 0.225 300);
+	--blue: oklch(90% 0.225 210);
+	--green: oklch(90% 0.225 150);
+	--yellow: oklch(90% 0.225 90);
+	--orange: oklch(90% 0.225 60);
+	--red: oklch(90% 0.225 30);
 }
 
 body {
 	min-block-size: 100%;
 	display: grid;
 	grid-template-columns: 1fr;
+	grid-template-rows: min-content auto 3rem;
+	padding: 1.5vmin;
+	font-family: ui-rounded, "Hiragino Maru Gothic ProN", Quicksand, Comfortaa,
+		Manjari, "Arial Rounded MT", "Arial Rounded MT Bold", Calibri,
+		source-sans-pro, sans-serif;
+}
+
+h1 {
+	font-weight: 900;
+	font-size: 1.5rem;
+}
+
+h1,
+p {
+	color: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
+	-webkit-text-stroke: 1px color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
 }
