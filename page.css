@@ -26,20 +26,10 @@ body {
 	min-block-size: 100%;
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: min-content auto 3rem;
+	grid-template-rows: auto 3rem;
 	padding: 1.5vmin;
-	font-family: ui-rounded, "Hiragino Maru Gothic ProN", Quicksand, Comfortaa,
-		Manjari, "Arial Rounded MT", "Arial Rounded MT Bold", Calibri,
-		source-sans-pro, sans-serif;
-}
-
-h1 {
-	font-weight: 900;
-	font-size: 1.5rem;
-}
-
-h1,
-p {
-	color: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
-	-webkit-text-stroke: 1px color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+	background-color: oklch(100% 0.025 150);
+	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><text x="50%" y="50%" text-anchor="middle" font-size="10" style="filter: grayscale(100%);">🌲</text></svg>');
+	background-size: 6rem 4rem;
+	background-repeat: round space;
 }
