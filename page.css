@@ -4,7 +4,7 @@
 	padding: 0;
 	font: inherit;
 	max-inline-size: 100%;
-	touch-action: manipulation;
+	touch-action: none;
 }
 
 html {
@@ -28,8 +28,5 @@ body {
 	grid-template-columns: 1fr;
 	grid-template-rows: auto 3rem;
 	padding: 1.5vmin;
-	background-color: oklch(100% 0.025 150);
-	background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"><text x="50%" y="50%" text-anchor="middle" font-size="10" style="filter: grayscale(100%);">🌲</text></svg>');
-	background-size: 6rem 4rem;
-	background-repeat: round space;
+	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
 }
