@@ -14,12 +14,12 @@ html {
 	font-size: 125%;
 
 	--gray: oklch(90% 0 0);
-	--purple: oklch(90% 0.225 300);
-	--blue: oklch(90% 0.225 210);
-	--green: oklch(90% 0.225 150);
-	--yellow: oklch(90% 0.225 90);
-	--orange: oklch(90% 0.225 60);
-	--red: oklch(90% 0.225 30);
+	--purple: oklch(90% 0.15 300);
+	--blue: oklch(90% 0.15 210);
+	--green: oklch(90% 0.15 150);
+	--yellow: oklch(90% 0.15 90);
+	--orange: oklch(90% 0.15 60);
+	--red: oklch(90% 0.15 30);
 }
 
 body {
