@@ -19,6 +19,7 @@ button {
 	padding: 0.5rem;
 	background: var(--purple);
 	color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+	box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
 	border-radius: 0.5rem;
 }
 

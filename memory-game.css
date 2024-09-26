@@ -125,7 +125,7 @@ button {
 	&:where(:empty) {
 		border-radius: 0.5rem;
 		box-shadow: 0 0 0.5cqmin 0
-			color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+			color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
 		background: var(--purple);
 		font-size: calc(45cqi / var(--columns));
 		block-size: 100%;
@@ -153,17 +153,17 @@ button {
 
 	:where(.clicked) & {
 		animation-name: clicked;
-		animation-duration: 0.4s;
+		animation-duration: 0.2s;
 	}
 
 	:where(.flipped) & {
 		animation-name: flipped;
-		animation-duration: 0.4s;
+		animation-duration: 0.2s;
 	}
 
 	:where(.matched) & {
 		animation-name: matched;
-		animation-duration: 1.2s;
+		animation-duration: 0.6s;
 	}
 
 	:where(.completed) & {
@@ -189,7 +189,7 @@ button {
 .front {
 	backface-visibility: hidden;
 	background: var(--purple);
-	box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+	box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
 }
 
 .back {
@@ -197,5 +197,5 @@ button {
 	transform: rotateY(180deg);
 	background: var(--back-background);
 	box-shadow: 0 0 0.5cqmin 0
-		color-mix(in lch, var(--back-background), oklch(0% 0 0) 50%);
+		color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%);
 }
