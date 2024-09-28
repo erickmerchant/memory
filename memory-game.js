@@ -48,62 +48,71 @@ class MemoryGame extends HTMLElement {
 		}
 	}
 
-	handleEvent(e) {
-		if (e.type === "click") {
-			let current = e.currentTarget;
-			let faces = current.querySelector(".faces");
+	toggleCard(current) {
+		let faces = current.querySelector(".faces");
 
-			current.classList.add("clicked");
+		current.classList.add("clicked");
 
-			if (this.#locked.has(current)) return;
+		if (this.#locked.has(current)) return;
 
-			current.classList.toggle("flipped", this.#previous !== current);
+		current.classList.toggle("flipped", this.#previous !== current);
 
-			if (this.#previous && this.#previous !== current) {
-				faces.addEventListener("animationend", this, {
+		if (this.#previous && this.#previous !== current) {
+			faces.addEventListener("animationend", this, {
+				once: true,
+				capture: true,
+			});
+		} else {
+			this.#previous = current;
+		}
+	}
+
+	resolvePair(current) {
+		this.#locked.add(current);
+		this.#locked.add(this.#previous);
+
+		if (this.#previous.textContent !== current.textContent) {
+			setTimeout(
+				(previous, current) => {
+					this.#locked.delete(current);
+					this.#locked.delete(previous);
+
+					previous.classList.remove("flipped");
+					current.classList.remove("flipped");
+				},
+				1000,
+				this.#previous,
+				current
+			);
+		} else {
+			this.#incomplete -= 1;
+
+			this.#previous.classList.add("matched");
+			current.classList.add("matched");
+
+			if (!this.#incomplete) {
+				this.addEventListener("animationend", this, {
 					once: true,
 					capture: true,
 				});
-			} else {
-				this.#previous = current;
 			}
+		}
+
+		this.#previous = null;
+	}
+
+	handleEvent(e) {
+		if (e.type === "click") {
+			let current = e.currentTarget;
+
+			this.toggleCard(current);
 		}
 
 		if (e.type === "animationend") {
 			let current = e.currentTarget.closest("button");
 
 			if (current) {
-				this.#locked.add(current);
-				this.#locked.add(this.#previous);
-
-				if (this.#previous.textContent !== current.textContent) {
-					setTimeout(
-						(previous, current) => {
-							this.#locked.delete(current);
-							this.#locked.delete(previous);
-
-							previous.classList.remove("flipped");
-							current.classList.remove("flipped");
-						},
-						1000,
-						this.#previous,
-						current
-					);
-				} else {
-					this.#incomplete -= 1;
-
-					this.#previous.classList.add("matched");
-					current.classList.add("matched");
-
-					if (!this.#incomplete) {
-						this.addEventListener("animationend", this, {
-							once: true,
-							capture: true,
-						});
-					}
-				}
-
-				this.#previous = null;
+				this.resolvePair(current);
 			} else {
 				this.classList.add("completed");
 			}
