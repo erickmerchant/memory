@@ -1,6 +1,7 @@
 class MemoryGame extends HTMLElement {
 	#incomplete = 0;
 	#locked = new Set();
+	#previous;
 
 	connectedCallback() {
 		let characters = [
@@ -19,12 +20,7 @@ class MemoryGame extends HTMLElement {
 			.map((character) => ({...character, order: Math.random()}))
 			.toSorted((a, b) => a.order - b.order);
 
-		let shadow = this.shadowRoot;
-		let cards = shadow.querySelector("memory-cards");
-
-		let previous = null;
-
-		for (let current of cards.querySelectorAll("button")) {
+		for (let current of this.querySelectorAll("button")) {
 			let character = characters.shift();
 			let front = document.createElement("span");
 
@@ -48,63 +44,71 @@ class MemoryGame extends HTMLElement {
 			faces.append(front, back);
 
 			current.append(faces);
-			current.addEventListener("click", () => {
-				current.classList.add("clicked");
-
-				if (this.#locked.has(current)) return;
-
-				current.classList.toggle("flipped", previous !== current);
-
-				if (previous && previous !== current) {
-					faces.addEventListener(
-						"animationend",
-						this.#getAnimationEnd(current, previous, cards),
-						{once: true, capture: true}
-					);
-				}
-
-				previous = previous ? null : current;
-			});
+			current.addEventListener("click", this);
 		}
 	}
 
-	#getAnimationEnd(current, previous, cards) {
-		return () => {
-			this.#locked.add(current);
-			this.#locked.add(previous);
+	handleEvent(e) {
+		if (e.type === "click") {
+			let current = e.currentTarget;
+			let faces = current.querySelector(".faces");
 
-			if (previous.textContent !== current.textContent) {
-				setTimeout(
-					(previous, current) => {
-						this.#locked.delete(current);
-						this.#locked.delete(previous);
+			current.classList.add("clicked");
 
-						previous.classList.remove("flipped");
-						current.classList.remove("flipped");
-					},
-					1000,
-					previous,
-					current
-				);
+			if (this.#locked.has(current)) return;
+
+			current.classList.toggle("flipped", this.#previous !== current);
+
+			if (this.#previous && this.#previous !== current) {
+				faces.addEventListener("animationend", this, {
+					once: true,
+					capture: true,
+				});
 			} else {
-				this.#incomplete -= 1;
-
-				previous.classList.add("matched");
-				current.classList.add("matched");
-
-				if (!this.#incomplete) {
-					cards.addEventListener(
-						"animationend",
-						() => {
-							cards.classList.add("completed");
-						},
-						{once: true, capture: true}
-					);
-				}
+				this.#previous = current;
 			}
-		};
+		}
+
+		if (e.type === "animationend") {
+			let current = e.currentTarget.closest("button");
+
+			if (current) {
+				this.#locked.add(current);
+				this.#locked.add(this.#previous);
+
+				if (this.#previous.textContent !== current.textContent) {
+					setTimeout(
+						(previous, current) => {
+							this.#locked.delete(current);
+							this.#locked.delete(previous);
+
+							previous.classList.remove("flipped");
+							current.classList.remove("flipped");
+						},
+						1000,
+						this.#previous,
+						current
+					);
+				} else {
+					this.#incomplete -= 1;
+
+					this.#previous.classList.add("matched");
+					current.classList.add("matched");
+
+					if (!this.#incomplete) {
+						this.addEventListener("animationend", this, {
+							once: true,
+							capture: true,
+						});
+					}
+				}
+
+				this.#previous = null;
+			} else {
+				this.classList.add("completed");
+			}
+		}
 	}
 }
 
 customElements.define("memory-game", MemoryGame);
-customElements.define("memory-cards", class extends HTMLElement {});

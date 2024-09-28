@@ -71,7 +71,7 @@
 	place-content: safe center;
 }
 
-memory-cards {
+memory-game {
 	max-inline-size: 100cqi;
 	padding-block: var(--gap);
 	display: grid;

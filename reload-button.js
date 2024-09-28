@@ -1,8 +1,10 @@
 class ReloadButton extends HTMLElement {
 	connectedCallback() {
-		this.shadowRoot.querySelector("button").addEventListener("click", () => {
-			window.location.reload();
-		});
+		this.addEventListener("click", this);
+	}
+
+	handleEvent() {
+		window.location.reload();
 	}
 }
 
