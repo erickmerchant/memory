@@ -199,3 +199,38 @@ button {
 	box-shadow: 0 0 0.5cqmin 0
 		color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%);
 }
+
+#reload:where([open]) {
+	border: none;
+	display: grid;
+	place-content: center;
+	background: color-mix(in lch, var(--purple), oklch(100% 0 0) 25%);
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	position: absolute;
+	margin: auto;
+
+	&::backdrop {
+		background-color: color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.5) 75%);
+	}
+
+	button {
+		display: flex;
+		appearance: none;
+		border: none;
+		padding: 0.5rem;
+		background: var(--purple);
+		color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+		box-shadow: 0 0 0.5cqmin 0
+			color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
+		border-radius: 0.5rem;
+		aspect-ratio: 1;
+	}
+
+	svg {
+		block-size: 2rem;
+		fill: currentColor;
+		stroke: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
+		stroke-width: 1px;
+	}
+}

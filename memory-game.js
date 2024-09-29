@@ -16,7 +16,7 @@ class MemoryGame extends HTMLElement {
 			.map((character) => ({...character, order: Math.random()}))
 			.toSorted((a, b) => a.order - b.order);
 
-		for (let current of this.querySelectorAll("button")) {
+		for (let current of this.querySelectorAll(":scope > button")) {
 			let character = characters.shift();
 			let front = document.createElement("span");
 
@@ -70,7 +70,7 @@ class MemoryGame extends HTMLElement {
 						setTimeout(() => {
 							previous.classList.remove("flipped");
 							current.classList.remove("flipped");
-						}, 1000);
+						}, 1_000);
 					} else {
 						this.#incomplete -= 1;
 
@@ -82,6 +82,22 @@ class MemoryGame extends HTMLElement {
 								"animationend",
 								() => {
 									this.classList.add("completed");
+
+									setTimeout(() => {
+										let reload = this.querySelector("#reload");
+
+										if (reload) {
+											reload.showModal();
+
+											reload.querySelector("button")?.addEventListener(
+												"click",
+												() => {
+													window.location.reload();
+												},
+												{once: true}
+											);
+										}
+									}, 5_000);
 								},
 								{
 									once: true,
