@@ -54,7 +54,7 @@ class MemoryGame extends HTMLElement {
 		let flipped = current.className === "flipped";
 
 		if (flipped) {
-			current.className = "unflipped";
+			current.className = "covered";
 
 			if (this.#previous === current) {
 				this.#previous = null;
@@ -69,8 +69,8 @@ class MemoryGame extends HTMLElement {
 				"animationend",
 				(e) => {
 					if (!matched) {
-						current.className = "unflipped";
-						previous.className = "unflipped";
+						current.className = "covered";
+						previous.className = "covered";
 					} else {
 						this.#incomplete -= 1;
 
@@ -83,21 +83,19 @@ class MemoryGame extends HTMLElement {
 								() => {
 									this.className = "completed";
 
-									setTimeout(() => {
-										let reload = this.querySelector("dialog");
+									let reload = this.querySelector("dialog");
 
-										if (reload) {
-											reload.showModal();
+									if (reload) {
+										reload.showModal();
 
-											reload.querySelector("button")?.addEventListener?.(
-												"click",
-												() => {
-													window.location.reload();
-												},
-												{once: true}
-											);
-										}
-									}, 5_000);
+										reload.querySelector("button")?.addEventListener?.(
+											"click",
+											() => {
+												window.location.reload();
+											},
+											{once: true}
+										);
+									}
 								},
 								{
 									once: true,

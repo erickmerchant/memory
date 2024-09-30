@@ -1,4 +1,24 @@
-@keyframes unflipped {
+@keyframes backdrop {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes dialog {
+	0% {
+		scale: 0;
+	}
+
+	100% {
+		scale: 1;
+	}
+}
+
+@keyframes covered {
 	0% {
 		transform: rotateY(180deg) scale(1);
 	}
@@ -148,13 +168,27 @@ dialog:where([open]) {
 	border-radius: 0.5rem;
 	position: absolute;
 	margin: auto;
+	scale: 0;
+	animation-name: dialog;
+	animation-duration: 0.5s;
+	animation-delay: 5s;
+	animation-fill-mode: forwards;
 
 	&::backdrop {
+		opacity: 0;
+		animation-name: backdrop;
+		animation-duration: 0.5s;
+		animation-delay: 5s;
+		animation-fill-mode: forwards;
 		background-color: color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.5) 75%);
 	}
 
 	:where(button) {
+		font-size: 2.25rem;
+		font-weight: 900;
 		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 		appearance: none;
 		border: none;
 		padding: 0.5rem;
@@ -163,7 +197,7 @@ dialog:where([open]) {
 		box-shadow: 0 0 0.5cqmin 0
 			color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
 		border-radius: 0.5rem;
-		aspect-ratio: 1;
+		aspect-ratio: unset;
 	}
 
 	:where(svg) {
@@ -186,9 +220,9 @@ dialog:where([open]) {
 	animation-timing-function: linear;
 	animation-fill-mode: forwards;
 
-	:where(.unflipped) & {
+	:where(.covered) & {
 		transform: rotateY(180deg) scale(1);
-		animation-name: unflipped;
+		animation-name: covered;
 		animation-duration: 0.2s;
 		animation-delay: 1s;
 	}
