@@ -89,7 +89,7 @@ class MemoryGame extends HTMLElement {
 										if (reload) {
 											reload.showModal();
 
-											reload.querySelector("button")?.addEventListener(
+											reload.querySelector("button")?.addEventListener?.(
 												"click",
 												() => {
 													window.location.reload();

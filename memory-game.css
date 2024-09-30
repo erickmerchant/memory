@@ -214,7 +214,7 @@ button {
 		background-color: color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.5) 75%);
 	}
 
-	button {
+	:where(button) {
 		display: flex;
 		appearance: none;
 		border: none;
@@ -227,7 +227,7 @@ button {
 		aspect-ratio: 1;
 	}
 
-	svg {
+	:where(svg) {
 		block-size: 2rem;
 		fill: currentColor;
 		stroke: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
