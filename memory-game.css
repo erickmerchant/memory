@@ -1,4 +1,4 @@
-@keyframes clicked {
+@keyframes unflipped {
 	0% {
 		transform: rotateY(180deg) scale(1);
 	}
@@ -139,68 +139,7 @@ button {
 	}
 }
 
-.faces {
-	position: absolute;
-	inset-inline-start: 0;
-	inset-block-start: 0;
-	border-radius: 0.5rem;
-	font-size: calc(45cqi / var(--columns));
-	block-size: 100%;
-	inline-size: 100%;
-	transform-style: preserve-3d;
-	animation-timing-function: linear;
-	animation-fill-mode: forwards;
-
-	:where(.clicked) & {
-		animation-name: clicked;
-		animation-duration: 0.2s;
-	}
-
-	:where(.flipped) & {
-		animation-name: flipped;
-		animation-duration: 0.2s;
-	}
-
-	:where(.matched) & {
-		animation-name: matched;
-		animation-duration: 0.6s;
-	}
-
-	:where(.completed) & {
-		animation-name: completed;
-		animation-duration: 1.8s;
-	}
-}
-
-.front,
-.back {
-	display: grid;
-	place-content: center;
-	position: absolute;
-	inset-inline-start: 0;
-	inset-block-start: 0;
-	block-size: 100%;
-	inline-size: 100%;
-	border-radius: 0.5rem;
-	user-select: none;
-	-webkit-user-select: none;
-}
-
-.front {
-	backface-visibility: hidden;
-	background: var(--purple);
-	box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
-}
-
-.back {
-	backface-visibility: hidden;
-	transform: rotateY(180deg);
-	background: var(--back-background);
-	box-shadow: 0 0 0.5cqmin 0
-		color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%);
-}
-
-#reload:where([open]) {
+dialog:where([open]) {
 	border: none;
 	display: grid;
 	place-content: center;
@@ -233,4 +172,72 @@ button {
 		stroke: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
 		stroke-width: 1px;
 	}
+}
+
+.faces {
+	position: absolute;
+	inset-inline-start: 0;
+	inset-block-start: 0;
+	border-radius: 0.5rem;
+	font-size: calc(45cqi / var(--columns));
+	block-size: 100%;
+	inline-size: 100%;
+	transform-style: preserve-3d;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
+
+	:where(.unflipped) & {
+		transform: rotateY(180deg) scale(1);
+		animation-name: unflipped;
+		animation-duration: 0.2s;
+		animation-delay: 1s;
+	}
+
+	:where(.flipped) & {
+		animation-name: flipped;
+		animation-duration: 0.2s;
+		animation-delay: 0s;
+	}
+
+	:where(.matched) & {
+		transform: rotateY(180deg) scale(1);
+		animation-name: matched;
+		animation-duration: 0.6s;
+		animation-delay: 0s;
+	}
+
+	:where(.completed) & {
+		transform: rotateY(540deg) scale(1);
+		animation-name: completed;
+		animation-duration: 1.8s;
+		animation-delay: 0s;
+	}
+}
+
+.front,
+.back {
+	display: grid;
+	place-content: center;
+	position: absolute;
+	inset-inline-start: 0;
+	inset-block-start: 0;
+	block-size: 100%;
+	inline-size: 100%;
+	border-radius: 0.5rem;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.front {
+	backface-visibility: hidden;
+	background: var(--purple);
+	box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
+}
+
+.back {
+	backface-visibility: hidden;
+	transform: rotateY(180deg);
+	background: var(--back-background);
+	box-shadow: 0 0 0.5cqmin 0
+		color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%);
 }
