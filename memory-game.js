@@ -10,6 +10,7 @@ let CHARACTERS = [
 class MemoryGame extends HTMLElement {
 	#incomplete = CHARACTERS.length;
 	#previous;
+	#queue = [];
 
 	connectedCallback() {
 		let characters = CHARACTERS.concat(CHARACTERS)
@@ -45,6 +46,10 @@ class MemoryGame extends HTMLElement {
 	}
 
 	handleEvent(e) {
+		while (this.#queue.length) {
+			this.#queue.shift()?.();
+		}
+
 		let current = e.currentTarget;
 
 		let faces = current.querySelector(".faces");
@@ -67,10 +72,14 @@ class MemoryGame extends HTMLElement {
 
 			faces.addEventListener(
 				"animationend",
-				(e) => {
+				() => {
 					if (!matched) {
-						current.className = "covered";
-						previous.className = "covered";
+						this.#queue.push(() => {
+							current.className = "covered";
+							previous.className = "covered";
+						});
+
+						setTimeout(() => this.#queue.shift()?.(), 2_000);
 					} else {
 						this.#incomplete -= 1;
 
