@@ -46,8 +46,12 @@ class MemoryGame extends HTMLElement {
 	}
 
 	handleEvent(e) {
-		while (this.#queue.length) {
-			this.#queue.shift()?.();
+		for (let i = 0; i < this.#queue.length; i++) {
+			let cb = this.#queue[i];
+
+			if (cb) cb();
+
+			this.#queue[i] = null;
 		}
 
 		let current = e.currentTarget;
@@ -116,7 +120,6 @@ class MemoryGame extends HTMLElement {
 				},
 				{
 					once: true,
-					capture: true,
 				}
 			);
 

@@ -151,7 +151,7 @@ memory-game {
 		--columns: 6;
 	}
 
-	button {
+	:where(button) {
 		appearance: none;
 		border: none;
 		border-radius: 0.5rem;
@@ -178,7 +178,7 @@ memory-game {
 		}
 	}
 
-	dialog:where([open]) {
+	:where(dialog[open]) {
 		border: none;
 		display: grid;
 		place-content: center;
@@ -207,7 +207,7 @@ memory-game {
 		}
 
 		:where(button) {
-			font-size: 2.25rem;
+			font-size: 1.5rem;
 			font-weight: 900;
 			display: flex;
 			align-items: center;
@@ -224,14 +224,14 @@ memory-game {
 		}
 
 		:where(svg) {
-			block-size: 2rem;
+			block-size: 1.5rem;
 			fill: currentColor;
 			stroke: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
 			stroke-width: 1px;
 		}
 	}
 
-	.faces {
+	:where(.faces) {
 		position: absolute;
 		inset-inline-start: 0;
 		inset-block-start: 0;
@@ -267,8 +267,7 @@ memory-game {
 		}
 	}
 
-	.front,
-	.back {
+	:where(.front, .back) {
 		display: grid;
 		place-content: center;
 		position: absolute;
@@ -281,14 +280,14 @@ memory-game {
 		-webkit-user-select: none;
 	}
 
-	.front {
+	:where(.front) {
 		backface-visibility: hidden;
 		background: var(--purple);
 		box-shadow: 0 0 0.5cqmin 0
 			color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
 	}
 
-	.back {
+	:where(.back) {
 		backface-visibility: hidden;
 		transform: rotateY(180deg);
 		background: var(--back-background);
