@@ -226,8 +226,6 @@ memory-game {
 		:where(svg) {
 			block-size: 1.5rem;
 			fill: currentColor;
-			stroke: color-mix(in lch, var(--purple), oklch(0% 0 0) 60%);
-			stroke-width: 1px;
 		}
 	}
 
