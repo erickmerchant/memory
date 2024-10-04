@@ -1,3 +1,11 @@
+import {Howl} from "https://esm.sh/howler";
+
+const SOUNDS = {
+	// flip: makeSound("./sounds/card_flip.mp3"),
+	match: makeSound("./sounds/match_correct.mp3"),
+	win: makeSound("./sounds/game_complete.mp3"),
+};
+
 let CHARACTERS = [
 	{text: "🐰", color: "gray"},
 	{text: "🐶", color: "blue"},
@@ -65,11 +73,15 @@ class MemoryGame extends HTMLElement {
 		if (flipped) {
 			current.className = "covered";
 
+			// SOUNDS.flip.play();
+
 			if (this.#previous === current) {
 				this.#previous = null;
 			}
 		} else if (this.#previous) {
 			current.className = "flipped";
+
+			// SOUNDS.flip.play();
 
 			let matched = this.#previous.textContent === current.textContent;
 			let previous = this.#previous;
@@ -81,6 +93,9 @@ class MemoryGame extends HTMLElement {
 						this.#queue.push(() => {
 							current.className = "covered";
 							previous.className = "covered";
+
+							// SOUNDS.flip.play();
+							// SOUNDS.flip.play();
 						});
 
 						setTimeout(() => this.#queue.shift()?.(), 2_000);
@@ -90,11 +105,15 @@ class MemoryGame extends HTMLElement {
 						current.className = "matched";
 						previous.className = "matched";
 
+						SOUNDS.match.play();
+
 						if (!this.#incomplete) {
 							this.addEventListener(
 								"animationend",
 								() => {
 									this.className = "completed";
+
+									SOUNDS.win.play();
 
 									let reload = this.querySelector("dialog");
 
@@ -127,9 +146,17 @@ class MemoryGame extends HTMLElement {
 		} else {
 			current.className = "flipped";
 
+			// SOUNDS.flip.play();
+
 			this.#previous = current;
 		}
 	}
 }
 
 customElements.define("memory-game", MemoryGame);
+
+function makeSound(url) {
+	return new Howl({
+		src: [url],
+	});
+}
