@@ -1,3 +1,54 @@
+import * as Tone from "https://cdn.jsdelivr.net/npm/tone@15.0.4/+esm";
+
+let synth = new Tone.Synth().toDestination();
+
+let sounds = new Proxy(
+	{
+		reveal: {
+			notes: ["D4", "E4", "G4"],
+			duration: 0.2,
+		},
+		match: {notes: ["C4", "C4", "D4", "E4", "G4", "D4"], duration: 0.8},
+		win: {
+			notes: [
+				"D4",
+				"C4",
+				"G4",
+				"F4",
+				"E4",
+				"D4",
+				"E4",
+				"F4",
+				"C4",
+				"C4",
+				"G4",
+				"F4",
+				"E4",
+				"D4",
+				"D4",
+			],
+			duration: 2,
+		},
+	},
+	{
+		get(sounds, prop) {
+			let {notes, duration} = sounds[prop];
+
+			return () => {
+				let now = Tone.now();
+				let stepTime = Number((duration / notes.length).toFixed(2));
+				let progress = 0;
+
+				for (let note of notes) {
+					synth.triggerAttackRelease(note, stepTime, now + progress);
+
+					progress += stepTime;
+				}
+			};
+		},
+	}
+);
+
 let CHARACTERS = [
 	{text: "🐰", color: "gray"},
 	{text: "🐶", color: "blue"},
@@ -74,6 +125,18 @@ class MemoryGame extends HTMLElement {
 			let matched = this.#previous.textContent === current.textContent;
 			let previous = this.#previous;
 
+			if (matched) {
+				this.#incomplete -= 1;
+
+				if (this.#incomplete) {
+					sounds.match();
+				} else {
+					sounds.win();
+				}
+			} else {
+				sounds.reveal();
+			}
+
 			faces.addEventListener(
 				"animationend",
 				() => {
@@ -85,8 +148,6 @@ class MemoryGame extends HTMLElement {
 
 						setTimeout(() => this.#queue.shift()?.(), 2_000);
 					} else {
-						this.#incomplete -= 1;
-
 						current.className = "matched";
 						previous.className = "matched";
 
@@ -96,18 +157,30 @@ class MemoryGame extends HTMLElement {
 								() => {
 									this.className = "completed";
 
-									let reload = this.querySelector("dialog");
+									let reloadDialog = this.querySelector("dialog");
 
-									if (reload) {
-										reload.showModal();
+									if (reloadDialog) {
+										reloadDialog.showModal();
 
-										reload.querySelector("button")?.addEventListener?.(
-											"click",
-											() => {
-												window.location.reload();
-											},
-											{once: true}
-										);
+										reloadDialog
+											.querySelector("#playAgain")
+											?.addEventListener?.(
+												"click",
+												() => {
+													window.location.reload();
+												},
+												{once: true}
+											);
+
+										reloadDialog
+											.querySelector("#stopPlaying")
+											?.addEventListener?.(
+												"click",
+												() => {
+													reloadDialog.close();
+												},
+												{once: true}
+											);
 									}
 								},
 								{
@@ -126,6 +199,8 @@ class MemoryGame extends HTMLElement {
 			this.#previous = null;
 		} else {
 			current.className = "flipped";
+
+			sounds.reveal();
 
 			this.#previous = current;
 		}
