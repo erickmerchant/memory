@@ -111,7 +111,6 @@ memory-game {
 		gap: var(--gap);
 		place-content: center;
 		align-items: flex-start;
-		padding: 0.5rem;
 		border-radius: 0.5rem;
 		position: absolute;
 		margin: auto;
@@ -168,6 +167,7 @@ memory-game {
 			max-inline-size: calc(100cqi / var(--columns));
 			font-size: max(0.8rem, calc(10cqi / var(--columns)));
 			position: relative;
+			color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
 
 			&::before {
 				content: "";
@@ -206,8 +206,8 @@ memory-game {
 			padding: 0.5rem;
 			border-radius: 0.5rem;
 			border: 0.125rem solid currentColor;
-			background: white;
-			color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+			background: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
+			color: inherit;
 			aspect-ratio: unset;
 		}
 

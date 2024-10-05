@@ -8,7 +8,7 @@ let sounds = new Proxy(
 			notes: ["C4", "E4", "G4"],
 			duration: 0.2,
 		},
-		match: {notes: ["C4", "C4", "C4", "E4", "G4", "C4"], duration: 0.8},
+		match: {notes: ["C4", "D4", "C4", "E4", "G4", "C4"], duration: 0.8},
 		win: {
 			notes: [
 				"C4",
