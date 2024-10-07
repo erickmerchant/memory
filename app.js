@@ -1,55 +1,19 @@
-import * as Tone from "https://cdn.jsdelivr.net/npm/tone@15.0.4/+esm";
+const WAVEFORM = {
+	real: [0, 1, -0.01, 0.3, -0.01, 0.1, -0.001, 0.001, -0.0001, 0.1],
+	imag: [0, -0.005, 0.005, -0.005, 0.005, -0.005, 0.005, -0.005, 0.005, 0],
+};
 
-let synth = new Tone.Synth().toDestination();
+const FREQUENCIES = {
+	C: 261.63,
+	D: 293.66,
+	E: 329.63,
+	F: 349.23,
+	G: 392,
+	A: 440,
+	B: 493.88,
+};
 
-let sounds = new Proxy(
-	{
-		reveal: {
-			notes: ["C4", "E4", "G4"],
-			duration: 0.2,
-		},
-		match: {notes: ["C4", "D4", "C4", "E4", "G4", "C4"], duration: 0.8},
-		win: {
-			notes: [
-				"C4",
-				"C4",
-				"G4",
-				"F4",
-				"E4",
-				"D4",
-				"E4",
-				"F4",
-				"C4",
-				"C4",
-				"G4",
-				"F4",
-				"E4",
-				"D4",
-				"C4",
-			],
-			duration: 2.6,
-		},
-	},
-	{
-		get(sounds, prop) {
-			let {notes, duration} = sounds[prop];
-
-			return () => {
-				let now = Tone.now();
-				let stepTime = Number((duration / notes.length).toFixed(2));
-				let progress = 0;
-
-				for (let note of notes) {
-					synth.triggerAttackRelease(note, stepTime, now + progress);
-
-					progress += stepTime;
-				}
-			};
-		},
-	}
-);
-
-let CHARACTERS = [
+const CHARACTERS = [
 	{text: "🐰", color: "gray"},
 	{text: "🐶", color: "blue"},
 	{text: "🐸", color: "green"},
@@ -57,6 +21,88 @@ let CHARACTERS = [
 	{text: "🦊", color: "orange"},
 	{text: "🐻", color: "red"},
 ];
+
+let audio;
+let soundIsPlaying = false;
+
+let songs = new Proxy(
+	{
+		reveal: {
+			notes: ["C", "E", "G"],
+			duration: 0.2,
+		},
+		match: {notes: ["C", "D", "C", "E", "G", "C"], duration: 0.8},
+		win: {
+			notes: [
+				"C",
+				"C",
+				"G",
+				"F",
+				"E",
+				"D",
+				"E",
+				"F",
+				"C",
+				"C",
+				"G",
+				"F",
+				"E",
+				"D",
+				"C",
+			],
+			duration: 2,
+		},
+	},
+	{
+		get(songs, prop) {
+			let song = songs[prop];
+
+			return () => {
+				if (soundIsPlaying) return;
+
+				soundIsPlaying = true;
+
+				audio = audio ?? new AudioContext();
+
+				let step = Number((song.duration / song.notes.length).toFixed(3));
+
+				let vco = audio.createOscillator();
+				let vca = audio.createGain();
+				let wave = audio.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
+					disableNormalization: true,
+				});
+
+				vco.setPeriodicWave(wave);
+				// vco.type = "triangle";
+				vco.connect(vca);
+
+				vca.connect(audio.destination);
+
+				vca.gain.setValueAtTime(0, audio.currentTime);
+
+				vco.start(audio.currentTime);
+
+				let time = audio.currentTime;
+
+				for (let note of song.notes) {
+					vco.frequency.setValueAtTime(FREQUENCIES[note], time);
+
+					vca.gain.linearRampToValueAtTime(2, time);
+
+					time += step;
+
+					vca.gain.linearRampToValueAtTime(0, time);
+				}
+
+				vco.stop(time);
+
+				setTimeout(() => {
+					soundIsPlaying = false;
+				}, song.duration * 1_000);
+			};
+		},
+	}
+);
 
 class MemoryGame extends HTMLElement {
 	#incomplete = CHARACTERS.length;
@@ -129,12 +175,12 @@ class MemoryGame extends HTMLElement {
 				this.#incomplete -= 1;
 
 				if (this.#incomplete) {
-					sounds.match();
+					songs.match();
 				} else {
-					sounds.win();
+					songs.win();
 				}
 			} else {
-				sounds.reveal();
+				songs.reveal();
 			}
 
 			faces.addEventListener(
@@ -148,46 +194,33 @@ class MemoryGame extends HTMLElement {
 
 						setTimeout(() => this.#queue.shift()?.(), 2_000);
 					} else {
-						current.className = "matched";
-						previous.className = "matched";
+						if (this.#incomplete) {
+							current.className = "matched";
+							previous.className = "matched";
+						} else {
+							this.className = "completed";
 
-						if (!this.#incomplete) {
-							this.addEventListener(
-								"animationend",
-								() => {
-									this.className = "completed";
+							let reloadDialog = this.querySelector("dialog");
 
-									let reloadDialog = this.querySelector("dialog");
+							if (reloadDialog) {
+								reloadDialog.showModal();
 
-									if (reloadDialog) {
-										reloadDialog.showModal();
+								reloadDialog.querySelector("#playAgain")?.addEventListener?.(
+									"click",
+									() => {
+										window.location.reload();
+									},
+									{once: true}
+								);
 
-										reloadDialog
-											.querySelector("#playAgain")
-											?.addEventListener?.(
-												"click",
-												() => {
-													window.location.reload();
-												},
-												{once: true}
-											);
-
-										reloadDialog
-											.querySelector("#stopPlaying")
-											?.addEventListener?.(
-												"click",
-												() => {
-													reloadDialog.close();
-												},
-												{once: true}
-											);
-									}
-								},
-								{
-									once: true,
-									capture: true,
-								}
-							);
+								reloadDialog.querySelector("#stopPlaying")?.addEventListener?.(
+									"click",
+									() => {
+										reloadDialog.close();
+									},
+									{once: true}
+								);
+							}
 						}
 					}
 				},
@@ -200,7 +233,7 @@ class MemoryGame extends HTMLElement {
 		} else {
 			current.className = "flipped";
 
-			sounds.reveal();
+			songs.reveal();
 
 			this.#previous = current;
 		}

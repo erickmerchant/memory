@@ -1,4 +1,6 @@
-* {
+*,
+::before,
+::after {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
@@ -130,8 +132,8 @@ memory-game {
 			animation-fill-mode: forwards;
 			background-color: color-mix(
 				in lch,
-				var(--purple),
-				oklch(0% 0 0 / 0.5) 75%
+				oklch(0% 0 0 / 0.25),
+				var(--purple) 25%
 			);
 		}
 
