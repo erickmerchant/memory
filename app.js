@@ -14,12 +14,12 @@ const FREQUENCIES = {
 };
 
 const CHARACTERS = [
-	{text: "🐰", color: "gray"},
-	{text: "🐶", color: "blue"},
-	{text: "🐸", color: "green"},
-	{text: "🐱", color: "yellow"},
-	{text: "🦊", color: "orange"},
-	{text: "🐻", color: "red"},
+	{text: "🐰", name: "rabbit", color: "gray"},
+	{text: "🐶", name: "dog", color: "blue"},
+	{text: "🐸", name: "frog", color: "green"},
+	{text: "🐱", name: "cat", color: "yellow"},
+	{text: "🦊", name: "fox", color: "orange"},
+	{text: "🐻", name: "bear", color: "red"},
 ];
 
 let audio;
@@ -116,6 +116,10 @@ class MemoryGame extends HTMLElement {
 
 		for (let current of this.querySelectorAll(":scope > button")) {
 			let character = characters.shift();
+
+			current.ariaLabel = "owl";
+			current.dataset.name = character.name;
+
 			let front = document.createElement("span");
 
 			front.className = "front";
@@ -161,12 +165,14 @@ class MemoryGame extends HTMLElement {
 
 		if (flipped) {
 			current.className = "covered";
+			current.ariaLabel = "owl";
 
 			if (this.#previous === current) {
 				this.#previous = null;
 			}
 		} else if (this.#previous) {
 			current.className = "flipped";
+			current.ariaLabel = current.dataset.name;
 
 			let matched = this.#previous.textContent === current.textContent;
 			let previous = this.#previous;
@@ -189,14 +195,20 @@ class MemoryGame extends HTMLElement {
 					if (!matched) {
 						this.#queue.push(() => {
 							current.className = "covered";
+							current.ariaLabel = "owl";
+
 							previous.className = "covered";
+							previous.ariaLabel = "owl";
 						});
 
 						setTimeout(() => this.#queue.shift()?.(), 2_000);
 					} else {
 						if (this.#incomplete) {
 							current.className = "matched";
+							current.ariaLabel += " (matched)";
+
 							previous.className = "matched";
+							previous.ariaLabel += " (matched)";
 						} else {
 							this.className = "completed";
 
@@ -232,6 +244,7 @@ class MemoryGame extends HTMLElement {
 			this.#previous = null;
 		} else {
 			current.className = "flipped";
+			current.ariaLabel = current.dataset.name;
 
 			songs.reveal();
 

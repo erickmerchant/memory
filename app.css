@@ -30,13 +30,13 @@ body {
 	min-block-size: 100%;
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: auto 3rem;
-	padding: 1.5vmin;
+	padding-inline: 1.5vmin;
 	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
 	block-size: 100%;
 	inline-size: 100%;
 	container-type: size;
 	place-content: safe center;
+	scrollbar-gutter: stable;
 }
 
 memory-game {
@@ -180,7 +180,7 @@ memory-game {
 				border-bottom: var(--gap) solid transparent;
 				border-right: var(--gap) solid white;
 				position: absolute;
-				left: calc((-1 * var(--gap)) + 1px);
+				right: calc(100% - 1px);
 				top: 2rem;
 			}
 
