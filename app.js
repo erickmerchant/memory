@@ -1,6 +1,15 @@
+const CHARACTERS = [
+	{text: "🐰", name: "rabbit", color: "gray"},
+	{text: "🐶", name: "dog", color: "blue"},
+	{text: "🐸", name: "frog", color: "green"},
+	{text: "🐱", name: "cat", color: "yellow"},
+	{text: "🦊", name: "fox", color: "orange"},
+	{text: "🐻", name: "bear", color: "red"},
+];
+
 const WAVEFORM = {
-	real: [0, 1, -0.01, 0.3, -0.01, 0.1, -0.001, 0.001, -0.0001, 0.1],
-	imag: [0, -0.005, 0.005, -0.005, 0.005, -0.005, 0.005, -0.005, 0.005, 0],
+	real: [0, -1, 0.01, -0.3, 0.01, -0.1, 0.001, -0.001, 0.0001, -0.1],
+	imag: [0, -0.005, 0.05, -0.005, 0.05, -0.005, 0.05, -0.005, 0.05, -0],
 };
 
 const FREQUENCIES = {
@@ -13,96 +22,74 @@ const FREQUENCIES = {
 	B: 493.88,
 };
 
-const CHARACTERS = [
-	{text: "🐰", name: "rabbit", color: "gray"},
-	{text: "🐶", name: "dog", color: "blue"},
-	{text: "🐸", name: "frog", color: "green"},
-	{text: "🐱", name: "cat", color: "yellow"},
-	{text: "🦊", name: "fox", color: "orange"},
-	{text: "🐻", name: "bear", color: "red"},
-];
+const SONGS = {
+	reveal: "C E G",
+	match: "C D C E G C",
+	noMatch: "A A",
+	win: "C C G F E D E F C C G F E D C",
+};
 
-let audio;
-let soundIsPlaying = false;
+let lastSong = Promise.resolve();
+let currentlyPlaying = 0;
 
-let songs = new Proxy(
-	{
-		reveal: {
-			notes: ["C", "E", "G"],
-			duration: 0.2,
-		},
-		match: {notes: ["C", "D", "C", "E", "G", "C"], duration: 0.8},
-		win: {
-			notes: [
-				"C",
-				"C",
-				"G",
-				"F",
-				"E",
-				"D",
-				"E",
-				"F",
-				"C",
-				"C",
-				"G",
-				"F",
-				"E",
-				"D",
-				"C",
-			],
-			duration: 2,
-		},
-	},
-	{
-		get(songs, prop) {
-			let song = songs[prop];
+function playSong(key) {
+	let song = SONGS[key].split(" ");
 
-			return () => {
-				if (soundIsPlaying) return;
+	currentlyPlaying += 1;
 
-				soundIsPlaying = true;
+	audioContext = audioContext ?? new AudioContext();
 
-				audio = audio ?? new AudioContext();
+	let step = 0.1;
+	let oscillator = new OscillatorNode(audioContext);
+	let gainNode = new GainNode(audioContext);
+	let wave = audioContext.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
+		disableNormalization: true,
+	});
 
-				let step = Number((song.duration / song.notes.length).toFixed(3));
+	oscillator.connect(gainNode).connect(audioContext.destination);
 
-				let vco = audio.createOscillator();
-				let vca = audio.createGain();
-				let wave = audio.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
-					disableNormalization: true,
-				});
+	oscillator.setPeriodicWave(wave);
 
-				vco.setPeriodicWave(wave);
-				// vco.type = "triangle";
-				vco.connect(vca);
+	oscillator.start(audioContext.currentTime);
 
-				vca.connect(audio.destination);
+	let time = audioContext.currentTime;
 
-				vca.gain.setValueAtTime(0, audio.currentTime);
+	for (let note of song) {
+		oscillator.frequency.setValueAtTime(FREQUENCIES[note], time);
 
-				vco.start(audio.currentTime);
+		gainNode.gain.linearRampToValueAtTime(1, time);
 
-				let time = audio.currentTime;
+		time += step;
 
-				for (let note of song.notes) {
-					vco.frequency.setValueAtTime(FREQUENCIES[note], time);
-
-					vca.gain.linearRampToValueAtTime(2, time);
-
-					time += step;
-
-					vca.gain.linearRampToValueAtTime(0, time);
-				}
-
-				vco.stop(time);
-
-				setTimeout(() => {
-					soundIsPlaying = false;
-				}, song.duration * 1_000);
-			};
-		},
+		gainNode.gain.linearRampToValueAtTime(0, time);
 	}
-);
+
+	oscillator.stop(time);
+
+	let {promise, resolve} = Promise.withResolvers();
+
+	setTimeout(() => {
+		resolve();
+
+		currentlyPlaying -= 1;
+	}, 100 * song.length);
+
+	lastSong = promise;
+}
+
+function trySong(key) {
+	if (currentlyPlaying === 0) {
+		playSong(key);
+	}
+}
+
+function scheduleSong(key) {
+	lastSong.then(() => {
+		playSong(key);
+	});
+}
+
+let audioContext;
 
 class MemoryGame extends HTMLElement {
 	#incomplete = CHARACTERS.length;
@@ -147,14 +134,6 @@ class MemoryGame extends HTMLElement {
 	}
 
 	handleEvent(e) {
-		for (let i = 0; i < this.#queue.length; i++) {
-			let cb = this.#queue[i];
-
-			if (cb) cb();
-
-			this.#queue[i] = null;
-		}
-
 		let current = e.currentTarget;
 
 		let faces = current.querySelector(".faces");
@@ -177,16 +156,8 @@ class MemoryGame extends HTMLElement {
 			let matched = this.#previous.textContent === current.textContent;
 			let previous = this.#previous;
 
-			if (matched) {
-				this.#incomplete -= 1;
-
-				if (this.#incomplete) {
-					songs.match();
-				} else {
-					songs.win();
-				}
-			} else {
-				songs.reveal();
+			if (!matched) {
+				trySong("reveal");
 			}
 
 			faces.addEventListener(
@@ -199,41 +170,59 @@ class MemoryGame extends HTMLElement {
 
 							previous.className = "covered";
 							previous.ariaLabel = "owl";
+
+							trySong("noMatch");
 						});
 
-						setTimeout(() => this.#queue.shift()?.(), 2_000);
+						setTimeout(() => this.#queue.shift()?.(false), 2_000);
 					} else {
-						if (this.#incomplete) {
-							current.className = "matched";
-							current.ariaLabel += " (matched)";
+						current.className = "matched";
+						current.ariaLabel += " (matched)";
 
-							previous.className = "matched";
-							previous.ariaLabel += " (matched)";
-						} else {
-							this.className = "completed";
+						previous.className = "matched";
+						previous.ariaLabel += " (matched)";
 
-							let reloadDialog = this.querySelector("dialog");
+						this.#incomplete -= 1;
 
-							if (reloadDialog) {
-								reloadDialog.showModal();
+						trySong("match");
 
-								reloadDialog.querySelector("#playAgain")?.addEventListener?.(
-									"click",
-									() => {
-										window.location.reload();
-									},
-									{once: true}
-								);
+						faces.addEventListener(
+							"animationend",
+							() => {
+								if (this.#incomplete) return;
 
-								reloadDialog.querySelector("#stopPlaying")?.addEventListener?.(
-									"click",
-									() => {
-										reloadDialog.close();
-									},
-									{once: true}
-								);
+								this.className = "completed";
+
+								scheduleSong("win");
+
+								let reloadDialog = this.querySelector("dialog");
+
+								if (reloadDialog) {
+									reloadDialog.showModal();
+
+									reloadDialog.querySelector("#playAgain")?.addEventListener?.(
+										"click",
+										() => {
+											window.location.reload();
+										},
+										{once: true}
+									);
+
+									reloadDialog
+										.querySelector("#stopPlaying")
+										?.addEventListener?.(
+											"click",
+											() => {
+												reloadDialog.close();
+											},
+											{once: true}
+										);
+								}
+							},
+							{
+								once: true,
 							}
-						}
+						);
 					}
 				},
 				{
@@ -246,9 +235,17 @@ class MemoryGame extends HTMLElement {
 			current.className = "flipped";
 			current.ariaLabel = current.dataset.name;
 
-			songs.reveal();
+			trySong("reveal");
 
 			this.#previous = current;
+		}
+
+		for (let i = 0; i < this.#queue.length; i++) {
+			let cb = this.#queue[i];
+
+			if (cb) cb(true);
+
+			this.#queue[i] = null;
 		}
 	}
 }
