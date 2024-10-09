@@ -4,13 +4,13 @@ const WAVEFORM = {
 };
 
 const FREQUENCIES = {
+	A: 220,
+	B: 246,
 	C: 261,
 	D: 293,
 	E: 329,
 	F: 349,
 	G: 392,
-	A: 440,
-	B: 493,
 };
 
 const SONGS = {
