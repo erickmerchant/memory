@@ -8,18 +8,18 @@ const CHARACTERS = [
 ];
 
 const WAVEFORM = {
-	real: [0, -1, 0.01, -0.3, 0.01, -0.1, 0.001, -0.001, 0.0001, -0.1],
-	imag: [0, -0.005, 0.05, -0.005, 0.05, -0.005, 0.05, -0.005, 0.05, -0],
+	real: [0, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1],
+	imag: [0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.1],
 };
 
 const FREQUENCIES = {
-	C: 261.63,
-	D: 293.66,
-	E: 329.63,
-	F: 349.23,
+	C: 261,
+	D: 293,
+	E: 329,
+	F: 349,
 	G: 392,
 	A: 440,
-	B: 493.88,
+	B: 493,
 };
 
 const SONGS = {
@@ -43,7 +43,7 @@ function playSong(key) {
 	let oscillator = new OscillatorNode(audioContext);
 	let gainNode = new GainNode(audioContext);
 	let wave = audioContext.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
-		disableNormalization: true,
+		disableNormalization: false,
 	});
 
 	oscillator.connect(gainNode).connect(audioContext.destination);
