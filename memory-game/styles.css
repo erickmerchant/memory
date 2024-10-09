@@ -114,7 +114,7 @@ memory-game {
 		:where(figure) {
 			background: var(--purple);
 			box-shadow: 0 0 0.5cqmin 0
-				color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
+				color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.75) 100%);
 			font-size: calc(45cqi / var(--columns));
 			aspect-ratio: 5 / 7;
 			border-radius: 0.5rem;
@@ -133,7 +133,8 @@ memory-game {
 		:where(div) {
 			background: white;
 			border-radius: 0.5rem;
-			box-shadow: 0 0 0.5cqmin 0 color-mix(in lch, white, oklch(0% 0 0) 75%);
+			box-shadow: 0 0 0.5cqmin 0
+				color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%);
 			display: grid;
 			grid-template-rows: auto max-content;
 			grid-template-columns: 1fr 1fr;
