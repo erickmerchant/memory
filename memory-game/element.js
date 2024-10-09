@@ -1,4 +1,4 @@
-import {trySong, scheduleSong} from "./audio.js";
+import {trySong, scheduleSong} from "memory-game/audio";
 
 const CHARACTERS = [
 	{text: "🐰", name: "rabbit", color: "gray"},

@@ -7,12 +7,22 @@
 			content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
 		<title>Memory</title>
 		<link rel="stylesheet" href="./page.css" />
+		<script type="importmap">
+			{
+				"imports": {
+					"memory-game/audio": "./memory-game/audio.js",
+					"memory-game/element": "./memory-game/element.js"
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<div>
 			<template shadowrootmode="open">
 				<link rel="stylesheet" href="./memory-game/styles.css" />
-				<script type="module" src="./memory-game/element.js"></script>
+				<script type="module">
+					import "memory-game/element";
+				</script>
 
 				<memory-game>
 					<button></button>

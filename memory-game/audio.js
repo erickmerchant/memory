@@ -4,7 +4,7 @@ const WAVEFORM = {
 };
 
 const FREQUENCIES = {
-	A: 220,
+	A: 110,
 	B: 246,
 	C: 261,
 	D: 293,
