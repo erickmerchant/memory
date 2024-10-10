@@ -68,7 +68,7 @@ function playSong(key) {
 
 	setTimeout(resolve, 100 * length);
 
-	lastSong = promise.then(() => {
+	lastSong = Promise.all([lastSong, promise]).then(() => {
 		currentlyPlaying -= 1;
 	});
 }
