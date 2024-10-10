@@ -20,9 +20,28 @@ const SONGS = {
 	win: "CC CC GG F E D E CC CC GG F E D E CC",
 };
 
-let audioContext;
+let audio;
 let lastSong = Promise.resolve();
 let isPlaying = false;
+let step = 0.1;
+
+function initApi() {
+	let context = new AudioContext();
+
+	let oscillatorNode = new OscillatorNode(context);
+	let gainNode = new GainNode(context);
+	let wave = context.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
+		disableNormalization: false,
+	});
+
+	oscillatorNode.connect(gainNode).connect(context.destination);
+
+	oscillatorNode.setPeriodicWave(wave);
+
+	oscillatorNode.start(context.currentTime);
+
+	return {context, gain: gainNode.gain, frequency: oscillatorNode.frequency};
+}
 
 export function trySong(key) {
 	if (isPlaying) return;
@@ -31,22 +50,9 @@ export function trySong(key) {
 
 	isPlaying = true;
 
-	audioContext = audioContext ?? new AudioContext();
+	audio ??= initApi();
 
-	let step = 0.1;
-	let oscillator = new OscillatorNode(audioContext);
-	let gainNode = new GainNode(audioContext);
-	let wave = audioContext.createPeriodicWave(WAVEFORM.real, WAVEFORM.imag, {
-		disableNormalization: false,
-	});
-
-	oscillator.connect(gainNode).connect(audioContext.destination);
-
-	oscillator.setPeriodicWave(wave);
-
-	oscillator.start(audioContext.currentTime);
-
-	let time = audioContext.currentTime;
+	let time = audio.context.currentTime;
 	let length = 0;
 
 	for (let part of song) {
@@ -55,16 +61,14 @@ export function trySong(key) {
 
 		length += len;
 
-		oscillator.frequency.setValueAtTime(FREQUENCIES[note], time);
+		audio.frequency.setValueAtTime(FREQUENCIES[note], time);
 
-		gainNode.gain.linearRampToValueAtTime(1, time);
+		audio.gain.linearRampToValueAtTime(1, time);
 
 		time += step * len;
 
-		gainNode.gain.linearRampToValueAtTime(0, time);
+		audio.gain.linearRampToValueAtTime(0, time);
 	}
-
-	oscillator.stop(time);
 
 	let {promise, resolve} = Promise.withResolvers();
 
