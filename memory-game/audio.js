@@ -22,12 +22,14 @@ const SONGS = {
 
 let audioContext;
 let lastSong = Promise.resolve();
-let currentlyPlaying = 0;
+let isPlaying = false;
 
-function playSong(key) {
+export function trySong(key) {
+	if (isPlaying) return;
+
 	let song = SONGS[key].split(" ");
 
-	currentlyPlaying += 1;
+	isPlaying = true;
 
 	audioContext = audioContext ?? new AudioContext();
 
@@ -68,19 +70,13 @@ function playSong(key) {
 
 	setTimeout(resolve, 100 * length);
 
-	lastSong = Promise.all([lastSong, promise]).then(() => {
-		currentlyPlaying -= 1;
+	lastSong = promise.then(() => {
+		isPlaying = false;
 	});
-}
-
-export function trySong(key) {
-	if (currentlyPlaying === 0) {
-		playSong(key);
-	}
 }
 
 export function scheduleSong(key) {
 	lastSong.then(() => {
-		playSong(key);
+		trySong(key);
 	});
 }
