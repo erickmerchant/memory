@@ -7,6 +7,8 @@
 			content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
 		<title>Memory</title>
 		<link rel="stylesheet" href="./page.css" />
+		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=freckle-face:400|inter:500" />
+		<link rel="stylesheet" href="./halloween.css" />
 		<script type="importmap">
 			{
 				"imports": {
@@ -22,34 +24,34 @@
 			<script type="module">
 				import {MemoryGame} from "memory-game/element";
 
-				const A = [220, 0.1];
-				const AA = [220, 0.2];
-				const B = [246, 0.1];
-				const C = [261, 0.1];
-				const CC = [261, 0.2];
-				const D = [293, 0.1];
-				const E = [329, 0.1];
-				const F = [349, 0.1];
-				const G = [392, 0.1];
-				const GG = [392, 0.2];
+				const G_ = [92, 0.1];
+				const GG_ = [92, 0.2];
+				const A_ = [104, 0.1];
+				const A = [110, 0.1];
+				const AA = [110, 0.2];
+				const B = [123, 0.1];
+				const D_ = [138, 0.1];
+				const D = [146, 0.1];
+				const E = [164, 0.1];
+				const EE = [164, 0.2];
 
 				customElements.define(
 					"memory-game",
 					class extends MemoryGame {
 						characters = [
-							{text: "🐰", name: "rabbit", color: "gray"},
-							{text: "🐶", name: "dog", color: "blue"},
-							{text: "🐸", name: "frog", color: "green"},
-							{text: "🐱", name: "cat", color: "yellow"},
-							{text: "🦊", name: "fox", color: "orange"},
-							{text: "🐻", name: "bear", color: "red"},
+							{text: "🦇", name: "bat", color: "yellow"},
+							{text: "🕷️", name: "spider web", color: "gray"},
+							{text: "🧟‍♀️", name: "zombie", color: "green"},
+							{text: "🎃", name: "jack-o'-lantern", color: "orange"},
+							{text: "🐺", name: "wolf", color: "blue"},
+							{text: "🧛‍♀️", name: "vampire", color: "red"},
 						];
 
 						songs = {
-							reveal: [C, E, G],
-							match: [CC, CC, G, F, E, CC],
-							noMatch: [A, AA],
-							win: [CC, CC, GG, F, E, D, E, CC, CC, GG, F, E, D, E, CC],
+							reveal: [A, D_, E],
+							match: [AA, AA, E, D, D_, AA],
+							noMatch: [G_, GG_],
+							win: [AA, AA, EE, D, D_, B, D_, AA, AA, EE, D, D_, B, D_, AA],
 						};
 					}
 				);
@@ -73,7 +75,7 @@
 				<dialog>
 					<figure>🦉</figure>
 					<div>
-						<p>Hoo-ray! You found all my owl friends. Play again?</p>
+						<p>Happy Halloween! Play again?</p>
 						<button class="play-again">Yes</button>
 						<button class="stop-playing">No</button>
 					</div>

@@ -1,16 +1,7 @@
 import {trySong, scheduleSong} from "memory-game/audio";
 
-const CHARACTERS = [
-	{text: "🐰", name: "rabbit", color: "gray"},
-	{text: "🐶", name: "dog", color: "blue"},
-	{text: "🐸", name: "frog", color: "green"},
-	{text: "🐱", name: "cat", color: "yellow"},
-	{text: "🦊", name: "fox", color: "orange"},
-	{text: "🐻", name: "bear", color: "red"},
-];
-
-class MemoryGame extends HTMLElement {
-	#incomplete = CHARACTERS.length;
+export class MemoryGame extends HTMLElement {
+	#incomplete;
 	#previous;
 	#resolvePrevious;
 	#previousArgs = [];
@@ -30,7 +21,7 @@ class MemoryGame extends HTMLElement {
 						element.ariaLabel = "owl";
 					}
 
-					trySong("noMatch");
+					trySong(this.songs?.noMatch ?? []);
 				});
 
 				setTimeout(resolve, 2_000);
@@ -42,14 +33,14 @@ class MemoryGame extends HTMLElement {
 
 				this.#incomplete -= 1;
 
-				trySong("match");
+				trySong(this.songs?.match ?? []);
 			}
 		} else if (this.#incomplete === 0) {
 			this.#incomplete = -1;
 
 			this.className = "completed";
 
-			scheduleSong("win");
+			scheduleSong(this.songs?.win ?? []);
 
 			let reloadDialog = this.querySelector("dialog");
 
@@ -83,12 +74,12 @@ class MemoryGame extends HTMLElement {
 				this.#previousArgs = [matched, this.#previous, current];
 
 				if (!matched) {
-					trySong("reveal");
+					trySong(this.songs?.reveal ?? []);
 				}
 
 				this.#previous = null;
 			} else {
-				trySong("reveal");
+				trySong(this.songs?.reveal ?? []);
 
 				this.#previous = current;
 			}
@@ -98,11 +89,17 @@ class MemoryGame extends HTMLElement {
 	};
 
 	connectedCallback() {
-		let characters = CHARACTERS.concat(CHARACTERS)
+		this.#incomplete = this.characters.length;
+
+		let characters = this.characters
+			.concat(this.characters)
 			.map((character) => ({...character, order: Math.random()}))
 			.toSorted((a, b) => a.order - b.order);
+		let buttons = this.querySelectorAll(":scope > button");
 
-		for (let current of this.querySelectorAll(":scope > button")) {
+		if (buttons.length !== characters.length) return;
+
+		for (let current of buttons) {
 			let character = characters.shift();
 
 			current.ariaLabel = "owl";
@@ -156,5 +153,3 @@ class MemoryGame extends HTMLElement {
 		this.addEventListener("animationend", this.#onAnimationEnd);
 	}
 }
-
-customElements.define("memory-game", MemoryGame);

@@ -55,7 +55,7 @@ memory-game {
 		position: relative;
 		inline-size: auto;
 		aspect-ratio: 5 / 7;
-		background: color-mix(in lch, var(--purple), oklch(100% 0 0) 50%);
+		background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
 
 		&:where(:empty) {
 			border-radius: 0.5rem;
