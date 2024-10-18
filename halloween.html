@@ -7,7 +7,6 @@
 			content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
 		<title>Memory</title>
 		<link rel="stylesheet" href="./page.css" />
-		<link rel="stylesheet" href="https://fonts.bunny.net/css?family=freckle-face:400|inter:500" />
 		<link rel="stylesheet" href="./halloween.css" />
 		<script type="importmap">
 			{
@@ -24,16 +23,15 @@
 			<script type="module">
 				import {MemoryGame} from "memory-game/element";
 
-				const G_ = [92, 0.1];
-				const GG_ = [92, 0.2];
-				const A_ = [104, 0.1];
-				const A = [110, 0.1];
-				const AA = [110, 0.2];
-				const B = [123, 0.1];
-				const D_ = [138, 0.1];
-				const D = [146, 0.1];
-				const E = [164, 0.1];
-				const EE = [164, 0.2];
+				// A, B, C, D, E, F, G, A
+				const A = [55, 0.2];
+				const B = [61, 0.2];
+				const C = [65, 0.2];
+				const D = [73, 0.2];
+				const E = [82, 0.2];
+				const F = [87, 0.2];
+				const G = [98, 0.2];
+				const A2 = [110, 0.2];
 
 				customElements.define(
 					"memory-game",
@@ -48,10 +46,10 @@
 						];
 
 						songs = {
-							reveal: [A, D_, E],
-							match: [AA, AA, E, D, D_, AA],
-							noMatch: [G_, GG_],
-							win: [AA, AA, EE, D, D_, B, D_, AA, AA, EE, D, D_, B, D_, AA],
+							reveal: [A, B],
+							noMatch: [C, B],
+							match: [A, B, C, D],
+							win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
 						};
 					}
 				);

@@ -1,6 +1,7 @@
 html {
 	color-scheme: dark;
-	font-family: "Freckle Face", display;
+	font-family: Superclarendon, "Bookman Old Style", "URW Bookman",
+		"URW Bookman L", "Georgia Pro", Georgia, serif;
 
 	--gray: oklch(85% 0 0);
 	--purple: oklch(85% 0.075 300);
