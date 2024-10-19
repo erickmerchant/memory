@@ -8,8 +8,8 @@ function initApi() {
 	let oscillatorNode = new OscillatorNode(context);
 	let gainNode = new GainNode(context);
 	let wave = context.createPeriodicWave(
-		[0, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1],
-		[0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.1],
+		[0, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1, 0],
+		[0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0],
 		{
 			disableNormalization: false,
 		}
@@ -31,19 +31,21 @@ export function trySong(song) {
 
 	audio ??= initApi();
 
-	let time = audio.context.currentTime;
+	let {context, gain, frequency} = audio;
+
+	let time = context.currentTime;
 	let length = 0;
 
 	for (let [note, len] of song) {
 		length += len;
 
-		audio.frequency.setValueAtTime(note, time);
+		frequency.setValueAtTime(note, time);
 
-		audio.gain.linearRampToValueAtTime(1, time);
+		gain.linearRampToValueAtTime(1, time);
 
 		time += len;
 
-		audio.gain.linearRampToValueAtTime(0, time);
+		gain.linearRampToValueAtTime(0, time);
 	}
 
 	let {promise, resolve} = Promise.withResolvers();

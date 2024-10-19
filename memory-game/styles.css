@@ -137,11 +137,10 @@ memory-game {
 				color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%);
 			display: grid;
 			grid-template-rows: auto max-content;
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: auto auto;
 			padding: 0.5rem;
-			gap: 0.5rem;
-			min-inline-size: min-content;
-			max-inline-size: calc(100cqi / var(--columns));
+			gap: 2rem 0.5rem;
+			inline-size: min-content;
 			font-size: max(0.8rem, calc(10cqi / var(--columns)));
 			position: relative;
 			color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
