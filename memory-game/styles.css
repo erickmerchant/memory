@@ -89,9 +89,11 @@ memory-game {
 		animation-fill-mode: forwards;
 		background: none;
 		overflow: visible;
+		align-items: center;
 
-		@starting-style {
-			scale: 0;
+		@container (aspect-ratio <= 15/28) {
+			flex-direction: column;
+			align-items: center;
 		}
 
 		&::backdrop {
@@ -106,6 +108,8 @@ memory-game {
 		}
 
 		@starting-style {
+			scale: 0;
+
 			&::backdrop {
 				opacity: 0;
 			}
@@ -115,19 +119,14 @@ memory-game {
 			background: var(--purple);
 			box-shadow: 0 0 0.5cqmin 0
 				color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.75) 100%);
-			font-size: calc(45cqi / var(--columns));
+			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
 			border-radius: 0.5rem;
 			display: grid;
 			place-content: center;
-			min-inline-size: calc(100cqi / var(--columns));
+			min-inline-size: calc((100cqi / var(--columns) * 1.25));
 			flex-shrink: 0;
 			flex-grow: 0;
-
-			@container (aspect-ratio <= 15/28) {
-				font-size: 45cqi;
-				min-inline-size: 100cqi;
-			}
 		}
 
 		:where(div) {
@@ -139,7 +138,8 @@ memory-game {
 			grid-template-rows: auto max-content;
 			grid-template-columns: auto auto;
 			padding: 0.5rem;
-			gap: 2rem 0.5rem;
+			gap: 1rem 0.5rem;
+			min-inline-size: calc((100cqi / var(--columns) * 1.25));
 			inline-size: min-content;
 			font-size: max(0.8rem, calc(10cqi / var(--columns)));
 			position: relative;
@@ -163,10 +163,14 @@ memory-game {
 			}
 
 			@container (aspect-ratio <= 15/28) {
-				min-inline-size: 100cqi;
-
 				&::before {
-					display: none;
+					border-right: var(--gap) solid transparent;
+					border-left: var(--gap) solid transparent;
+					border-bottom: var(--gap) solid white;
+					position: absolute;
+					bottom: calc(100% - 1px);
+					left: calc(50% - (var(--gap) / 2));
+					top: unset;
 				}
 			}
 		}

@@ -8,8 +8,14 @@ function initApi() {
 	let oscillatorNode = new OscillatorNode(context);
 	let gainNode = new GainNode(context);
 	let wave = context.createPeriodicWave(
-		[0, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1, 0],
-		[0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0],
+		[
+			0, 1, 1, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		],
+		[
+			0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		],
 		{
 			disableNormalization: false,
 		}
