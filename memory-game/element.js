@@ -4,11 +4,13 @@ export class MemoryGame extends HTMLElement {
 	#incomplete;
 	#previous;
 	#resolvePrevious;
-	#previousArgs = [];
+	#previousArgs = null;
 
 	#onAnimationEnd = (e) => {
-		if (this.#previousArgs.length) {
-			let [matched, ...elements] = this.#previousArgs.splice(0, Infinity);
+		if (this.#previousArgs) {
+			let {matched, elements} = this.#previousArgs;
+
+			this.#previousArgs = null;
 
 			if (!matched) {
 				let {promise, resolve} = Promise.withResolvers();
@@ -71,7 +73,7 @@ export class MemoryGame extends HTMLElement {
 			if (this.#previous) {
 				let matched = this.#previous.textContent === current.textContent;
 
-				this.#previousArgs = [matched, this.#previous, current];
+				this.#previousArgs = {matched, elements: [this.#previous, current]};
 
 				if (!matched) {
 					trySong(this.songs?.reveal ?? []);
