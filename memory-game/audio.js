@@ -4,7 +4,6 @@ let isPlaying = false;
 
 function initApi() {
 	let context = new AudioContext();
-
 	let oscillatorNode = new OscillatorNode(context);
 	let gainNode = new GainNode(context);
 	let wave = context.createPeriodicWave(
@@ -38,7 +37,6 @@ export function trySong(song) {
 	audio ??= initApi();
 
 	let {context, gain, frequency} = audio;
-
 	let time = context.currentTime;
 	let length = 0;
 
