@@ -1,4 +1,4 @@
-import {watch, use, html} from "vanilla-kit";
+import {watch, html, effect} from "vanilla-kit";
 import {trySong, scheduleSong} from "memory-game/audio";
 
 let {span, div, dialog, figure, p, button} = html;
@@ -50,37 +50,43 @@ export default function (settings) {
 			current.on("click", onClick(model));
 		}
 
-		let reloadDialog = dialog()
-			.prop("open", () => state.incomplete === 0)
-			.nodes(
-				figure().text("🦉"),
-				div().nodes(
-					p().text("Hoo-ray! You found all my owl friends. Play again?"),
-					button()
-						.classes("play-again")
-						.text("Yes")
-						.on(
-							"click",
-							() => {
-								window.location.reload();
-							},
-							{once: true}
-						),
-					button()
-						.classes("stop-playing")
-						.text("No")
-						.on(
-							"click",
-							() => {
-								reloadDialog.close();
-							},
-							{once: true}
-						)
-				)
-			);
+		let reloadDialog = dialog().nodes(
+			figure().text("🦉"),
+			div().nodes(
+				p().text("Hoo-ray! You found all my owl friends. Play again?"),
+				button()
+					.classes("play-again")
+					.text("Yes")
+					.on(
+						"click",
+						() => {
+							window.location.reload();
+						},
+						{once: true}
+					),
+				button()
+					.classes("stop-playing")
+					.text("No")
+					.on(
+						"click",
+						() => {
+							reloadDialog.deref().close();
+						},
+						{once: true}
+					)
+			)
+		);
 
-		host.on("animationend", onAnimationEnd);
-		host.classes({completed: () => state.incomplete === 0});
+		effect(() => {
+			if (state.incomplete === -1) {
+				reloadDialog.deref().showModal();
+			}
+		});
+
+		host
+			.on("animationend", onAnimationEnd)
+			.classes({completed: () => state.incomplete === -1})
+			.nodes(reloadDialog);
 
 		function onAnimationEnd(e) {
 			if (state.previousArgs) {

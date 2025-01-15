@@ -59,8 +59,9 @@ memory-game {
 
 		&:where(:empty) {
 			border-radius: 0.5rem;
-			box-shadow: 0 0 0.5cqmin 0
-				color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
+			filter: drop-shadow(
+				0 0 0.25cqmin color-mix(in lch, var(--purple), oklch(0% 0 0) 75%)
+			);
 			background: var(--purple);
 			font-size: calc(45cqi / var(--columns));
 			block-size: 100%;
@@ -75,15 +76,13 @@ memory-game {
 	}
 
 	:where(dialog[open]) {
+		position: absolute;
+		margin: auto;
 		border: none;
 		display: flex;
 		flex-wrap: wrap;
 		gap: var(--gap);
-		place-content: center;
-		align-items: flex-start;
 		border-radius: 0.5rem;
-		position: absolute;
-		margin: auto;
 		scale: 1;
 		transition: scale 0.5s 1.8s;
 		animation-fill-mode: forwards;
@@ -117,8 +116,9 @@ memory-game {
 
 		:where(figure) {
 			background: var(--purple);
-			box-shadow: 0 0 0.5cqmin 0
-				color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.75) 100%);
+			filter: drop-shadow(
+				0 0 0.5cqmin color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.75) 100%)
+			);
 			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
 			border-radius: 0.5rem;
@@ -132,8 +132,9 @@ memory-game {
 		:where(div) {
 			background: white;
 			border-radius: 0.5rem;
-			box-shadow: 0 0 0.5cqmin 0
-				color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%);
+			filter: drop-shadow(
+				0 0 0.5cqmin color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%)
+			);
 			display: grid;
 			grid-template-rows: auto max-content;
 			grid-template-columns: auto auto;
@@ -249,16 +250,18 @@ memory-game {
 	:where(.front) {
 		backface-visibility: hidden;
 		background: var(--purple);
-		box-shadow: 0 0 0.5cqmin 0
-			color-mix(in lch, var(--purple), oklch(0% 0 0) 75%);
+		filter: drop-shadow(
+			0 0 0.25cqmin color-mix(in lch, var(--purple), oklch(0% 0 0) 75%)
+		);
 	}
 
 	:where(.back) {
 		backface-visibility: hidden;
 		transform: rotateY(180deg);
 		background: var(--back-background);
-		box-shadow: 0 0 0.5cqmin 0
-			color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%);
+		filter: drop-shadow(
+			0 0 0.25cqmin color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%)
+		);
 	}
 }
 
