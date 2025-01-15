@@ -10,6 +10,7 @@
 		<script type="importmap">
 			{
 				"imports": {
+					"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v3.1.2/lib.js",
 					"memory-game/audio": "./memory-game/audio.js",
 					"memory-game/element": "./memory-game/element.js"
 				}
@@ -20,7 +21,8 @@
 		<template shadowrootmode="open">
 			<link rel="stylesheet" href="./memory-game/styles.css" />
 			<script type="module">
-				import {MemoryGame} from "memory-game/element";
+				import {define} from "vanilla-kit";
+				import game from "memory-game/element";
 
 				const A = [220, 0.1];
 				const AA = [220, 0.2];
@@ -33,25 +35,24 @@
 				const G = [392, 0.1];
 				const GG = [392, 0.2];
 
-				customElements.define(
+				define(
 					"memory-game",
-					class extends MemoryGame {
-						characters = [
+					game({
+						characters: [
 							{text: "🐰", name: "rabbit", color: "gray"},
 							{text: "🐶", name: "dog", color: "blue"},
 							{text: "🐸", name: "frog", color: "green"},
 							{text: "🐱", name: "cat", color: "yellow"},
 							{text: "🦊", name: "fox", color: "orange"},
 							{text: "🐻", name: "bear", color: "red"},
-						];
-
-						songs = {
+						],
+						songs: {
 							reveal: [C, E, G],
 							match: [CC, CC, G, F, E, CC],
 							noMatch: [A, AA],
 							win: [CC, CC, GG, F, E, D, E, CC, CC, GG, F, E, D, E, CC],
-						};
-					}
+						},
+					})
 				);
 			</script>
 
@@ -70,14 +71,6 @@
 				<button></button>
 				<button></button>
 				<button></button>
-				<dialog>
-					<figure>🦉</figure>
-					<div>
-						<p>Hoo-ray! You found all my owl friends. Play again?</p>
-						<button class="play-again">Yes</button>
-						<button class="stop-playing">No</button>
-					</div>
-				</dialog>
 			</memory-game>
 		</template>
 	</body>

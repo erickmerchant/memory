@@ -9,19 +9,21 @@
 		<link rel="stylesheet" href="./page.css" />
 		<link rel="stylesheet" href="./halloween.css" />
 		<script type="importmap">
-			{
-				"imports": {
-					"memory-game/audio": "./memory-game/audio.js",
-					"memory-game/element": "./memory-game/element.js"
-				}
+		{
+			"imports": {
+				"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v3.1.2/lib.js",
+				"memory-game/audio": "./memory-game/audio.js",
+				"memory-game/element": "./memory-game/element.js"
 			}
+		}
 		</script>
 	</head>
 	<body>
 		<template shadowrootmode="open">
 			<link rel="stylesheet" href="./memory-game/styles.css" />
 			<script type="module">
-				import {MemoryGame} from "memory-game/element";
+				import {define} from "vanilla-kit";
+				import game from "memory-game/element";
 
 				const A = [55, 0.2];
 				const B = [61, 0.2];
@@ -32,25 +34,24 @@
 				const G = [98, 0.2];
 				const A2 = [110, 0.2];
 
-				customElements.define(
+				define(
 					"memory-game",
-					class extends MemoryGame {
-						characters = [
+					game({
+						characters: [
 							{text: "🦇", name: "bat", color: "yellow"},
 							{text: "🕷️", name: "spider", color: "gray"},
 							{text: "🧟‍♀️", name: "zombie", color: "green"},
 							{text: "🎃", name: "jack-o'-lantern", color: "orange"},
 							{text: "🐺", name: "wolf", color: "blue"},
 							{text: "🧛‍♀️", name: "vampire", color: "red"},
-						];
-
-						songs = {
+						],
+						songs: {
 							reveal: [A, B],
 							noMatch: [C, B],
 							match: [A, B, C, D],
 							win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
-						};
-					}
+						}
+					})
 				);
 			</script>
 
@@ -69,14 +70,6 @@
 				<button></button>
 				<button></button>
 				<button></button>
-				<dialog>
-					<figure>🦉</figure>
-					<div>
-						<p>Hoo-ray, and Happy Halloween! Play again?</p>
-						<button class="play-again">Yes</button>
-						<button class="stop-playing">No</button>
-					</div>
-				</dialog>
 			</memory-game>
 		</template>
 	</body>

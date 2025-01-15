@@ -1,157 +1,157 @@
+import {watch, use, html} from "vanilla-kit";
 import {trySong, scheduleSong} from "memory-game/audio";
 
-export class MemoryGame extends HTMLElement {
-	#incomplete;
-	#previous;
-	#resolvePrevious;
-	#previousArgs = null;
+let {span, div, dialog, figure, p, button} = html;
 
-	#onAnimationEnd = (e) => {
-		if (this.#previousArgs) {
-			let {matched, elements} = this.#previousArgs;
+export default function (settings) {
+	return (host) => {
+		let state = watch({
+			incomplete: settings.characters.length,
+			previous: null,
+			resolvePrevious: null,
+			previousArgs: null,
+		});
 
-			this.#previousArgs = null;
-
-			if (!matched) {
-				let {promise, resolve} = Promise.withResolvers();
-
-				this.#resolvePrevious = resolve;
-
-				promise.then(() => {
-					for (let element of elements) {
-						element.className = "covered";
-						element.ariaLabel = "owl";
-					}
-
-					trySong(this.songs?.noMatch ?? []);
-				});
-
-				setTimeout(resolve, 2_000);
-			} else {
-				for (let element of elements) {
-					element.className = "matched";
-					element.ariaLabel += " (matched)";
-				}
-
-				this.#incomplete -= 1;
-
-				trySong(this.songs?.match ?? []);
-			}
-		} else if (this.#incomplete === 0) {
-			this.#incomplete = -1;
-
-			this.className = "completed";
-
-			scheduleSong(this.songs?.win ?? []);
-
-			let reloadDialog = this.querySelector("dialog");
-
-			if (reloadDialog) {
-				reloadDialog.showModal();
-			}
-		}
-	};
-
-	#onClick = (e) => {
-		let current = e.currentTarget;
-
-		if (current.className === "matched") return;
-
-		let isFlipped = current.className === "flipped";
-
-		if (isFlipped) {
-			current.className = "covered";
-			current.ariaLabel = "owl";
-
-			if (this.#previous === current) {
-				this.#previous = null;
-			}
-		} else {
-			current.className = "flipped";
-			current.ariaLabel = current.dataset.name;
-
-			if (this.#previous) {
-				let matched = this.#previous.textContent === current.textContent;
-
-				this.#previousArgs = {matched, elements: [this.#previous, current]};
-
-				if (!matched) {
-					trySong(this.songs?.reveal ?? []);
-				}
-
-				this.#previous = null;
-			} else {
-				trySong(this.songs?.reveal ?? []);
-
-				this.#previous = current;
-			}
-		}
-
-		this.#resolvePrevious?.();
-	};
-
-	connectedCallback() {
-		this.#incomplete = this.characters.length;
-
-		let characters = this.characters
-			.concat(this.characters)
+		let characters = settings.characters
+			.concat(settings.characters)
 			.map((character) => ({...character, order: Math.random()}))
 			.toSorted((a, b) => a.order - b.order);
-		let buttons = this.querySelectorAll(":scope > button");
+		let buttons = host.find(":scope > button");
 
 		if (buttons.length !== characters.length) return;
 
 		for (let current of buttons) {
 			let character = characters.shift();
+			let model = watch({
+				state: "",
+				...character,
+			});
 
-			current.ariaLabel = "owl";
-			current.dataset.name = character.name;
+			let front = span().classes("front").text("🦉");
 
-			let front = document.createElement("span");
+			let text = span().classes("text").text(character.text);
 
-			front.className = "front";
-			front.append("🦉");
+			let back = span()
+				.classes("back")
+				.styles({"--back-background": `var(--${character.color}`})
+				.nodes(text);
 
-			let text = document.createElement("span");
+			let faces = div().classes("faces").nodes(front, back);
 
-			text.className = "text";
-			text.append(character.text);
-
-			let back = document.createElement("span");
-
-			back.className = "back";
-			back.style.setProperty("--back-background", `var(--${character.color}`);
-			back.append(text);
-
-			let faces = document.createElement("div");
-
-			faces.className = "faces";
-			faces.append(front, back);
-
-			current.append(faces);
-			current.addEventListener("click", this.#onClick);
+			current.attr("aria-label", () =>
+				model.state === "covered" ? "owl" : model.name
+			);
+			current.classes({
+				covered: () => model.state === "covered",
+				flipped: () => model.state === "flipped",
+				matched: () => model.state === "matched",
+			});
+			current.nodes(faces);
+			current.on("click", onClick(model));
 		}
 
-		let reloadDialog = this.querySelector("dialog");
-
-		if (reloadDialog) {
-			reloadDialog.querySelector(".play-again")?.addEventListener?.(
-				"click",
-				() => {
-					window.location.reload();
-				},
-				{once: true}
+		let reloadDialog = dialog()
+			.prop("open", () => state.incomplete === 0)
+			.nodes(
+				figure().text("🦉"),
+				div().nodes(
+					p().text("Hoo-ray! You found all my owl friends. Play again?"),
+					button()
+						.classes("play-again")
+						.text("Yes")
+						.on(
+							"click",
+							() => {
+								window.location.reload();
+							},
+							{once: true}
+						),
+					button()
+						.classes("stop-playing")
+						.text("No")
+						.on(
+							"click",
+							() => {
+								reloadDialog.close();
+							},
+							{once: true}
+						)
+				)
 			);
 
-			reloadDialog.querySelector(".stop-playing")?.addEventListener?.(
-				"click",
-				() => {
-					reloadDialog.close();
-				},
-				{once: true}
-			);
+		host.on("animationend", onAnimationEnd);
+		host.classes({completed: () => state.incomplete === 0});
+
+		function onAnimationEnd(e) {
+			if (state.previousArgs) {
+				let {matched, models} = state.previousArgs;
+
+				state.previousArgs = null;
+
+				if (!matched) {
+					let {promise, resolve} = Promise.withResolvers();
+
+					state.resolvePrevious = resolve;
+
+					promise.then(() => {
+						for (let model of models) {
+							model.state = "covered";
+						}
+
+						trySong(settings.songs?.noMatch ?? []);
+					});
+
+					setTimeout(resolve, 2_000);
+				} else {
+					for (let model of models) {
+						model.state = "matched";
+					}
+
+					state.incomplete -= 1;
+
+					trySong(settings.songs?.match ?? []);
+				}
+			} else if (state.incomplete === 0) {
+				state.incomplete = -1;
+
+				scheduleSong(settings.songs?.win ?? []);
+			}
 		}
 
-		this.addEventListener("animationend", this.#onAnimationEnd);
-	}
+		function onClick(current) {
+			return () => {
+				if (current.state === "matched") return;
+
+				let isFlipped = current.state === "flipped";
+
+				if (isFlipped) {
+					current.state = "covered";
+
+					if (state.previous === current) {
+						state.previous = null;
+					}
+				} else {
+					current.state = "flipped";
+
+					if (state.previous) {
+						let matched = state.previous.text === current.text;
+
+						state.previousArgs = {matched, models: [state.previous, current]};
+
+						if (!matched) {
+							trySong(settings.songs?.reveal ?? []);
+						}
+
+						state.previous = null;
+					} else {
+						trySong(settings.songs?.reveal ?? []);
+
+						state.previous = current;
+					}
+				}
+
+				state.resolvePrevious?.();
+			};
+		}
+	};
 }
