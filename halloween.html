@@ -12,18 +12,18 @@
 		{
 			"imports": {
 				"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v3.1.2/lib.min.js",
-				"memory-game/audio": "./memory-game/audio.js",
-				"memory-game/element": "./memory-game/element.js"
+				"audio": "./audio.js",
+				"base": "./base.js"
 			}
 		}
 		</script>
 	</head>
 	<body>
 		<template shadowrootmode="open">
-			<link rel="stylesheet" href="./memory-game/styles.css" />
+			<link rel="stylesheet" href="./base.css" />
 			<script type="module">
 				import {define} from "vanilla-kit";
-				import game from "memory-game/element";
+				import game from "base";
 
 				const A = [55, 0.2];
 				const B = [61, 0.2];

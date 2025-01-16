@@ -1,5 +1,5 @@
 import {watch, html, effect} from "vanilla-kit";
-import {trySong, scheduleSong} from "memory-game/audio";
+import {trySong, scheduleSong} from "audio";
 
 let {span, div, dialog, figure, p, button} = html;
 
