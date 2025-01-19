@@ -38,16 +38,15 @@ export default function (settings) {
 
 			let faces = div().classes("faces").nodes(front, back);
 
-			current.attr("aria-label", () =>
-				model.state === "covered" ? "owl" : model.name
-			);
-			current.classes({
-				covered: () => model.state === "covered",
-				flipped: () => model.state === "flipped",
-				matched: () => model.state === "matched",
-			});
-			current.nodes(faces);
-			current.on("click", onClick(model));
+			current
+				.aria({label: () => (model.state === "covered" ? "owl" : model.name)})
+				.classes({
+					covered: () => model.state === "covered",
+					flipped: () => model.state === "flipped",
+					matched: () => model.state === "matched",
+				})
+				.nodes(faces)
+				.on("click", onClick(model));
 		}
 
 		let reloadDialog = dialog().nodes(
