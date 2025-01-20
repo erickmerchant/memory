@@ -27,17 +27,6 @@ export default function (settings) {
 				...character,
 			});
 
-			let front = span().classes("front").text("🦉");
-
-			let text = span().classes("text").text(character.text);
-
-			let back = span()
-				.classes("back")
-				.styles({"--back-background": `var(--${character.color}`})
-				.nodes(text);
-
-			let faces = div().classes("faces").nodes(front, back);
-
 			current
 				.aria({label: () => (model.state === "covered" ? "owl" : model.name)})
 				.classes({
@@ -45,7 +34,17 @@ export default function (settings) {
 					flipped: () => model.state === "flipped",
 					matched: () => model.state === "matched",
 				})
-				.nodes(faces)
+				.nodes(
+					div()
+						.classes("faces")
+						.nodes(
+							span().classes("front").text("🦉"),
+							span()
+								.classes("back")
+								.styles({"--back-background": `var(--${character.color}`})
+								.nodes(span().classes("text").text(character.text))
+						)
+				)
 				.on("click", onClick(model));
 		}
 
