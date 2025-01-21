@@ -9,13 +9,13 @@
 		<link rel="stylesheet" href="./page.css" />
 		<link rel="stylesheet" href="./halloween.css" />
 		<script type="importmap">
-		{
-			"imports": {
-				"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v3.2.0/lib.min.js",
-				"audio": "./audio.js",
-				"base": "./base.js"
+			{
+				"imports": {
+					"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v4.0.0/lib.min.js",
+					"audio": "./audio.js",
+					"base": "./base.js"
+				}
 			}
-		}
 		</script>
 	</head>
 	<body>
@@ -34,8 +34,7 @@
 				const G = [98, 0.2];
 				const A2 = [110, 0.2];
 
-				define(
-					"memory-game",
+				define("memory-game").connected(
 					game({
 						characters: [
 							{text: "🦇", name: "bat", color: "yellow"},
@@ -50,7 +49,7 @@
 							noMatch: [C, B],
 							match: [A, B, C, D],
 							win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
-						}
+						},
 					})
 				);
 			</script>

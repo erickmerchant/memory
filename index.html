@@ -10,7 +10,7 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v3.2.0/lib.min.js",
+					"vanilla-kit": "https://cdn.jsdelivr.net/gh/erickmerchant/vanilla-kit@v4.0.0/lib.min.js",
 					"audio": "./audio.js",
 					"base": "./base.js"
 				}
@@ -35,8 +35,7 @@
 				const G = [392, 0.1];
 				const GG = [392, 0.2];
 
-				define(
-					"memory-game",
+				define("memory-game").connected(
 					game({
 						characters: [
 							{text: "🐰", name: "rabbit", color: "gray"},
