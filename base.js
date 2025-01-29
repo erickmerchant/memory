@@ -1,9 +1,12 @@
 import {trySong, scheduleSong} from "audio";
-import {watch, html, effect} from "vanilla-kit/prelude/min.js";
+import {watch, html, effect} from "vanilla-kit/lib.js";
 import "vanilla-kit/element/aria.js";
 import "vanilla-kit/element/classes.js";
+import "vanilla-kit/element/nodes.js";
 import "vanilla-kit/element/observe.js";
+import "vanilla-kit/element/on.js";
 import "vanilla-kit/element/styles.js";
+import "vanilla-kit/element/text.js";
 
 let {span, div, dialog, figure, p, button} = html;
 
