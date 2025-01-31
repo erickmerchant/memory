@@ -1,12 +1,13 @@
 import {trySong, scheduleSong} from "audio";
-import {watch, html, effect} from "vanilla-kit/lib.js";
-import "vanilla-kit/element/aria.js";
-import "vanilla-kit/element/classes.js";
-import "vanilla-kit/element/nodes.js";
-import "vanilla-kit/element/observe.js";
-import "vanilla-kit/element/on.js";
-import "vanilla-kit/element/styles.js";
-import "vanilla-kit/element/text.js";
+import {html} from "handcraft/dom.js";
+import {watch, effect} from "handcraft/reactivity.js";
+import "handcraft/element/aria.js";
+import "handcraft/element/classes.js";
+import "handcraft/element/nodes.js";
+import "handcraft/element/observe.js";
+import "handcraft/element/on.js";
+import "handcraft/element/styles.js";
+import "handcraft/element/text.js";
 
 let {span, div, dialog, figure, p, button} = html;
 
