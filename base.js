@@ -3,6 +3,7 @@ import {html} from "handcraft/dom.js";
 import {watch, effect} from "handcraft/reactivity.js";
 import "handcraft/element/aria.js";
 import "handcraft/element/classes.js";
+import "handcraft/element/effect.js";
 import "handcraft/element/nodes.js";
 import "handcraft/element/observe.js";
 import "handcraft/element/on.js";
@@ -17,6 +18,7 @@ export default (settings) => (host) => {
 		previous: null,
 		resolvePrevious: null,
 		previousArgs: null,
+		modalOpen: false,
 	});
 
 	let characters = settings.characters
@@ -55,43 +57,45 @@ export default (settings) => (host) => {
 			.on("click", onClick(model));
 	}
 
-	let reloadDialog = dialog().nodes(
-		figure().text("🦉"),
-		div().nodes(
-			p().text("Hoo-ray! You found all my owl friends. Play again?"),
-			button()
-				.classes("play-again")
-				.text("Yes")
-				.on(
-					"click",
-					() => {
-						window.location.reload();
-					},
-					{once: true}
-				),
-			button()
-				.classes("stop-playing")
-				.text("No")
-				.on(
-					"click",
-					() => {
-						reloadDialog.deref().close();
-					},
-					{once: true}
-				)
+	let reloadDialog = dialog()
+		.nodes(
+			figure().text("🦉"),
+			div().nodes(
+				p().text("Hoo-ray! You found all my owl friends. Play again?"),
+				button()
+					.classes("play-again")
+					.text("Yes")
+					.on(
+						"click",
+						() => {
+							window.location.reload();
+						},
+						{once: true}
+					),
+				button()
+					.classes("stop-playing")
+					.text("No")
+					.on(
+						"click",
+						() => {
+							state.modalOpen = false;
+						},
+						{once: true}
+					)
+			)
 		)
-	);
-
-	effect(() => {
-		if (state.incomplete === -1) {
-			reloadDialog.deref().showModal();
-		}
-	});
+		.effect((el) => {
+			if (state.modalOpen) {
+				el.showModal();
+			} else {
+				el.close();
+			}
+		});
 
 	host
 		.on("animationend", onAnimationEnd)
 		.classes({completed: () => state.incomplete === -1})
-		.nodes(...host.deref().children, reloadDialog);
+		.nodes(reloadDialog);
 
 	function onAnimationEnd(e) {
 		if (state.previousArgs) {
@@ -124,6 +128,7 @@ export default (settings) => (host) => {
 			}
 		} else if (state.incomplete === 0) {
 			state.incomplete = -1;
+			state.modalOpen = true;
 
 			scheduleSong(settings.songs?.win ?? []);
 		}
