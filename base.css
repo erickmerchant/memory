@@ -115,10 +115,7 @@ memory-game {
 		}
 
 		:where(figure) {
-			background: var(--purple);
-			filter: drop-shadow(
-				0 0 0.5cqmin color-mix(in lch, var(--purple), oklch(0% 0 0 / 0.75) 100%)
-			);
+			position: relative;
 			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
 			border-radius: 0.5rem;
@@ -127,6 +124,7 @@ memory-game {
 			min-inline-size: calc((100cqi / var(--columns) * 1.25));
 			flex-shrink: 0;
 			flex-grow: 0;
+			--background: var(--purple);
 		}
 
 		:where(div) {
@@ -136,8 +134,8 @@ memory-game {
 				0 0 0.5cqmin color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%)
 			);
 			display: grid;
-			grid-template-rows: auto max-content;
-			grid-template-columns: auto auto;
+			grid-template-rows: max-content;
+			grid-template-columns: auto;
 			padding: 0.5rem;
 			gap: 1rem 0.5rem;
 			min-inline-size: calc((100cqi / var(--columns) * 1.25));
@@ -157,10 +155,6 @@ memory-game {
 				position: absolute;
 				right: calc(100% - 1px);
 				top: 2rem;
-			}
-
-			:where(p) {
-				grid-column: 1 / -1;
 			}
 
 			@container (aspect-ratio <= 15/28) {
@@ -249,19 +243,29 @@ memory-game {
 
 	:where(.front) {
 		backface-visibility: hidden;
-		background: var(--purple);
-		filter: drop-shadow(
-			0 0 0.25cqmin color-mix(in lch, var(--purple), oklch(0% 0 0) 75%)
-		);
+		--background: var(--purple);
 	}
 
 	:where(.back) {
 		backface-visibility: hidden;
 		transform: rotateY(180deg);
-		background: var(--back-background);
-		filter: drop-shadow(
-			0 0 0.25cqmin color-mix(in lch, var(--back-background), oklch(0% 0 0) 75%)
-		);
+		--background: var(--back-background);
+	}
+}
+
+.face {
+	background: var(--background);
+	filter: drop-shadow(
+		0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)
+	);
+
+	&::after {
+		content: "";
+		display: block;
+		position: absolute;
+		inset: 0.2rem;
+		border-radius: 0.3rem;
+		border: 0.1rem solid color-mix(in lch, var(--background), oklch(0% 0 0) 10%);
 	}
 }
 

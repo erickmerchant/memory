@@ -39,9 +39,9 @@ export default (settings) => (host) => {
 		let faces = div()
 			.classes("faces")
 			.nodes(
-				span().classes("front").text("🦉"),
+				span().classes("front", "face").text("🦉"),
 				span()
-					.classes("back")
+					.classes("back", "face")
 					.styles({"--back-background": `var(--${character.color}`})
 					.nodes(span().classes("text").text(character.text))
 			);
@@ -59,26 +59,16 @@ export default (settings) => (host) => {
 
 	let reloadDialog = dialog()
 		.nodes(
-			figure().text("🦉"),
+			figure().classes("face").text("🦉"),
 			div().nodes(
 				p().text("Hoo-ray! You found all my owl friends. Play again?"),
 				button()
 					.classes("play-again")
-					.text("Yes")
+					.text("Play Again!")
 					.on(
 						"click",
 						() => {
 							window.location.reload();
-						},
-						{once: true}
-					),
-				button()
-					.classes("stop-playing")
-					.text("No")
-					.on(
-						"click",
-						() => {
-							state.modalOpen = false;
 						},
 						{once: true}
 					)
@@ -93,46 +83,9 @@ export default (settings) => (host) => {
 		});
 
 	host
-		.on("animationend", onAnimationEnd)
 		.classes({completed: () => state.incomplete === -1})
-		.nodes(reloadDialog);
-
-	function onAnimationEnd(e) {
-		if (state.previousArgs) {
-			let {matched, models} = state.previousArgs;
-
-			state.previousArgs = null;
-
-			if (!matched) {
-				let {promise, resolve} = Promise.withResolvers();
-
-				state.resolvePrevious = resolve;
-
-				promise.then(() => {
-					for (let model of models) {
-						model.state = "covered";
-					}
-
-					trySong(settings.songs?.noMatch ?? []);
-				});
-
-				setTimeout(resolve, 2_000);
-			} else {
-				for (let model of models) {
-					model.state = "matched";
-				}
-
-				state.incomplete -= 1;
-
-				trySong(settings.songs?.match ?? []);
-			}
-		} else if (state.incomplete === 0) {
-			state.incomplete = -1;
-			state.modalOpen = true;
-
-			scheduleSong(settings.songs?.win ?? []);
-		}
-	}
+		.nodes(reloadDialog)
+		.on("animationend", onAnimationEnd);
 
 	function onClick(current) {
 		return () => {
@@ -168,5 +121,44 @@ export default (settings) => (host) => {
 
 			state.resolvePrevious?.();
 		};
+	}
+
+	function onAnimationEnd(e) {
+		if (state.previousArgs) {
+			let {matched, models} = state.previousArgs;
+
+			state.previousArgs = null;
+
+			if (!matched) {
+				let {promise, resolve} = Promise.withResolvers();
+
+				state.resolvePrevious = resolve;
+
+				promise.then(() => {
+					for (let model of models) {
+						model.state = "covered";
+					}
+
+					trySong(settings.songs?.noMatch ?? []);
+				});
+
+				setTimeout(resolve, 2_000);
+			} else {
+				for (let model of models) {
+					model.state = "matched";
+				}
+
+				state.incomplete -= 1;
+
+				if (state.incomplete === 0) {
+					state.incomplete = -1;
+					state.modalOpen = true;
+
+					scheduleSong(settings.songs?.win ?? []);
+				} else {
+					trySong(settings.songs?.match ?? []);
+				}
+			}
+		}
 	}
 };
