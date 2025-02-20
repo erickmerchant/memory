@@ -42,6 +42,7 @@ memory-game {
 
 	@container (aspect-ratio > 15/28) {
 		aspect-ratio: 20/21;
+		block-size: 90cqb;
 
 		--columns: 4;
 
@@ -210,7 +211,7 @@ memory-game {
 		inset-inline-start: 0;
 		inset-block-start: 0;
 		border-radius: 0.5rem;
-		font-size: calc(45cqi / var(--columns));
+		font-size: min(calc(45cqi / var(--columns)), 30cqb);
 		block-size: 100%;
 		inline-size: 100%;
 		transform-style: preserve-3d;
