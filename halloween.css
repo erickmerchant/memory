@@ -1,7 +1,5 @@
 html {
 	color-scheme: dark;
-	font-family: Superclarendon, "Bookman Old Style", "URW Bookman",
-		"URW Bookman L", "Georgia Pro", Georgia, serif;
 
 	--gray: oklch(85% 0 0);
 	--purple: oklch(85% 0.075 300);
@@ -13,5 +11,8 @@ html {
 }
 
 body {
+	color: #222;
+	background-image: none;
 	background-color: color-mix(in lch, var(--gray), oklch(0% 0 0) 10%);
+	background-color: var(--gray);
 }

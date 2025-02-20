@@ -9,12 +9,18 @@
 	touch-action: none;
 }
 
+footer {
+	font-size: 0.75rem;
+	padding: 0.5rem;
+	text-align: right;
+}
+
 memory-game {
 	max-inline-size: 100cqi;
 	padding-block: var(--gap);
 	display: grid;
 	place-content: safe center;
-	max-block-size: 100cqb;
+	block-size: auto;
 	gap: var(--gap);
 	grid-template-columns: repeat(var(--columns), 1fr);
 
@@ -35,7 +41,6 @@ memory-game {
 	}
 
 	@container (aspect-ratio > 15/28) {
-		block-size: 100cqb;
 		aspect-ratio: 20/21;
 
 		--columns: 4;
@@ -60,14 +65,15 @@ memory-game {
 		&:where(:empty) {
 			border-radius: 0.5rem;
 			filter: drop-shadow(
-				0 0 0.25cqmin color-mix(in lch, var(--purple), oklch(0% 0 0) 75%)
+				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 75%)
 			);
-			background: var(--purple);
+			background: var(--background);
 			font-size: calc(45cqi / var(--columns));
 			block-size: 100%;
 			inline-size: 100%;
 			display: block;
 			place-content: center;
+			--background: var(--purple);
 
 			&::before {
 				content: "🦉";
@@ -75,7 +81,7 @@ memory-game {
 		}
 	}
 
-	:where(dialog[open]) {
+	:where(dialog) {
 		position: absolute;
 		margin: auto;
 		border: none;
@@ -83,27 +89,18 @@ memory-game {
 		flex-wrap: wrap;
 		gap: var(--gap);
 		border-radius: 0.5rem;
-		scale: 1;
-		transition: scale 0.5s 1.8s;
+		transition: scale 0.5s, display 0.5s ease-in-out allow-discrete;
 		animation-fill-mode: forwards;
 		background: none;
 		overflow: visible;
 		align-items: center;
 
-		@container (aspect-ratio <= 15/28) {
-			flex-direction: column;
-			align-items: center;
+		&:where([open]) {
+			scale: 1;
 		}
 
-		&::backdrop {
-			opacity: 1;
-			transition: opacity 0.5s 1.8s;
-			animation-fill-mode: forwards;
-			background-color: color-mix(
-				in lch,
-				oklch(0% 0 0 / 0.25),
-				var(--purple) 25%
-			);
+		&:where(:not([open])) {
+			scale: 0;
 		}
 
 		@starting-style {
@@ -112,6 +109,22 @@ memory-game {
 			&::backdrop {
 				opacity: 0;
 			}
+		}
+
+		@container (aspect-ratio <= 15/28) {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		&::backdrop {
+			opacity: 1;
+			transition: opacity 0.5s 9s;
+			animation-fill-mode: forwards;
+			background-color: color-mix(
+				in lch,
+				oklch(0% 0 0 / 0.25),
+				var(--purple) 25%
+			);
 		}
 
 		:where(figure) {
@@ -253,7 +266,8 @@ memory-game {
 	}
 }
 
-.face {
+.face,
+:where(button:empty) {
 	background: var(--background);
 	filter: drop-shadow(
 		0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)

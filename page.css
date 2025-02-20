@@ -30,11 +30,21 @@ body {
 	min-block-size: 100%;
 	display: grid;
 	grid-template-columns: 1fr;
+	grid-template-rows: auto min-content;
 	padding-inline: 1.5vmin;
-	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
 	block-size: 100%;
 	inline-size: 100%;
 	container-type: size;
-	place-content: safe center;
+	align-items: center;
 	scrollbar-gutter: stable;
+	background-image: repeating-linear-gradient(
+		135deg,
+		color-mix(in lch, var(--red), oklch(100% 0 0) 75%) 0 2em,
+		color-mix(in lch, var(--orange), oklch(100% 0 0) 75%) 2em 4em,
+		color-mix(in lch, var(--yellow), oklch(100% 0 0) 75%) 4em 6em,
+		color-mix(in lch, var(--green), oklch(100% 0 0) 75%) 6em 8em,
+		color-mix(in lch, var(--blue), oklch(100% 0 0) 75%) 8em 10em,
+		color-mix(in lch, var(--gray), oklch(100% 0 0) 75%) 10em 12em
+	);
+	background-attachment: fixed;
 }

@@ -11,7 +11,14 @@ import "handcraft/element/on.js";
 import "handcraft/element/styles.js";
 import "handcraft/element/text.js";
 
-let {span, div, dialog, figure, p, button} = html;
+let {
+	span: SPAN,
+	div: DIV,
+	dialog: DIALOG,
+	figure: FIGURE,
+	p: P,
+	button: BUTTON,
+} = html;
 
 export default (settings) => (host) => {
 	let observed = host.observe();
@@ -31,16 +38,16 @@ export default (settings) => (host) => {
 
 	let btns = each(state.characters)
 		.zip(buttons)
-		.map((entry, btn = button()) => {
-			let faces = div()
+		.map((entry, btn = BUTTON()) => {
+			let faces = DIV()
 				.classes("faces")
 				.nodes(
-					span().classes("front", "face").text("🦉"),
-					span()
+					SPAN().classes("front", "face").text("🦉"),
+					SPAN()
 						.classes("back", "face")
 						.styles({"--back-background": () => `var(--${entry.value.color}`})
 						.nodes(
-							span()
+							SPAN()
 								.classes("text")
 								.text(() => entry.value.text)
 						)
@@ -60,15 +67,15 @@ export default (settings) => (host) => {
 				.on("click", onClick(entry));
 		});
 
-	let reloadDialog = dialog()
+	let reloadDialog = DIALOG()
 		.nodes(
-			figure().classes("face").text("🦉"),
-			div().nodes(
-				p().text("Hoo-ray! You found all my owl friends."),
-				button()
+			FIGURE().classes("face").text("🦉"),
+			DIV().nodes(
+				P().text("Hoo-ray! You found all my owl friends."),
+				BUTTON()
 					.classes("play-again")
 					.text("Play Again!")
-					.on("click", resetState)
+					.on("click", () => resetState("covered"))
 			)
 		)
 		.effect((el) => {
@@ -84,7 +91,7 @@ export default (settings) => (host) => {
 		.nodes(btns, reloadDialog)
 		.on("animationend", onAnimationEnd);
 
-	function resetState() {
+	function resetState(defaultState) {
 		state.incomplete = settings.characters.length;
 		state.modalOpen = false;
 
@@ -94,7 +101,7 @@ export default (settings) => (host) => {
 			...settings.characters
 				.concat(settings.characters)
 				.map((character) =>
-					watch({...character, state: "", order: Math.random()})
+					watch({...character, state: defaultState, order: Math.random()})
 				)
 				.toSorted((a, b) => a.order - b.order)
 		);
