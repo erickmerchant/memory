@@ -37,7 +37,7 @@ body {
 	container-type: size;
 	align-items: center;
 	scrollbar-gutter: stable;
-	background-image: repeating-linear-gradient(
+	/* background-image: repeating-linear-gradient(
 		135deg,
 		color-mix(in lch, var(--red), oklch(100% 0 0) 75%) 0 2em,
 		color-mix(in lch, var(--orange), oklch(100% 0 0) 75%) 2em 4em,
@@ -46,5 +46,6 @@ body {
 		color-mix(in lch, var(--blue), oklch(100% 0 0) 75%) 8em 10em,
 		color-mix(in lch, var(--gray), oklch(100% 0 0) 75%) 10em 12em
 	);
-	background-attachment: fixed;
+	background-attachment: fixed; */
+	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
 }
