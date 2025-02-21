@@ -38,7 +38,7 @@ body {
 	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
 }
 
-div {
+body > :where(:first-child) {
 	display: grid;
 	block-size: 100%;
 	inline-size: 100%;

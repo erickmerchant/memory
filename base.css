@@ -1,14 +1,3 @@
-*,
-::before,
-::after {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	font: inherit;
-	max-inline-size: 100%;
-	touch-action: none;
-}
-
 memory-game {
 	max-inline-size: 100cqi;
 	padding-block: var(--gap);
@@ -205,7 +194,7 @@ memory-game {
 		inset-inline-start: 0;
 		inset-block-start: 0;
 		border-radius: 0.5rem;
-		font-size: min(calc(45cqi / var(--columns)), 30cqb);
+		font-size: min(calc(45cqi / var(--columns)), 20cqb);
 		block-size: 100%;
 		inline-size: 100%;
 		transform-style: preserve-3d;
@@ -259,22 +248,23 @@ memory-game {
 		transform: rotateY(180deg);
 		--background: var(--back-background);
 	}
-}
 
-.face,
-:where(button:empty) {
-	background: var(--background);
-	filter: drop-shadow(
-		0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)
-	);
+	:where(.face),
+	:where(button:empty) {
+		background: var(--background);
+		filter: drop-shadow(
+			0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)
+		);
 
-	&::after {
-		content: "";
-		display: block;
-		position: absolute;
-		inset: 0.2rem;
-		border-radius: 0.3rem;
-		border: 0.1rem solid color-mix(in lch, var(--background), oklch(0% 0 0) 10%);
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: 0.2rem;
+			border-radius: 0.3rem;
+			border: 0.1rem solid
+				color-mix(in lch, var(--background), oklch(0% 0 0) 10%);
+		}
 	}
 }
 
