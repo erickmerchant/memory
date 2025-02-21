@@ -17,62 +17,64 @@
 				}
 			}
 		</script>
+		<script type="module">
+			import {define} from "handcraft/define.js";
+			import game from "base";
+
+			const A = [55, 0.2];
+			const B = [61, 0.2];
+			const C = [65, 0.2];
+			const D = [73, 0.2];
+			const E = [82, 0.2];
+			const F = [87, 0.2];
+			const G = [98, 0.2];
+			const A2 = [110, 0.2];
+
+			define("memory-game").connected(
+				game({
+					characters: [
+						{text: "🦇", name: "bat", color: "yellow"},
+						{text: "🕷️", name: "spider", color: "gray"},
+						{text: "🧟‍♀️", name: "zombie", color: "green"},
+						{text: "🎃", name: "jack-o'-lantern", color: "orange"},
+						{text: "🐺", name: "wolf", color: "blue"},
+						{text: "🧛‍♀️", name: "vampire", color: "red"},
+					],
+					songs: {
+						reveal: [A, B],
+						noMatch: [C, B],
+						match: [A, B, C, D],
+						win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
+					},
+				})
+			);
+		</script>
 	</head>
 	<body>
-		<template shadowrootmode="open">
-			<link rel="stylesheet" href="./base.css" />
-			<script type="module">
-				import {define} from "handcraft/define.js";
-				import game from "base";
+		<div>
+			<template shadowrootmode="open">
+				<link rel="stylesheet" href="./base.css" />
 
-				const A = [55, 0.2];
-				const B = [61, 0.2];
-				const C = [65, 0.2];
-				const D = [73, 0.2];
-				const E = [82, 0.2];
-				const F = [87, 0.2];
-				const G = [98, 0.2];
-				const A2 = [110, 0.2];
+				<memory-game>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
 
-				define("memory-game").connected(
-					game({
-						characters: [
-							{text: "🦇", name: "bat", color: "yellow"},
-							{text: "🕷️", name: "spider", color: "gray"},
-							{text: "🧟‍♀️", name: "zombie", color: "green"},
-							{text: "🎃", name: "jack-o'-lantern", color: "orange"},
-							{text: "🐺", name: "wolf", color: "blue"},
-							{text: "🧛‍♀️", name: "vampire", color: "red"},
-						],
-						songs: {
-							reveal: [A, B],
-							noMatch: [C, B],
-							match: [A, B, C, D],
-							win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
-						},
-					})
-				);
-			</script>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
 
-			<memory-game>
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-			</memory-game>
-			<footer>
-				<p>Made with ❤️ for Louise</p>
-			</footer>
-		</template>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
+				</memory-game>
+			</template>
+		</div>
+		<footer>
+			<p>Made with ❤️ for Louise</p>
+		</footer>
 	</body>
 </html>

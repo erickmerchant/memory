@@ -34,8 +34,20 @@ body {
 	padding-inline: 1.5vmin;
 	block-size: 100%;
 	inline-size: 100%;
-	container-type: size;
-	place-items: center;
 	overflow: auto;
 	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
+}
+
+div {
+	display: grid;
+	block-size: 100%;
+	inline-size: 100%;
+	place-items: center;
+	container-type: size;
+}
+
+footer {
+	font-size: 0.75rem;
+	padding: 0.5rem;
+	text-align: right;
 }

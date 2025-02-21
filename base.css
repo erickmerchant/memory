@@ -9,12 +9,6 @@
 	touch-action: none;
 }
 
-footer {
-	font-size: 0.75rem;
-	padding: 0.5rem;
-	text-align: right;
-}
-
 memory-game {
 	max-inline-size: 100cqi;
 	padding-block: var(--gap);

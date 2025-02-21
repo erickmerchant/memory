@@ -16,64 +16,66 @@
 				}
 			}
 		</script>
+		<script type="module">
+			import {define} from "handcraft/define.js";
+			import game from "base";
+
+			const A = [220, 0.1];
+			const AA = [220, 0.2];
+			const B = [246, 0.1];
+			const C = [261, 0.1];
+			const CC = [261, 0.2];
+			const D = [293, 0.1];
+			const E = [329, 0.1];
+			const F = [349, 0.1];
+			const G = [392, 0.1];
+			const GG = [392, 0.2];
+
+			define("memory-game").connected(
+				game({
+					characters: [
+						{text: "🐰", name: "rabbit", color: "gray"},
+						{text: "🐶", name: "dog", color: "blue"},
+						{text: "🐸", name: "frog", color: "green"},
+						{text: "🐱", name: "cat", color: "yellow"},
+						{text: "🦊", name: "fox", color: "orange"},
+						{text: "🐻", name: "bear", color: "red"},
+					],
+					songs: {
+						reveal: [C, E, G],
+						match: [CC, CC, G, F, E, CC],
+						noMatch: [A, AA],
+						win: [CC, CC, GG, F, E, D, E, CC, CC, GG, F, E, D, E, CC],
+					},
+				})
+			);
+		</script>
 	</head>
 	<body>
-		<template shadowrootmode="open">
-			<link rel="stylesheet" href="./base.css" />
-			<script type="module">
-				import {define} from "handcraft/define.js";
-				import game from "base";
+		<div>
+			<template shadowrootmode="open">
+				<link rel="stylesheet" href="./base.css" />
 
-				const A = [220, 0.1];
-				const AA = [220, 0.2];
-				const B = [246, 0.1];
-				const C = [261, 0.1];
-				const CC = [261, 0.2];
-				const D = [293, 0.1];
-				const E = [329, 0.1];
-				const F = [349, 0.1];
-				const G = [392, 0.1];
-				const GG = [392, 0.2];
+				<memory-game>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
 
-				define("memory-game").connected(
-					game({
-						characters: [
-							{text: "🐰", name: "rabbit", color: "gray"},
-							{text: "🐶", name: "dog", color: "blue"},
-							{text: "🐸", name: "frog", color: "green"},
-							{text: "🐱", name: "cat", color: "yellow"},
-							{text: "🦊", name: "fox", color: "orange"},
-							{text: "🐻", name: "bear", color: "red"},
-						],
-						songs: {
-							reveal: [C, E, G],
-							match: [CC, CC, G, F, E, CC],
-							noMatch: [A, AA],
-							win: [CC, CC, GG, F, E, D, E, CC, CC, GG, F, E, D, E, CC],
-						},
-					})
-				);
-			</script>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
 
-			<memory-game>
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-
-				<button></button>
-				<button></button>
-				<button></button>
-				<button></button>
-			</memory-game>
-			<footer>
-				<p>Made with ❤️ for Louise</p>
-			</footer>
-		</template>
+					<button></button>
+					<button></button>
+					<button></button>
+					<button></button>
+				</memory-game>
+			</template>
+		</div>
+		<footer>
+			<p>Made with ❤️ for Louise</p>
+		</footer>
 	</body>
 </html>
