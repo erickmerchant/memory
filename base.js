@@ -45,7 +45,7 @@ export default (settings) => (host) => {
 					.classes("back", "face")
 					.styles({
 						"--back-background": () =>
-							entry.value.state !== "covered"
+							entry.value.state === "flipped" || entry.value.state === "matched"
 								? `var(--${entry.value.color})`
 								: null,
 					})
