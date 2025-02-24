@@ -22,9 +22,7 @@ let {
 
 export default (settings) => (host) => {
 	let observed = host.observe();
-	let buttons = observed.find(
-		`:scope:has(button:nth-child(${settings.characters.length * 2})) > button`
-	);
+	let buttons = observed.find(`:scope > button`);
 	let state = watch({
 		incomplete: null,
 		previous: null,
@@ -36,36 +34,36 @@ export default (settings) => (host) => {
 
 	resetState();
 
-	let btns = each(state.characters)
-		.zip(buttons)
-		.map((entry, btn = BUTTON()) => {
-			let faces = DIV()
-				.classes("faces")
-				.nodes(
-					SPAN().classes("front", "face").text("🦉"),
-					SPAN()
-						.classes("back", "face")
-						.styles({"--back-background": () => `var(--${entry.value.color}`})
-						.nodes(
-							SPAN()
-								.classes("text")
-								.text(() => entry.value.text)
-						)
-				);
+	let btns = each(state.characters).map((entry) => {
+		let btn = buttons[entry.index] ?? BUTTON();
 
-			return btn
-				.aria({
-					label: () =>
-						entry.value.state === "covered" ? "owl" : entry.value.name,
-				})
-				.classes({
-					covered: () => entry.value.state === "covered",
-					flipped: () => entry.value.state === "flipped",
-					matched: () => entry.value.state === "matched",
-				})
-				.nodes(faces)
-				.on("click", onClick(entry));
-		});
+		let faces = DIV()
+			.classes("faces")
+			.nodes(
+				SPAN().classes("front", "face").text("🦉"),
+				SPAN()
+					.classes("back", "face")
+					.styles({"--back-background": () => `var(--${entry.value.color}`})
+					.nodes(
+						SPAN()
+							.classes("text")
+							.text(() => entry.value.text)
+					)
+			);
+
+		return btn
+			.aria({
+				label: () =>
+					entry.value.state === "covered" ? "owl" : entry.value.name,
+			})
+			.classes({
+				covered: () => entry.value.state === "covered",
+				flipped: () => entry.value.state === "flipped",
+				matched: () => entry.value.state === "matched",
+			})
+			.nodes(faces)
+			.on("click", onClick(entry));
+	});
 
 	let reloadDialog = DIALOG()
 		.nodes(

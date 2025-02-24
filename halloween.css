@@ -10,7 +10,7 @@ html {
 	--red: oklch(85% 0.075 30);
 }
 
-body {
+.page {
 	color: #222;
 	background-image: none;
 	background-color: color-mix(in lch, var(--gray), oklch(0% 0 0) 10%);

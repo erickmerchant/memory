@@ -28,17 +28,20 @@ html {
 
 body {
 	min-block-size: 100%;
+	block-size: 100%;
+	inline-size: 100%;
+	overflow: auto;
+}
+
+.page {
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: auto min-content;
 	padding-inline: 1.5vmin;
-	block-size: 100%;
-	inline-size: 100%;
-	overflow: auto;
 	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
 }
 
-body > :where(:first-child) {
+.game {
 	display: grid;
 	block-size: 100%;
 	inline-size: 100%;
@@ -46,7 +49,7 @@ body > :where(:first-child) {
 	container-type: size;
 }
 
-footer {
+.dedication {
 	font-size: 0.75rem;
 	padding: 0.5rem;
 	text-align: right;

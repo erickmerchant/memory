@@ -45,23 +45,23 @@ memory-game {
 		inline-size: auto;
 		aspect-ratio: 5 / 7;
 		background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
+	}
 
-		&:where(:empty) {
-			border-radius: 0.5rem;
-			filter: drop-shadow(
-				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 75%)
-			);
-			background: var(--background);
-			font-size: calc(45cqi / var(--columns));
-			block-size: 100%;
-			inline-size: 100%;
-			display: block;
-			place-content: center;
-			--background: var(--purple);
+	:where(button:empty) {
+		border-radius: 0.5rem;
+		filter: drop-shadow(
+			0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 75%)
+		);
+		background: var(--background);
+		font-size: calc(45cqi / var(--columns));
+		block-size: 100%;
+		inline-size: 100%;
+		display: block;
+		place-content: center;
+		--background: var(--purple);
 
-			&::before {
-				content: "🦉";
-			}
+		&::before {
+			content: "🦉";
 		}
 	}
 
@@ -78,14 +78,6 @@ memory-game {
 		background: none;
 		overflow: visible;
 		align-items: center;
-
-		&:where([open]) {
-			scale: 1;
-		}
-
-		&:where(:not([open])) {
-			scale: 0;
-		}
 
 		@starting-style {
 			scale: 0;
@@ -110,83 +102,91 @@ memory-game {
 				var(--purple) 25%
 			);
 		}
+	}
 
-		:where(figure) {
-			position: relative;
-			font-size: calc((45cqi / var(--columns)) * 1.25);
-			aspect-ratio: 5 / 7;
-			border-radius: 0.5rem;
-			display: grid;
-			place-content: center;
-			min-inline-size: calc((100cqi / var(--columns) * 1.25));
-			flex-shrink: 0;
-			flex-grow: 0;
-			--background: var(--purple);
+	:where(dialog[open]) {
+		scale: 1;
+	}
+
+	:where(dialog:not([open])) {
+		scale: 0;
+	}
+
+	:where(dialog) :where(figure) {
+		position: relative;
+		font-size: calc((45cqi / var(--columns)) * 1.25);
+		aspect-ratio: 5 / 7;
+		border-radius: 0.5rem;
+		display: grid;
+		place-content: center;
+		min-inline-size: calc((100cqi / var(--columns) * 1.25));
+		flex-shrink: 0;
+		flex-grow: 0;
+		--background: var(--purple);
+	}
+
+	:where(dialog) :where(div) {
+		background: white;
+		border-radius: 0.5rem;
+		filter: drop-shadow(
+			0 0 0.5cqmin color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%)
+		);
+		display: grid;
+		grid-template-rows: max-content;
+		grid-template-columns: auto;
+		padding: 0.5rem;
+		gap: 1rem 0.5rem;
+		min-inline-size: calc((100cqi / var(--columns) * 1.25));
+		inline-size: min-content;
+		font-size: max(0.8rem, calc(10cqi / var(--columns)));
+		position: relative;
+		color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+
+		&::before {
+			content: "";
+			display: block;
+			width: 0;
+			height: 0;
+			border-top: var(--gap) solid transparent;
+			border-bottom: var(--gap) solid transparent;
+			border-right: var(--gap) solid white;
+			position: absolute;
+			right: calc(100% - 1px);
+			top: 2rem;
 		}
 
-		:where(div) {
-			background: white;
-			border-radius: 0.5rem;
-			filter: drop-shadow(
-				0 0 0.5cqmin color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%)
-			);
-			display: grid;
-			grid-template-rows: max-content;
-			grid-template-columns: auto;
-			padding: 0.5rem;
-			gap: 1rem 0.5rem;
-			min-inline-size: calc((100cqi / var(--columns) * 1.25));
-			inline-size: min-content;
-			font-size: max(0.8rem, calc(10cqi / var(--columns)));
-			position: relative;
-			color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
-
+		@container (aspect-ratio <= 15/28) {
 			&::before {
-				content: "";
-				display: block;
-				width: 0;
-				height: 0;
-				border-top: var(--gap) solid transparent;
-				border-bottom: var(--gap) solid transparent;
-				border-right: var(--gap) solid white;
+				border-right: var(--gap) solid transparent;
+				border-left: var(--gap) solid transparent;
+				border-bottom: var(--gap) solid white;
 				position: absolute;
-				right: calc(100% - 1px);
-				top: 2rem;
-			}
-
-			@container (aspect-ratio <= 15/28) {
-				&::before {
-					border-right: var(--gap) solid transparent;
-					border-left: var(--gap) solid transparent;
-					border-bottom: var(--gap) solid white;
-					position: absolute;
-					bottom: calc(100% - 1px);
-					left: calc(50% - (var(--gap) / 2));
-					top: unset;
-				}
+				bottom: calc(100% - 1px);
+				left: calc(50% - (var(--gap) / 2));
+				top: unset;
 			}
 		}
+	}
 
-		:where(button) {
-			font-size: inherit;
-			font-weight: 900;
-			display: inline-flex;
-			place-content: center;
-			gap: 0.5rem;
-			appearance: none;
-			border: none;
-			padding: 0.5rem;
-			border-radius: 0.5rem;
-			border: 0.125rem solid currentColor;
-			background: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
-			color: inherit;
-			aspect-ratio: unset;
-		}
+	:where(dialog) :where(button) {
+		font-size: inherit;
+		font-weight: 900;
+		display: inline-flex;
+		place-content: center;
+		gap: 0.5rem;
+		appearance: none;
+		border: none;
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+		border: 0.125rem solid currentColor;
+		background: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
+		color: inherit;
+		aspect-ratio: unset;
+	}
 
-		:where(svg) {
-			block-size: 1.5rem;
-			fill: currentColor;
-		}
+	:where(dialog) :where(svg) {
+		block-size: 1.5rem;
+		fill: currentColor;
 	}
 
 	:where(.faces) {
@@ -200,29 +200,29 @@ memory-game {
 		transform-style: preserve-3d;
 		animation-timing-function: linear;
 		animation-fill-mode: forwards;
+	}
 
-		:where(.covered) & {
-			transform: rotateY(180deg);
-			animation-name: memory-game-covered;
-			animation-duration: 0.2s;
-		}
+	:where(.covered) :where(.faces) {
+		transform: rotateY(180deg);
+		animation-name: memory-game-covered;
+		animation-duration: 0.2s;
+	}
 
-		:where(.flipped) & {
-			animation-name: memory-game-flipped;
-			animation-duration: 0.2s;
-		}
+	:where(.flipped) :where(.faces) {
+		animation-name: memory-game-flipped;
+		animation-duration: 0.2s;
+	}
 
-		:where(.matched) & {
-			transform: rotateY(180deg);
-			animation-name: memory-game-matched;
-			animation-duration: 0.6s;
-		}
+	:where(.matched) :where(.faces) {
+		transform: rotateY(180deg);
+		animation-name: memory-game-matched;
+		animation-duration: 0.6s;
+	}
 
-		:where(.completed) & {
-			transform: rotateY(540deg);
-			animation-name: memory-game-completed;
-			animation-duration: 1.8s;
-		}
+	&:where(.completed) :where(.faces) {
+		transform: rotateY(540deg);
+		animation-name: memory-game-completed;
+		animation-duration: 1.8s;
 	}
 
 	:where(.front, .back) {
