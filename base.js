@@ -43,7 +43,12 @@ export default (settings) => (host) => {
 				SPAN().classes("front", "face").text("🦉"),
 				SPAN()
 					.classes("back", "face")
-					.styles({"--back-background": () => `var(--${entry.value.color}`})
+					.styles({
+						"--back-background": () =>
+							entry.value.state !== "covered"
+								? `var(--${entry.value.color})`
+								: null,
+					})
 					.nodes(
 						SPAN()
 							.classes("text")
