@@ -1,56 +1,58 @@
-*,
-::before,
-::after {
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-	font: inherit;
-	max-inline-size: 100%;
-	touch-action: none;
-}
+@layer page {
+	*,
+	::before,
+	::after {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+		font: inherit;
+		max-inline-size: 100%;
+		touch-action: none;
+	}
 
-html {
-	block-size: 100%;
-	font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
-		sans-serif;
-	font-weight: 700;
-	color-scheme: light;
-	font-size: 125%;
+	html {
+		block-size: 100%;
+		font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
+			sans-serif;
+		font-weight: 700;
+		color-scheme: light;
+		font-size: 125%;
 
-	--gray: oklch(90% 0 0);
-	--purple: oklch(90% 0.15 300);
-	--blue: oklch(90% 0.15 210);
-	--green: oklch(90% 0.15 150);
-	--yellow: oklch(90% 0.15 90);
-	--orange: oklch(90% 0.15 60);
-	--red: oklch(90% 0.15 30);
-}
+		--gray: oklch(90% 0 0);
+		--purple: oklch(90% 0.15 300);
+		--blue: oklch(90% 0.15 210);
+		--green: oklch(90% 0.15 150);
+		--yellow: oklch(90% 0.15 90);
+		--orange: oklch(90% 0.15 60);
+		--red: oklch(90% 0.15 30);
+	}
 
-body {
-	min-block-size: 100%;
-	block-size: 100%;
-	inline-size: 100%;
-	overflow: auto;
-}
+	body {
+		min-block-size: 100%;
+		block-size: 100%;
+		inline-size: 100%;
+		overflow: auto;
+	}
 
-.page {
-	display: grid;
-	grid-template-columns: 1fr;
-	grid-template-rows: auto min-content;
-	padding-inline: 1.5vmin;
-	background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
-}
+	.page {
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto min-content;
+		padding-inline: 1.5vmin;
+		background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
+	}
 
-.game {
-	display: grid;
-	block-size: 100%;
-	inline-size: 100%;
-	place-items: center;
-	container-type: size;
-}
+	.game {
+		display: grid;
+		block-size: 100%;
+		inline-size: 100%;
+		place-items: center;
+		container-type: size;
+	}
 
-.dedication {
-	font-size: 0.75rem;
-	padding: 0.5rem;
-	text-align: right;
+	.dedication {
+		font-size: 0.75rem;
+		padding: 0.5rem;
+		text-align: right;
+	}
 }
