@@ -11,14 +11,7 @@ import "handcraft/element/on.js";
 import "handcraft/element/styles.js";
 import "handcraft/element/text.js";
 
-let {
-	span: SPAN,
-	div: DIV,
-	dialog: DIALOG,
-	figure: FIGURE,
-	p: P,
-	button: BUTTON,
-} = html;
+let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
 
 export default (settings) => (host) => {
 	let observed = host.observe();
@@ -72,7 +65,7 @@ export default (settings) => (host) => {
 
 	let reloadDialog = DIALOG()
 		.nodes(
-			FIGURE().classes("face").text("🦉"),
+			DIV().classes("face").text("🦉"),
 			DIV().nodes(
 				P().text("Hoo-ray! You found all my owl friends."),
 				BUTTON()
