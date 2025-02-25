@@ -66,13 +66,15 @@ export default (settings) => (host) => {
 	let reloadDialog = DIALOG()
 		.nodes(
 			DIV().classes("face").text("🦉"),
-			DIV().nodes(
-				P().text("Hoo-ray! You found all my owl friends."),
-				BUTTON()
-					.classes("play-again")
-					.text("Play Again!")
-					.on("click", () => resetState("covered"))
-			)
+			DIV()
+				.classes("bubble")
+				.nodes(
+					P().text("Hoo-ray! You found all my owl friends."),
+					BUTTON()
+						.classes("play-again")
+						.text("Play Again!")
+						.on("click", () => resetState("covered"))
+				)
 		)
 		.effect((el) => {
 			if (state.modalOpen) {

@@ -113,7 +113,7 @@
 			scale: 0;
 		}
 
-		:where(dialog) :where(figure) {
+		:where(dialog) :where(.face) {
 			position: relative;
 			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
@@ -126,7 +126,7 @@
 			--background: var(--purple);
 		}
 
-		:where(dialog) :where(div) {
+		:where(dialog) :where(.bubble) {
 			background: white;
 			border-radius: 0.5rem;
 			filter: drop-shadow(
