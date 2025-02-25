@@ -66,7 +66,7 @@
 			}
 		}
 
-		:where(dialog) {
+		:where(.reload-dialog) {
 			position: absolute;
 			margin: auto;
 			border: none;
@@ -105,15 +105,15 @@
 			}
 		}
 
-		:where(dialog[open]) {
+		:where(.reload-dialog[open]) {
 			scale: 1;
 		}
 
-		:where(dialog:not([open])) {
+		:where(.reload-dialog:not([open])) {
 			scale: 0;
 		}
 
-		:where(dialog) :where(.face) {
+		:where(.reload-dialog) :where(.face) {
 			position: relative;
 			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
@@ -126,7 +126,7 @@
 			--background: var(--purple);
 		}
 
-		:where(dialog) :where(.bubble) {
+		:where(.reload-dialog) :where(.bubble) {
 			background: white;
 			border-radius: 0.5rem;
 			filter: drop-shadow(
@@ -169,7 +169,7 @@
 			}
 		}
 
-		:where(dialog) :where(button) {
+		:where(.reload-dialog) :where(button) {
 			font-size: inherit;
 			font-weight: 900;
 			display: inline-flex;
@@ -178,14 +178,14 @@
 			appearance: none;
 			border: none;
 			padding: 0.5rem;
-			border-radius: 0.5rem;
+			border-radius: 0.25rem;
 			border: 0.125rem solid currentColor;
 			background: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
 			color: inherit;
 			aspect-ratio: unset;
 		}
 
-		:where(dialog) :where(svg) {
+		:where(.reload-dialog) :where(svg) {
 			block-size: 1.5rem;
 			fill: currentColor;
 		}

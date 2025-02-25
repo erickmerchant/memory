@@ -37,10 +37,10 @@ export default (settings) => (host) => {
 				SPAN()
 					.classes("back", "face")
 					.styles({
-						"--back-background": () =>
-							entry.value.state === "flipped" || entry.value.state === "matched"
-								? `var(--${entry.value.color})`
-								: null,
+						"--back-background": () => `var(--${entry.value.color})`,
+						// entry.value.state === "flipped" || entry.value.state === "matched"
+						// 	? `var(--${entry.value.color})`
+						// 	: null,
 					})
 					.nodes(
 						SPAN()
@@ -64,6 +64,7 @@ export default (settings) => (host) => {
 	});
 
 	let reloadDialog = DIALOG()
+		.classes("reload-dialog")
 		.nodes(
 			DIV().classes("face").text("🦉"),
 			DIV()
