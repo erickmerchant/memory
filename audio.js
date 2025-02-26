@@ -29,7 +29,7 @@ function initApi() {
 	return {context, gain: gainNode.gain, frequency: oscillatorNode.frequency};
 }
 
-export function trySong(song) {
+export function trySong(song = []) {
 	if (isPlaying) return;
 
 	isPlaying = true;
@@ -61,7 +61,7 @@ export function trySong(song) {
 	});
 }
 
-export function scheduleSong(song) {
+export function scheduleSong(song = []) {
 	lastSong.then(() => {
 		trySong(song);
 	});

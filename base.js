@@ -2,14 +2,14 @@ import {trySong, scheduleSong} from "audio";
 import {html} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
 import {each} from "handcraft/each.js";
-import "handcraft/element/aria.js";
-import "handcraft/element/classes.js";
-import "handcraft/element/effect.js";
-import "handcraft/element/nodes.js";
-import "handcraft/element/observe.js";
-import "handcraft/element/on.js";
-import "handcraft/element/styles.js";
-import "handcraft/element/text.js";
+import "handcraft/dom/aria.js";
+import "handcraft/dom/classes.js";
+import "handcraft/dom/effect.js";
+import "handcraft/dom/nodes.js";
+import "handcraft/dom/observe.js";
+import "handcraft/dom/on.js";
+import "handcraft/dom/styles.js";
+import "handcraft/dom/text.js";
 
 let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
 
@@ -18,9 +18,8 @@ export default (settings) => (host) => {
 	let buttons = observed.find(`:scope > button`);
 	let state = watch({
 		incomplete: null,
-		previous: null,
+		previousStack: [],
 		resolvePrevious: null,
-		previousArgs: null,
 		modalOpen: false,
 		characters: watch([]),
 	});
@@ -37,10 +36,12 @@ export default (settings) => (host) => {
 				SPAN()
 					.classes("back", "face")
 					.styles({
-						"--back-background": () => `var(--${entry.value.color})`,
-						// entry.value.state === "flipped" || entry.value.state === "matched"
-						// 	? `var(--${entry.value.color})`
-						// 	: null,
+						"--back-background": () =>
+							entry.value.animating ||
+							entry.value.state === "flipped" ||
+							entry.value.state === "matched"
+								? `var(--${entry.value.color})`
+								: null,
 					})
 					.nodes(
 						SPAN()
@@ -100,7 +101,12 @@ export default (settings) => (host) => {
 			...settings.characters
 				.concat(settings.characters)
 				.map((character) =>
-					watch({...character, state: defaultState, order: Math.random()})
+					watch({
+						...character,
+						state: defaultState,
+						animating: false,
+						order: Math.random(),
+					})
 				)
 				.toSorted((a, b) => a.order - b.order)
 		);
@@ -112,59 +118,50 @@ export default (settings) => (host) => {
 
 			let isFlipped = entry.value.state === "flipped";
 
-			if (isFlipped) {
-				entry.value.state = "covered";
+			entry.value.animating = true;
 
-				if (state.previous === entry.value) {
-					state.previous = null;
-				}
+			if (isFlipped && state.previousStack.length === 1) {
+				entry.value.state = "covered";
 			} else {
 				entry.value.state = "flipped";
 
-				if (state.previous) {
-					let matched = state.previous.text === entry.value.text;
-
-					state.previousArgs = {matched, models: [state.previous, entry.value]};
-
-					if (!matched) {
-						trySong(settings.songs?.reveal ?? []);
-					}
-
-					state.previous = null;
-				} else {
-					trySong(settings.songs?.reveal ?? []);
-
-					state.previous = entry.value;
-				}
+				state.previousStack.push(entry.value);
 			}
 
-			state.resolvePrevious?.();
+			state.resolvePrevious?.(true);
 		};
 	}
 
-	function onAnimationEnd(e) {
-		if (state.previousArgs) {
-			let {matched, models} = state.previousArgs;
+	function onAnimationEnd() {
+		if (state.previousStack.length === 2) {
+			let localStack = [...state.previousStack];
+			let matched = localStack[0].name === localStack[1].name;
 
-			state.previousArgs = null;
+			state.previousStack = [];
 
 			if (!matched) {
 				let {promise, resolve} = Promise.withResolvers();
 
 				state.resolvePrevious = resolve;
 
-				promise.then(() => {
-					for (let model of models) {
+				promise.then((early) => {
+					for (let model of localStack) {
 						model.state = "covered";
+						model.animating = false;
 					}
 
-					trySong(settings.songs?.noMatch ?? []);
+					if (!early) {
+						trySong(settings.songs?.cover);
+					}
 				});
 
-				setTimeout(resolve, 2_000);
+				trySong(settings.songs?.reveal);
+
+				setTimeout(resolve, 2_000, false);
 			} else {
-				for (let model of models) {
+				for (let model of localStack) {
 					model.state = "matched";
+					model.animating = false;
 				}
 
 				state.incomplete -= 1;
@@ -173,10 +170,20 @@ export default (settings) => (host) => {
 					state.incomplete = -1;
 					state.modalOpen = true;
 
-					scheduleSong(settings.songs?.win ?? []);
+					scheduleSong(settings.songs?.win);
 				} else {
-					trySong(settings.songs?.match ?? []);
+					trySong(settings.songs?.match);
 				}
+			}
+		} else if (state.previousStack.length === 1) {
+			state.previousStack[0].animating = false;
+
+			if (state.previousStack[0].state !== "covered") {
+				trySong(settings.songs?.reveal);
+			} else {
+				state.previousStack = [];
+
+				trySong(settings.songs?.cover);
 			}
 		}
 	}
