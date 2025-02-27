@@ -125,7 +125,9 @@ export default (settings) => (host) => {
 			} else {
 				entry.value.state = "flipped";
 
-				state.previousStack.push(entry.value);
+				if (!state.previousStack.includes(entry.value)) {
+					state.previousStack.push(entry.value);
+				}
 			}
 
 			state.resolvePrevious?.(true);
