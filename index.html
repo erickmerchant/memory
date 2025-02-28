@@ -7,19 +7,19 @@
 			content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
 		<title>Memory</title>
 		<link rel="stylesheet" href="./page.css" />
-		<link rel="stylesheet" href="./base.css" />
+		<link rel="stylesheet" href="./memory-game.css" />
 		<script type="importmap">
 			{
 				"imports": {
 					"handcraft/": "../handcraft/",
 					"audio": "./audio.js",
-					"base": "./base.js"
+					"memory-game": "./memory-game.js"
 				}
 			}
 		</script>
 		<script type="module">
 			import {define} from "handcraft/define.js";
-			import game from "base";
+			import game from "memory-game";
 
 			const A = [220, 0.1];
 			const AA = [220, 0.2];
