@@ -37,7 +37,7 @@
 			}
 		}
 
-		:where(button) {
+		button {
 			appearance: none;
 			border: none;
 			border-radius: 0.5rem;
@@ -48,7 +48,7 @@
 			background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
 		}
 
-		:where(button:empty) {
+		button:where(:empty) {
 			border-radius: 0.5rem;
 			filter: drop-shadow(
 				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 75%)
@@ -66,7 +66,7 @@
 			}
 		}
 
-		:where(.reload-dialog) {
+		.reload-dialog {
 			position: absolute;
 			margin: auto;
 			border: none;
@@ -105,15 +105,15 @@
 			}
 		}
 
-		:where(.reload-dialog[open]) {
+		.reload-dialog:where([open]) {
 			scale: 1;
 		}
 
-		:where(.reload-dialog:not([open])) {
+		.reload-dialog:where(:not([open])) {
 			scale: 0;
 		}
 
-		:where(.reload-dialog) :where(.face) {
+		.reload-dialog :where(.face) {
 			position: relative;
 			font-size: calc((45cqi / var(--columns)) * 1.25);
 			aspect-ratio: 5 / 7;
@@ -126,7 +126,7 @@
 			--background: var(--purple);
 		}
 
-		:where(.reload-dialog) :where(.bubble) {
+		.reload-dialog :where(.bubble) {
 			background: white;
 			border-radius: 0.5rem;
 			filter: drop-shadow(
@@ -154,10 +154,8 @@
 				position: absolute;
 				right: calc(100% - 1px);
 				top: 2rem;
-			}
 
-			@container (aspect-ratio <= 15/28) {
-				&::before {
+				@container (aspect-ratio <= 15/28) {
 					border-right: var(--gap) solid transparent;
 					border-left: var(--gap) solid transparent;
 					border-bottom: var(--gap) solid white;
@@ -169,7 +167,7 @@
 			}
 		}
 
-		:where(.reload-dialog) :where(button) {
+		.reload-dialog :where(button) {
 			font-size: inherit;
 			font-weight: 900;
 			display: inline-flex;
@@ -185,12 +183,12 @@
 			aspect-ratio: unset;
 		}
 
-		:where(.reload-dialog) :where(svg) {
+		.reload-dialog :where(svg) {
 			block-size: 1.5rem;
 			fill: currentColor;
 		}
 
-		:where(.faces) {
+		.faces {
 			position: absolute;
 			inset-inline-start: 0;
 			inset-block-start: 0;
@@ -203,30 +201,31 @@
 			animation-fill-mode: forwards;
 		}
 
-		:where(.covered) :where(.faces) {
+		:where(.covered) .faces {
 			transform: rotateY(180deg);
 			animation-name: memory-game-covered;
 			animation-duration: 0.2s;
 		}
 
-		:where(.flipped) :where(.faces) {
+		:where(.flipped) .faces {
 			animation-name: memory-game-flipped;
 			animation-duration: 0.2s;
 		}
 
-		:where(.matched) :where(.faces) {
+		:where(.matched) .faces {
 			transform: rotateY(180deg);
 			animation-name: memory-game-matched;
 			animation-duration: 0.6s;
 		}
 
-		&:where(.completed) :where(.faces) {
+		&:where(.completed) .faces {
 			transform: rotateY(540deg);
 			animation-name: memory-game-completed;
 			animation-duration: 1.8s;
 		}
 
-		:where(.front, .back) {
+		.front,
+		.back {
 			display: grid;
 			place-content: center;
 			position: absolute;
@@ -239,19 +238,18 @@
 			-webkit-user-select: none;
 		}
 
-		:where(.front) {
+		.front {
 			backface-visibility: hidden;
 			--background: var(--purple);
 		}
 
-		:where(.back) {
+		.back {
 			backface-visibility: hidden;
 			transform: rotateY(180deg);
 			--background: var(--back-background);
 		}
 
-		:where(.face),
-		:where(button:empty) {
+		:is(.face, button:where(:empty)) {
 			background: var(--background);
 			filter: drop-shadow(
 				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)
