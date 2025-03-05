@@ -14,7 +14,6 @@
 	.page {
 		color: #222;
 		background-image: none;
-		background-color: color-mix(in lch, var(--gray), oklch(0% 0 0) 10%);
-		background-color: var(--gray);
+		background-color: oklch(from var(--gray) calc(l - 0.1) c h);
 	}
 }

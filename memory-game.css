@@ -50,10 +50,6 @@
 
 		button:where(:empty) {
 			border-radius: 0.5rem;
-			filter: drop-shadow(
-				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 75%)
-			);
-			background: var(--background);
 			font-size: calc(45cqi / var(--columns));
 			block-size: 100%;
 			inline-size: 100%;
@@ -97,11 +93,7 @@
 				opacity: 1;
 				transition: opacity 0.5s 9s;
 				animation-fill-mode: forwards;
-				background-color: color-mix(
-					in lch,
-					oklch(0% 0 0 / 0.25),
-					var(--purple) 25%
-				);
+				background-color: oklch(from var(--purple) calc(l + 0.7) c h / 0.25);
 			}
 		}
 
@@ -129,9 +121,7 @@
 		.reload-dialog :where(.bubble) {
 			background: white;
 			border-radius: 0.5rem;
-			filter: drop-shadow(
-				0 0 0.5cqmin color-mix(in lch, white, oklch(0% 0 0 / 0.75) 100%)
-			);
+			filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
 			display: grid;
 			grid-template-rows: max-content;
 			grid-template-columns: auto;
@@ -141,7 +131,7 @@
 			inline-size: min-content;
 			font-size: max(0.8rem, calc(10cqi / var(--columns)));
 			position: relative;
-			color: color-mix(in lch, var(--purple), oklch(0% 0 0) 50%);
+			color: oklch(from var(--purple) calc(l - 0.6) c h);
 
 			&::before {
 				content: "";
@@ -178,7 +168,7 @@
 			padding: 0.5rem;
 			border-radius: 0.25rem;
 			border: 0.125rem solid currentColor;
-			background: color-mix(in lch, var(--purple), oklch(100% 0 0) 75%);
+			background: oklch(from var(--purple) calc(l + 0.6) c h);
 			color: inherit;
 			aspect-ratio: unset;
 		}
@@ -252,7 +242,7 @@
 		:is(.face, button:where(:empty)) {
 			background: var(--background);
 			filter: drop-shadow(
-				0 0 0.25cqmin color-mix(in lch, var(--background), oklch(0% 0 0) 70%)
+				0 0 0.25cqmin oklch(from var(--background) calc(l - 0.75) c h)
 			);
 
 			&::after {
@@ -261,8 +251,7 @@
 				position: absolute;
 				inset: 0.2rem;
 				border-radius: 0.3rem;
-				border: 0.1rem solid
-					color-mix(in lch, var(--background), oklch(0% 0 0) 10%);
+				border: 0.1rem solid oklch(from var(--background) calc(l - 0.1) c h);
 			}
 		}
 	}

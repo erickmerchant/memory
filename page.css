@@ -39,7 +39,7 @@
 		grid-template-columns: 1fr;
 		grid-template-rows: auto min-content;
 		padding-inline: 1.5vmin;
-		background-color: color-mix(in lch, var(--purple), oklch(100% 0 0) 70%);
+		background-color: oklch(from var(--purple) calc(l + 0.7) calc(c - 0.1) h);
 	}
 
 	.game {
