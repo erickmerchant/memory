@@ -1,7 +1,8 @@
+import "handcraft/dom/_nodes.js";
+import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/append.js";
 import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/styles.js";
