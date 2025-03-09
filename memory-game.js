@@ -1,7 +1,7 @@
 import "handcraft/dom/aria.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/nodes.js";
+import "handcraft/dom/append.js";
 import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/styles.js";
@@ -10,6 +10,7 @@ import {trySong, scheduleSong} from "audio";
 import {html} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
 import {each} from "handcraft/each.js";
+import {when} from "handcraft/when.js";
 
 let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
 
@@ -31,7 +32,7 @@ export default (settings) => (host) => {
 
 		let faces = DIV()
 			.classes("faces")
-			.nodes(
+			.append(
 				SPAN().classes("front", "face").text("🦉"),
 				SPAN()
 					.classes("back", "face")
@@ -43,7 +44,7 @@ export default (settings) => (host) => {
 								? `var(--${entry.value.color})`
 								: null,
 					})
-					.nodes(
+					.append(
 						SPAN()
 							.classes("text")
 							.text(() => entry.value.text)
@@ -60,35 +61,36 @@ export default (settings) => (host) => {
 				flipped: () => entry.value.state === "flipped",
 				matched: () => entry.value.state === "matched",
 			})
-			.nodes(faces)
+			.append(faces)
 			.on("click", onClick(entry));
 	});
 
-	let reloadDialog = DIALOG()
-		.classes("reload-dialog")
-		.nodes(
-			DIV().classes("face").text("🦉"),
-			DIV()
-				.classes("bubble")
-				.nodes(
-					P().text("Hoo-ray! You found all my owl friends."),
-					BUTTON()
-						.classes("play-again")
-						.text("Play Again!")
-						.on("click", () => resetState("covered"))
-				)
-		)
-		.effect((el) => {
-			if (state.modalOpen) {
-				el.showModal();
-			} else {
-				el.close();
-			}
-		});
+	let reloadDialog = () =>
+		DIALOG()
+			.classes("reload-dialog")
+			.append(
+				DIV().classes("face").text("🦉"),
+				DIV()
+					.classes("bubble")
+					.append(
+						P().text("Hoo-ray! You found all my owl friends."),
+						BUTTON()
+							.classes("play-again")
+							.text("Play Again!")
+							.on("click", () => resetState("covered"))
+					)
+			)
+			.effect((el) => {
+				if (state.modalOpen) {
+					el.showModal();
+				} else {
+					el.close();
+				}
+			});
 
 	host
 		.classes({completed: () => state.incomplete === -1})
-		.nodes(btns, reloadDialog)
+		.append(btns, when((prev) => prev || state.modalOpen).show(reloadDialog))
 		.on("animationend", onAnimationEnd);
 
 	function resetState(defaultState) {
