@@ -58,6 +58,7 @@ export default (settings) => (host) => {
 					entry.value.state === "covered" ? "owl" : entry.value.name,
 			})
 			.classes({
+				completed: () => state.incomplete === -1,
 				covered: () => entry.value.state === "covered",
 				flipped: () => entry.value.state === "flipped",
 				matched: () => entry.value.state === "matched",
@@ -90,7 +91,6 @@ export default (settings) => (host) => {
 			});
 
 	host
-		.classes({completed: () => state.incomplete === -1})
 		.append(btns, when((prev) => prev || state.modalOpen).show(reloadDialog))
 		.on("animationend", onAnimationEnd);
 

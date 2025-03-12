@@ -89,95 +89,95 @@
 				animation-fill-mode: forwards;
 				background-color: oklch(from var(--purple) calc(l + 0.7) c h / 0.25);
 			}
-		}
 
-		.reload-dialog:where([open]) {
-			scale: 1;
+			&:where([open]) {
+				scale: 1;
 
-			@starting-style {
+				@starting-style {
+					scale: 0;
+
+					&::backdrop {
+						opacity: 0;
+					}
+				}
+			}
+
+			&:where(:not([open])) {
 				scale: 0;
-
-				&::backdrop {
-					opacity: 0;
-				}
 			}
-		}
 
-		.reload-dialog:where(:not([open])) {
-			scale: 0;
-		}
+			& :where(.face) {
+				position: relative;
+				font-size: calc((45cqi / var(--columns)) * 1.25);
+				aspect-ratio: 5 / 7;
+				border-radius: 0.5rem;
+				display: grid;
+				place-content: center;
+				min-inline-size: calc((100cqi / var(--columns) * 1.25));
+				flex-shrink: 0;
+				flex-grow: 0;
+				--background: var(--purple);
+			}
 
-		.reload-dialog :where(.face) {
-			position: relative;
-			font-size: calc((45cqi / var(--columns)) * 1.25);
-			aspect-ratio: 5 / 7;
-			border-radius: 0.5rem;
-			display: grid;
-			place-content: center;
-			min-inline-size: calc((100cqi / var(--columns) * 1.25));
-			flex-shrink: 0;
-			flex-grow: 0;
-			--background: var(--purple);
-		}
+			& :where(.bubble) {
+				background: white;
+				border-radius: 0.5rem;
+				filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
+				display: grid;
+				grid-template-rows: max-content;
+				grid-template-columns: auto;
+				padding: 0.5rem;
+				gap: 1rem 0.5rem;
+				min-inline-size: calc((100cqi / var(--columns) * 1.25));
+				inline-size: min-content;
+				font-size: max(0.8rem, calc(10cqi / var(--columns)));
+				position: relative;
+				color: oklch(from var(--purple) calc(l - 0.6) c h);
 
-		.reload-dialog :where(.bubble) {
-			background: white;
-			border-radius: 0.5rem;
-			filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
-			display: grid;
-			grid-template-rows: max-content;
-			grid-template-columns: auto;
-			padding: 0.5rem;
-			gap: 1rem 0.5rem;
-			min-inline-size: calc((100cqi / var(--columns) * 1.25));
-			inline-size: min-content;
-			font-size: max(0.8rem, calc(10cqi / var(--columns)));
-			position: relative;
-			color: oklch(from var(--purple) calc(l - 0.6) c h);
-
-			&::before {
-				content: "";
-				display: block;
-				width: 0;
-				height: 0;
-				border-top: var(--gap) solid transparent;
-				border-bottom: var(--gap) solid transparent;
-				border-right: var(--gap) solid white;
-				position: absolute;
-				right: calc(100% - 1px);
-				top: 2rem;
-
-				@container (aspect-ratio <= 15/28) {
-					border-right: var(--gap) solid transparent;
-					border-left: var(--gap) solid transparent;
-					border-bottom: var(--gap) solid white;
+				&::before {
+					content: "";
+					display: block;
+					width: 0;
+					height: 0;
+					border-top: var(--gap) solid transparent;
+					border-bottom: var(--gap) solid transparent;
+					border-right: var(--gap) solid white;
 					position: absolute;
-					bottom: calc(100% - 1px);
-					left: calc(50% - (var(--gap) / 2));
-					top: unset;
+					right: calc(100% - 1px);
+					top: 2rem;
+
+					@container (aspect-ratio <= 15/28) {
+						border-right: var(--gap) solid transparent;
+						border-left: var(--gap) solid transparent;
+						border-bottom: var(--gap) solid white;
+						position: absolute;
+						bottom: calc(100% - 1px);
+						left: calc(50% - (var(--gap) / 2));
+						top: unset;
+					}
 				}
 			}
-		}
 
-		.reload-dialog :where(button) {
-			font-size: inherit;
-			font-weight: 900;
-			display: inline-flex;
-			place-content: center;
-			gap: 0.5rem;
-			appearance: none;
-			border: none;
-			padding: 0.5rem;
-			border-radius: 0.25rem;
-			border: 0.125rem solid currentColor;
-			background: oklch(from var(--purple) calc(l + 0.6) c h);
-			color: inherit;
-			aspect-ratio: unset;
-		}
+			& :where(button) {
+				font-size: inherit;
+				font-weight: 900;
+				display: inline-flex;
+				place-content: center;
+				gap: 0.5rem;
+				appearance: none;
+				border: none;
+				padding: 0.5rem;
+				border-radius: 0.25rem;
+				border: 0.125rem solid currentColor;
+				background: oklch(from var(--purple) calc(l + 0.6) c h);
+				color: inherit;
+				aspect-ratio: unset;
+			}
 
-		.reload-dialog :where(svg) {
-			block-size: 1.5rem;
-			fill: currentColor;
+			& :where(svg) {
+				block-size: 1.5rem;
+				fill: currentColor;
+			}
 		}
 
 		.faces {
@@ -191,29 +191,29 @@
 			transform-style: preserve-3d;
 			animation-timing-function: linear;
 			animation-fill-mode: forwards;
-		}
 
-		:where(.covered) .faces {
-			transform: rotateY(180deg);
-			animation-name: memory-game-covered;
-			animation-duration: 0.2s;
-		}
+			:where(.covered) & {
+				transform: rotateY(180deg);
+				animation-name: memory-game-covered;
+				animation-duration: 0.2s;
+			}
 
-		:where(.flipped) .faces {
-			animation-name: memory-game-flipped;
-			animation-duration: 0.2s;
-		}
+			:where(.flipped) & {
+				animation-name: memory-game-flipped;
+				animation-duration: 0.2s;
+			}
 
-		:where(.matched) .faces {
-			transform: rotateY(180deg);
-			animation-name: memory-game-matched;
-			animation-duration: 0.6s;
-		}
+			:where(.matched) & {
+				transform: rotateY(180deg);
+				animation-name: memory-game-matched;
+				animation-duration: 0.6s;
+			}
 
-		&:where(.completed) .faces {
-			transform: rotateY(540deg);
-			animation-name: memory-game-completed;
-			animation-duration: 1.8s;
+			:where(.completed) & {
+				transform: rotateY(540deg);
+				animation-name: memory-game-completed;
+				animation-duration: 1.8s;
+			}
 		}
 
 		.front,
@@ -257,60 +257,60 @@
 			}
 		}
 	}
+}
 
-	@keyframes memory-game-covered {
-		0% {
-			transform: rotateY(180deg);
-		}
-
-		50% {
-			transform: rotateY(90deg);
-		}
-
-		100% {
-			transform: rotateY(0deg);
-		}
+@keyframes memory-game-covered {
+	0% {
+		transform: rotateY(180deg);
 	}
 
-	@keyframes memory-game-flipped {
-		0% {
-			transform: rotateY(0deg);
-		}
-
-		50% {
-			transform: rotateY(90deg);
-		}
-
-		100% {
-			transform: rotateY(180deg);
-		}
+	50% {
+		transform: rotateY(90deg);
 	}
 
-	@keyframes memory-game-matched {
-		0% {
-			transform: rotateY(180deg);
-		}
+	100% {
+		transform: rotateY(0deg);
+	}
+}
 
-		50% {
-			transform: rotateY(360deg);
-		}
-
-		100% {
-			transform: rotateY(540deg);
-		}
+@keyframes memory-game-flipped {
+	0% {
+		transform: rotateY(0deg);
 	}
 
-	@keyframes memory-game-completed {
-		0% {
-			transform: rotateY(540deg);
-		}
+	50% {
+		transform: rotateY(90deg);
+	}
 
-		50% {
-			transform: rotateY(1080deg);
-		}
+	100% {
+		transform: rotateY(180deg);
+	}
+}
 
-		100% {
-			transform: rotateY(1620deg);
-		}
+@keyframes memory-game-matched {
+	0% {
+		transform: rotateY(180deg);
+	}
+
+	50% {
+		transform: rotateY(360deg);
+	}
+
+	100% {
+		transform: rotateY(540deg);
+	}
+}
+
+@keyframes memory-game-completed {
+	0% {
+		transform: rotateY(540deg);
+	}
+
+	50% {
+		transform: rotateY(1080deg);
+	}
+
+	100% {
+		transform: rotateY(1620deg);
 	}
 }
