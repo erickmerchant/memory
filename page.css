@@ -10,10 +10,10 @@
 		touch-action: none;
 	}
 
-	html {
+	:root {
 		block-size: 100%;
-		font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro,
-			sans-serif;
+		font-family:
+			Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
 		font-weight: 700;
 		color-scheme: light;
 		font-size: 125%;
@@ -27,14 +27,11 @@
 		--red: oklch(90% 0.15 30);
 	}
 
-	body {
+	.page {
 		min-block-size: 100%;
 		block-size: 100%;
 		inline-size: 100%;
 		overflow: auto;
-	}
-
-	.page {
 		display: grid;
 		grid-template-columns: 1fr;
 		grid-template-rows: auto min-content;

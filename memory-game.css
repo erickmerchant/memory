@@ -36,7 +36,9 @@
 				--columns: 6;
 			}
 		}
+	}
 
+	:where(memory-game) {
 		button {
 			appearance: none;
 			border: none;

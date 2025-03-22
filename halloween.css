@@ -1,5 +1,5 @@
 @layer page-variant {
-	html {
+	:root {
 		color-scheme: dark;
 
 		--gray: oklch(85% 0 0);
