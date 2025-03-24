@@ -68,8 +68,8 @@
 			position: absolute;
 			margin: auto;
 			border: none;
-			display: flex;
-			flex-wrap: wrap;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
 			gap: var(--gap);
 			border-radius: 0.5rem;
 			transition:
@@ -81,7 +81,7 @@
 			align-items: center;
 
 			@container (aspect-ratio <= 15/28) {
-				flex-direction: column;
+				grid-template-columns: 1fr;
 				align-items: center;
 			}
 
@@ -116,8 +116,6 @@
 				display: grid;
 				place-content: center;
 				min-inline-size: calc((100cqi / var(--columns) * 1.25));
-				flex-shrink: 0;
-				flex-grow: 0;
 				--background: var(--purple);
 			}
 
@@ -163,7 +161,7 @@
 			& :where(button) {
 				font-size: inherit;
 				font-weight: 900;
-				display: inline-flex;
+				display: inline grid;
 				place-content: center;
 				gap: 0.5rem;
 				appearance: none;
