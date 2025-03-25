@@ -3,21 +3,21 @@ import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/observe.js";
+import "handcraft/dom/query.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
-import {trySong, scheduleSong} from "audio";
 import {html} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
 import {each} from "handcraft/each.js";
 import {when} from "handcraft/when.js";
+import {trySong, scheduleSong} from "audio";
 
 let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
 
 export default (settings) => (host) => {
-	let observed = host.observe();
-	let buttons = observed.find(`:scope > button`);
+	let queried = host.query();
+	let buttons = queried.find(`:scope > button`);
 	let state = watch({
 		incomplete: null,
 		previousStack: [],
