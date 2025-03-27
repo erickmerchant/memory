@@ -3,7 +3,7 @@ import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
 import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/query.js";
+import "handcraft/dom/find.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
@@ -16,8 +16,7 @@ import {trySong, scheduleSong} from "audio";
 let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
 
 export default (settings) => (host) => {
-	let queried = host.query();
-	let buttons = queried.find(`:scope > button`);
+	let buttons = host.find(`:scope > button`);
 	let state = watch({
 		incomplete: null,
 		previousStack: [],
@@ -30,7 +29,6 @@ export default (settings) => (host) => {
 
 	let btns = each(state.characters).map((entry) => {
 		let btn = buttons[entry.index] ?? BUTTON();
-
 		let faces = DIV()
 			.classes("faces")
 			.append(
