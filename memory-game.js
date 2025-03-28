@@ -36,12 +36,7 @@ export default (settings) => (host) => {
 				SPAN()
 					.classes("back", "face")
 					.styles({
-						"--back-background": () =>
-							entry.value.animating ||
-							entry.value.state === "flipped" ||
-							entry.value.state === "matched"
-								? `var(--${entry.value.color})`
-								: null,
+						"--background": () => `var(--${entry.value.color})`,
 					})
 					.append(
 						SPAN()
@@ -69,7 +64,13 @@ export default (settings) => (host) => {
 		DIALOG()
 			.classes("reload-dialog")
 			.append(
-				DIV().classes("face").text("🦉"),
+				DIV()
+					.classes("card")
+					.append(
+						DIV()
+							.classes("faces")
+							.append(SPAN().classes("front", "face").text("🦉"))
+					),
 				DIV()
 					.classes("bubble")
 					.append(

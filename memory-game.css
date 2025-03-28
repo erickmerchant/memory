@@ -39,6 +39,10 @@
 	}
 
 	:where(memory-game) {
+		> * {
+			font-size: calc(45cqi / var(--columns));
+		}
+
 		button {
 			appearance: none;
 			border: none;
@@ -52,7 +56,6 @@
 
 		button:where(:empty) {
 			border-radius: 0.5rem;
-			font-size: calc(45cqi / var(--columns));
 			block-size: 100%;
 			inline-size: 100%;
 			display: block;
@@ -108,9 +111,9 @@
 				scale: 0;
 			}
 
-			& :where(.face) {
+			& :where(.card) {
 				position: relative;
-				font-size: calc((45cqi / var(--columns)) * 1.25);
+				font-size: calc(55cqi / var(--columns));
 				aspect-ratio: 5 / 7;
 				border-radius: 0.5rem;
 				display: grid;
@@ -185,7 +188,6 @@
 			inset-inline-start: 0;
 			inset-block-start: 0;
 			border-radius: 0.5rem;
-			font-size: min(calc(45cqi / var(--columns)), 20cqb);
 			block-size: 100%;
 			inline-size: 100%;
 			transform-style: preserve-3d;
@@ -232,20 +234,19 @@
 
 		.front {
 			backface-visibility: hidden;
+			filter: drop-shadow(
+				0 0 0.25cqmin oklch(from var(--background) calc(l - 0.75) c h)
+			);
 			--background: var(--purple);
 		}
 
 		.back {
 			backface-visibility: hidden;
 			transform: rotateY(180deg);
-			--background: var(--back-background);
 		}
 
 		:is(.face, button:where(:empty)) {
 			background: var(--background);
-			filter: drop-shadow(
-				0 0 0.25cqmin oklch(from var(--background) calc(l - 0.75) c h)
-			);
 
 			&::after {
 				content: "";
