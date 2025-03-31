@@ -19,10 +19,9 @@ export default (settings) => (host) => {
 	let buttons = host.find(`:scope > button`);
 	let state = watch({
 		incomplete: null,
-		previousStack: [],
-		resolvePrevious: null,
 		modalOpen: false,
 		characters: watch([]),
+		previous: null,
 	});
 
 	resetState();
@@ -31,30 +30,30 @@ export default (settings) => (host) => {
 		let btn = buttons[entry.index] ?? BUTTON();
 		let faces = DIV()
 			.classes("faces")
+			.styles({
+				"--turns": () => entry.value.total,
+				"--duration": () => entry.value.latest,
+				"--background": () => `var(--${entry.value.color})`,
+			})
 			.append(
 				SPAN().classes("front", "face").text("🦉"),
 				SPAN()
 					.classes("back", "face")
-					.styles({
-						"--background": () => `var(--${entry.value.color})`,
-					})
 					.append(
 						SPAN()
 							.classes("text")
 							.text(() => entry.value.text)
 					)
-			);
+			)
+			.on("transitionend", () => {
+				entry.value.aftertransition?.();
+
+				entry.value.aftertransition = null;
+			});
 
 		return btn
 			.aria({
-				label: () =>
-					entry.value.state === "covered" ? "owl" : entry.value.name,
-			})
-			.classes({
-				completed: () => state.incomplete === -1,
-				covered: () => entry.value.state === "covered",
-				flipped: () => entry.value.state === "flipped",
-				matched: () => entry.value.state === "matched",
+				label: () => (entry.value.total % 2 === 0 ? "owl" : entry.value.name),
 			})
 			.append(faces)
 			.on("click", onClick(entry));
@@ -78,7 +77,7 @@ export default (settings) => (host) => {
 						BUTTON()
 							.classes("play-again")
 							.text("Play Again!")
-							.on("click", () => resetState("covered"))
+							.on("click", resetState)
 					)
 			)
 			.effect((el) => {
@@ -89,14 +88,11 @@ export default (settings) => (host) => {
 				}
 			});
 
-	host
-		.append(btns, when((prev) => prev || state.modalOpen).show(reloadDialog))
-		.on("animationend", onAnimationEnd);
+	host.append(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
 
-	function resetState(defaultState) {
+	function resetState() {
 		state.incomplete = settings.characters.length;
 		state.modalOpen = false;
-
 		state.characters.splice(
 			0,
 			Infinity,
@@ -105,90 +101,93 @@ export default (settings) => (host) => {
 				.map((character) =>
 					watch({
 						...character,
-						state: defaultState,
-						animating: false,
+						interactive: true,
 						order: Math.random(),
+						aftertransition: null,
+						total: 0,
+						latest: 0,
+						revealed: false,
 					})
 				)
 				.toSorted((a, b) => a.order - b.order)
 		);
 	}
 
-	function onClick(entry) {
-		return () => {
-			if (entry.value.state === "matched") return;
+	function turn(model, val) {
+		model.total += val;
 
-			let isFlipped = entry.value.state === "flipped";
+		model.latest = val ?? 0;
 
-			entry.value.animating = true;
-
-			if (isFlipped && state.previousStack.length === 1) {
-				entry.value.state = "covered";
-			} else {
-				entry.value.state = "flipped";
-
-				if (!state.previousStack.includes(entry.value)) {
-					state.previousStack.push(entry.value);
-				}
-			}
-
-			state.resolvePrevious?.(true);
-		};
+		model.revealed = model.total % 2;
 	}
 
-	function onAnimationEnd() {
-		if (state.previousStack.length === 2) {
-			let localStack = [...state.previousStack];
-			let matched = localStack[0].name === localStack[1].name;
+	function onClick(entry) {
+		return () => {
+			let current = entry.value;
 
-			state.previousStack = [];
+			if (!current.interactive) return;
 
-			if (!matched) {
-				let {promise, resolve} = Promise.withResolvers();
+			if (!current.revealed) {
+				if (state.previous) {
+					let previous = state.previous;
 
-				state.resolvePrevious = resolve;
+					turn(current, 1);
 
-				promise.then((early) => {
-					for (let model of localStack) {
-						model.state = "covered";
-						model.animating = false;
+					trySong(settings.songs.reveal);
+
+					current.interactive = false;
+					previous.interactive = false;
+
+					if (current.text === state.previous.text) {
+						current.aftertransition = () => {
+							turn(current, 2);
+							turn(previous, 2);
+
+							state.incomplete -= 1;
+
+							if (state.incomplete === 0) {
+								scheduleSong(settings.songs.win);
+
+								for (let character of state.characters) {
+									turn(character, 6);
+								}
+
+								state.modalOpen = true;
+
+								state.incomplete = -1;
+							} else {
+								scheduleSong(settings.songs.match);
+							}
+						};
+					} else {
+						current.aftertransition = () => {
+							setTimeout(() => {
+								turn(current, 1);
+								turn(previous, 1);
+
+								current.interactive = true;
+								previous.interactive = true;
+
+								trySong(settings.songs.cover);
+							}, 1000);
+						};
 					}
 
-					if (!early) {
-						trySong(settings.songs?.cover);
-					}
-				});
-
-				trySong(settings.songs?.reveal);
-
-				setTimeout(resolve, 2_000, false);
-			} else {
-				for (let model of localStack) {
-					model.state = "matched";
-					model.animating = false;
-				}
-
-				state.incomplete -= 1;
-
-				if (state.incomplete === 0) {
-					state.incomplete = -1;
-					state.modalOpen = true;
-
-					scheduleSong(settings.songs?.win);
+					state.previous = null;
 				} else {
-					trySong(settings.songs?.match);
+					turn(current, 1);
+
+					trySong(settings.songs.reveal);
+
+					state.previous = current;
 				}
-			}
-		} else if (state.previousStack.length === 1) {
-			state.previousStack[0].animating = false;
-
-			if (state.previousStack[0].state !== "covered") {
-				trySong(settings.songs?.reveal);
 			} else {
-				state.previousStack = [];
+				turn(current, 1);
 
-				trySong(settings.songs?.cover);
+				state.previous = null;
+
+				trySong(settings.songs.cover);
 			}
-		}
+		};
 	}
 };
