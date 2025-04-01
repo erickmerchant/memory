@@ -5,6 +5,7 @@ import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
 import "handcraft/dom/find.js";
 import "handcraft/dom/on.js";
+import "handcraft/dom/once.js";
 import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
 import {html} from "handcraft/dom.js";
@@ -44,19 +45,80 @@ export default (settings) => (host) => {
 							.classes("text")
 							.text(() => entry.value.text)
 					)
-			)
-			.on("transitionend", () => {
-				entry.value.aftertransition?.();
-
-				entry.value.aftertransition = null;
-			});
+			);
 
 		return btn
 			.aria({
 				label: () => (entry.value.total % 2 === 0 ? "owl" : entry.value.name),
 			})
 			.append(faces)
-			.on("click", onClick(entry));
+			.on("click", () => {
+				let current = entry.value;
+
+				if (!current.interactive) return;
+
+				if (!current.revealed) {
+					if (state.previous) {
+						let previous = state.previous;
+
+						turn(current, 1);
+
+						trySong(settings.songs.reveal);
+
+						current.interactive = false;
+						previous.interactive = false;
+
+						if (current.text === state.previous.text) {
+							btn.once("transitionend", () => {
+								turn(current, 2);
+								turn(previous, 2);
+
+								state.incomplete -= 1;
+
+								if (state.incomplete === 0) {
+									scheduleSong(settings.songs.win);
+
+									for (let character of state.characters) {
+										turn(character, 6);
+									}
+
+									state.modalOpen = true;
+
+									state.incomplete = -1;
+								} else {
+									scheduleSong(settings.songs.match);
+								}
+							});
+						} else {
+							btn.once("transitionend", () => {
+								setTimeout(() => {
+									turn(current, 1);
+									turn(previous, 1);
+
+									current.interactive = true;
+									previous.interactive = true;
+
+									trySong(settings.songs.cover);
+								}, 1000);
+							});
+						}
+
+						state.previous = null;
+					} else {
+						turn(current, 1);
+
+						trySong(settings.songs.reveal);
+
+						state.previous = current;
+					}
+				} else {
+					turn(current, 1);
+
+					state.previous = null;
+
+					trySong(settings.songs.cover);
+				}
+			});
 	});
 
 	let reloadDialog = () =>
@@ -103,7 +165,6 @@ export default (settings) => (host) => {
 						...character,
 						interactive: true,
 						order: Math.random(),
-						aftertransition: null,
 						total: 0,
 						latest: 0,
 						revealed: false,
@@ -119,75 +180,5 @@ export default (settings) => (host) => {
 		model.latest = val ?? 0;
 
 		model.revealed = model.total % 2;
-	}
-
-	function onClick(entry) {
-		return () => {
-			let current = entry.value;
-
-			if (!current.interactive) return;
-
-			if (!current.revealed) {
-				if (state.previous) {
-					let previous = state.previous;
-
-					turn(current, 1);
-
-					trySong(settings.songs.reveal);
-
-					current.interactive = false;
-					previous.interactive = false;
-
-					if (current.text === state.previous.text) {
-						current.aftertransition = () => {
-							turn(current, 2);
-							turn(previous, 2);
-
-							state.incomplete -= 1;
-
-							if (state.incomplete === 0) {
-								scheduleSong(settings.songs.win);
-
-								for (let character of state.characters) {
-									turn(character, 6);
-								}
-
-								state.modalOpen = true;
-
-								state.incomplete = -1;
-							} else {
-								scheduleSong(settings.songs.match);
-							}
-						};
-					} else {
-						current.aftertransition = () => {
-							setTimeout(() => {
-								turn(current, 1);
-								turn(previous, 1);
-
-								current.interactive = true;
-								previous.interactive = true;
-
-								trySong(settings.songs.cover);
-							}, 1000);
-						};
-					}
-
-					state.previous = null;
-				} else {
-					turn(current, 1);
-
-					trySong(settings.songs.reveal);
-
-					state.previous = current;
-				}
-			} else {
-				turn(current, 1);
-
-				state.previous = null;
-
-				trySong(settings.songs.cover);
-			}
-		};
 	}
 };
