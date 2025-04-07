@@ -27,14 +27,14 @@ export default (settings) => (host) => {
 
 	resetState();
 
-	let btns = each(state.characters).map((entry) => {
-		let btn = buttons[entry.index] ?? BUTTON();
+	let btns = each(state.characters).map((current, index) => {
+		let btn = buttons[index()] ?? BUTTON();
 		let faces = DIV()
 			.classes("faces")
 			.styles({
-				"--turns": () => entry.value.total,
-				"--duration": () => entry.value.latest,
-				"--background": () => `var(--${entry.value.color})`,
+				"--turns": () => current.total,
+				"--duration": () => current.latest,
+				"--background": () => `var(--${current.color})`,
 			})
 			.append(
 				SPAN().classes("front", "face").text("🦉"),
@@ -43,18 +43,16 @@ export default (settings) => (host) => {
 					.append(
 						SPAN()
 							.classes("text")
-							.text(() => entry.value.text)
+							.text(() => current.text)
 					)
 			);
 
 		return btn
 			.aria({
-				label: () => (entry.value.total % 2 === 0 ? "owl" : entry.value.name),
+				label: () => (current.total % 2 === 0 ? "owl" : current.name),
 			})
 			.append(faces)
 			.on("click", () => {
-				let current = entry.value;
-
 				if (!current.interactive) return;
 
 				if (!current.revealed) {
