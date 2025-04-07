@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8" />
@@ -19,7 +19,6 @@
 			}
 		</script>
 		<script type="module">
-			import {define} from "handcraft/define.js";
 			import game from "memory-game";
 
 			const A = [55, 0.2];
@@ -31,24 +30,22 @@
 			const G = [98, 0.2];
 			const A2 = [110, 0.2];
 
-			define("memory-game").connected(
-				game({
-					characters: [
-						{text: "🦇", name: "bat", color: "yellow"},
-						{text: "🕷️", name: "spider", color: "gray"},
-						{text: "🧟‍♀️", name: "zombie", color: "green"},
-						{text: "🎃", name: "jack-o'-lantern", color: "orange"},
-						{text: "🐺", name: "wolf", color: "blue"},
-						{text: "🧛‍♀️", name: "vampire", color: "red"},
-					],
-					songs: {
-						cover: [C, B],
-						reveal: [A, B],
-						match: [A, B, C, D],
-						win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
-					},
-				})
-			);
+			game({
+				characters: [
+					{text: "🦇", name: "bat", color: "yellow"},
+					{text: "🕷️", name: "spider", color: "gray"},
+					{text: "🧟‍♀️", name: "zombie", color: "green"},
+					{text: "🎃", name: "jack-o'-lantern", color: "orange"},
+					{text: "🐺", name: "wolf", color: "blue"},
+					{text: "🧛‍♀️", name: "vampire", color: "red"},
+				],
+				songs: {
+					cover: [C, B],
+					reveal: [A, B],
+					match: [A, B, C, D],
+					win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
+				},
+			});
 		</script>
 	</head>
 	<body class="page">
