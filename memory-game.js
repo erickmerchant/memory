@@ -128,7 +128,6 @@ export default (settings) =>
 				el.close();
 			}
 		};
-
 		let reloadDialog = () =>
 			DIALOG()
 				.classes("reload-dialog")
