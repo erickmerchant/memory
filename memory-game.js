@@ -48,78 +48,86 @@ export default (settings) =>
 								.text(() => current.text)
 						)
 				);
+			let clickCard = () => {
+				if (!current.interactive) return;
+
+				if (!current.revealed) {
+					if (state.previous) {
+						let previous = state.previous;
+
+						turn(current, 1);
+
+						trySong(settings.songs.reveal);
+
+						current.interactive = false;
+						previous.interactive = false;
+
+						if (current.text === state.previous.text) {
+							btn.once("transitionend", () => {
+								turn(current, 2);
+								turn(previous, 2);
+
+								state.incomplete -= 1;
+
+								if (state.incomplete === 0) {
+									scheduleSong(settings.songs.win);
+
+									for (let character of state.characters) {
+										turn(character, 6);
+									}
+
+									state.modalOpen = true;
+
+									state.incomplete = -1;
+								} else {
+									scheduleSong(settings.songs.match);
+								}
+							});
+						} else {
+							btn.once("transitionend", () => {
+								setTimeout(() => {
+									turn(current, 1);
+									turn(previous, 1);
+
+									current.interactive = true;
+									previous.interactive = true;
+
+									trySong(settings.songs.cover);
+								}, 1000);
+							});
+						}
+
+						state.previous = null;
+					} else {
+						turn(current, 1);
+
+						trySong(settings.songs.reveal);
+
+						state.previous = current;
+					}
+				} else {
+					turn(current, 1);
+
+					state.previous = null;
+
+					trySong(settings.songs.cover);
+				}
+			};
 
 			return btn
 				.aria({
 					label: () => (current.total % 2 === 0 ? "owl" : current.name),
 				})
 				.append(faces)
-				.on("click", () => {
-					if (!current.interactive) return;
-
-					if (!current.revealed) {
-						if (state.previous) {
-							let previous = state.previous;
-
-							turn(current, 1);
-
-							trySong(settings.songs.reveal);
-
-							current.interactive = false;
-							previous.interactive = false;
-
-							if (current.text === state.previous.text) {
-								btn.once("transitionend", () => {
-									turn(current, 2);
-									turn(previous, 2);
-
-									state.incomplete -= 1;
-
-									if (state.incomplete === 0) {
-										scheduleSong(settings.songs.win);
-
-										for (let character of state.characters) {
-											turn(character, 6);
-										}
-
-										state.modalOpen = true;
-
-										state.incomplete = -1;
-									} else {
-										scheduleSong(settings.songs.match);
-									}
-								});
-							} else {
-								btn.once("transitionend", () => {
-									setTimeout(() => {
-										turn(current, 1);
-										turn(previous, 1);
-
-										current.interactive = true;
-										previous.interactive = true;
-
-										trySong(settings.songs.cover);
-									}, 1000);
-								});
-							}
-
-							state.previous = null;
-						} else {
-							turn(current, 1);
-
-							trySong(settings.songs.reveal);
-
-							state.previous = current;
-						}
-					} else {
-						turn(current, 1);
-
-						state.previous = null;
-
-						trySong(settings.songs.cover);
-					}
-				});
+				.on("click", clickCard);
 		});
+		let reloadEffect = (el) => {
+			if (state.modalOpen) {
+				el.showModal();
+			} else {
+				el.close();
+			}
+		};
 
 		let reloadDialog = () =>
 			DIALOG()
@@ -142,13 +150,7 @@ export default (settings) =>
 								.on("click", resetState)
 						)
 				)
-				.effect((el) => {
-					if (state.modalOpen) {
-						el.showModal();
-					} else {
-						el.close();
-					}
-				});
+				.effect(reloadEffect);
 
 		host.append(
 			btns,
