@@ -49,7 +49,9 @@ export default (settings) =>
 						)
 				);
 			let clickCard = () => {
-				if (!current.interactive) return;
+				if (!current.interactive) {
+					return;
+				}
 
 				if (!current.revealed) {
 					if (state.previous) {

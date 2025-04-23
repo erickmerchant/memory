@@ -30,7 +30,9 @@ function initApi() {
 }
 
 export function trySong(song = []) {
-	if (isPlaying) return;
+	if (isPlaying) {
+		return;
+	}
 
 	isPlaying = true;
 
