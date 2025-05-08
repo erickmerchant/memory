@@ -12,7 +12,7 @@ import {each} from "handcraft/each.js";
 import {when} from "handcraft/when.js";
 import {trySong, scheduleSong} from "audio";
 
-let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = h.html;
+let {span, div, dialog, p, button} = h.html;
 
 export default (settings) =>
 	define("memory-game").connected((host) => {
@@ -27,14 +27,14 @@ export default (settings) =>
 		resetState();
 
 		let btns = each(state.characters).map((current, index) => {
-			let btn = buttons[index()] ?? BUTTON();
-			let faces = DIV.class("faces").styles({
+			let btn = buttons[index()] ?? button();
+			let faces = div.class("faces").styles({
 				"--turns": () => current.total,
 				"--duration": () => current.latest,
 				"--background": () => `var(--${current.color})`,
 			})(
-				SPAN.class("front face").text("🦉"),
-				SPAN.class("back face")(SPAN.class("text").text(() => current.text))
+				span.class("front face").text("🦉"),
+				span.class("back face")(span.class("text").text(() => current.text))
 			);
 			let clickCard = () => {
 				if (!current.interactive) {
@@ -107,8 +107,11 @@ export default (settings) =>
 			return btn
 				.aria({
 					label: () => (current.total % 2 === 0 ? "owl" : current.name),
-				})(faces)
-				.on("click", clickCard);
+				})
+				.on(
+					"click",
+					clickCard
+				)(faces);
 		});
 		let reloadEffect = (el) => {
 			if (state.modalOpen) {
@@ -118,16 +121,15 @@ export default (settings) =>
 			}
 		};
 		let reloadDialog = () =>
-			DIALOG.class("reload-dialog")(
-				DIV.class("card")(
-					DIV.class("faces")(SPAN.class("front face").text("🦉"))
+			dialog.class("reload-dialog").effect(reloadEffect)(
+				div.class("card")(
+					div.class("faces")(span.class("front face").text("🦉"))
 				),
-				DIV.class("bubble")(
-					P.text("Hoo-ray! You found all my owl friends."),
-					BUTTON.class("play-again").text("Play Again!").on("click", resetState)
+				div.class("bubble")(
+					p.text("Hoo-ray! You found all my owl friends."),
+					button.class("play-again").text("Play Again!").on("click", resetState)
 				)
-			).effect(reloadEffect);
-
+			);
 		host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
 
 		function resetState() {
