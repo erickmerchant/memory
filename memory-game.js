@@ -1,7 +1,4 @@
-import "handcraft/dom/_nodes.js";
-import "handcraft/dom/append.js";
 import "handcraft/dom/aria.js";
-import "handcraft/dom/classes.js";
 import "handcraft/dom/effect.js";
 import "handcraft/dom/find.js";
 import "handcraft/dom/on.js";
@@ -9,13 +6,13 @@ import "handcraft/dom/once.js";
 import "handcraft/dom/styles.js";
 import "handcraft/dom/text.js";
 import {define} from "handcraft/define.js";
-import {html} from "handcraft/dom.js";
+import {h} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
 import {each} from "handcraft/each.js";
 import {when} from "handcraft/when.js";
 import {trySong, scheduleSong} from "audio";
 
-let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = html;
+let {span: SPAN, div: DIV, dialog: DIALOG, p: P, button: BUTTON} = h.html;
 
 export default (settings) =>
 	define("memory-game").connected((host) => {
@@ -31,23 +28,14 @@ export default (settings) =>
 
 		let btns = each(state.characters).map((current, index) => {
 			let btn = buttons[index()] ?? BUTTON();
-			let faces = DIV()
-				.classes("faces")
-				.styles({
-					"--turns": () => current.total,
-					"--duration": () => current.latest,
-					"--background": () => `var(--${current.color})`,
-				})
-				.append(
-					SPAN().classes("front", "face").text("🦉"),
-					SPAN()
-						.classes("back", "face")
-						.append(
-							SPAN()
-								.classes("text")
-								.text(() => current.text)
-						)
-				);
+			let faces = DIV.class("faces").styles({
+				"--turns": () => current.total,
+				"--duration": () => current.latest,
+				"--background": () => `var(--${current.color})`,
+			})(
+				SPAN.class("front face").text("🦉"),
+				SPAN.class("back face")(SPAN.class("text").text(() => current.text))
+			);
 			let clickCard = () => {
 				if (!current.interactive) {
 					return;
@@ -119,8 +107,7 @@ export default (settings) =>
 			return btn
 				.aria({
 					label: () => (current.total % 2 === 0 ? "owl" : current.name),
-				})
-				.append(faces)
+				})(faces)
 				.on("click", clickCard);
 		});
 		let reloadEffect = (el) => {
@@ -131,32 +118,17 @@ export default (settings) =>
 			}
 		};
 		let reloadDialog = () =>
-			DIALOG()
-				.classes("reload-dialog")
-				.append(
-					DIV()
-						.classes("card")
-						.append(
-							DIV()
-								.classes("faces")
-								.append(SPAN().classes("front", "face").text("🦉"))
-						),
-					DIV()
-						.classes("bubble")
-						.append(
-							P().text("Hoo-ray! You found all my owl friends."),
-							BUTTON()
-								.classes("play-again")
-								.text("Play Again!")
-								.on("click", resetState)
-						)
+			DIALOG.class("reload-dialog")(
+				DIV.class("card")(
+					DIV.class("faces")(SPAN.class("front face").text("🦉"))
+				),
+				DIV.class("bubble")(
+					P.text("Hoo-ray! You found all my owl friends."),
+					BUTTON.class("play-again").text("Play Again!").on("click", resetState)
 				)
-				.effect(reloadEffect);
+			).effect(reloadEffect);
 
-		host.append(
-			btns,
-			when((prev) => prev || state.modalOpen).show(reloadDialog)
-		);
+		host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
 
 		function resetState() {
 			state.incomplete = settings.characters.length;
