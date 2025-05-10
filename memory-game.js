@@ -10,7 +10,7 @@ import {h} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
 import {each} from "handcraft/each.js";
 import {when} from "handcraft/when.js";
-import {trySong, scheduleSong} from "audio";
+import {trySong, scheduleSong} from "./audio.js";
 
 let {span, div, dialog, p, button} = h.html;
 

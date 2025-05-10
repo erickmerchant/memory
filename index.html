@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8" />
@@ -11,14 +11,12 @@
 		<script type="importmap">
 			{
 				"imports": {
-					"handcraft/": "../handcraft/",
-					"audio": "./audio.js",
-					"memory-game": "./memory-game.js"
+					"handcraft/": "/node_modules/handcraft/"
 				}
 			}
 		</script>
 		<script type="module">
-			import game from "memory-game";
+			import game from "./memory-game.js";
 
 			const A = [220, 0.1];
 			const AA = [220, 0.2];
