@@ -1,6 +1,6 @@
 import "handcraft/dom/aria.js";
 import "handcraft/dom/effect.js";
-import "handcraft/dom/find.js";
+import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/once.js";
 import "handcraft/dom/styles.js";
@@ -16,7 +16,8 @@ let {span, div, dialog, p, button} = h.html;
 
 export default (settings) =>
 	define("memory-game").connected((host) => {
-		let buttons = host.find(`:scope > button`);
+		let observed = host.observe();
+		let buttons = observed.find(`:scope > button`);
 		let state = watch({
 			incomplete: null,
 			modalOpen: false,
