@@ -23,30 +23,32 @@
 		--gap: 1.5cqmin;
 		--columns: 1;
 
-		@container (aspect-ratio <= 15/28) {
-			inline-size: 100cqi;
+		@container (aspect-ratio <= 15/28) and (aspect-ratio <= 10/42) {
 			aspect-ratio: 10/42;
+			inline-size: 100cqi;
 
 			--columns: 2;
-
-			@container (aspect-ratio > 10/42) {
-				aspect-ratio: 15/28;
-
-				--columns: 3;
-			}
 		}
 
-		@container (aspect-ratio > 15/28) {
+		@container (aspect-ratio <= 15/28) and (aspect-ratio > 10/42) {
+			aspect-ratio: 15/28;
+			inline-size: 100cqi;
+
+			--columns: 3;
+		}
+
+		@container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
 			aspect-ratio: 20/21;
 			block-size: 90cqb;
 
 			--columns: 4;
+		}
 
-			@container (aspect-ratio > 20/21) {
-				aspect-ratio: 30/14;
+		@container (aspect-ratio > 15/28) and (aspect-ratio > 20/21) {
+			aspect-ratio: 30/14;
+			block-size: 90cqb;
 
-				--columns: 6;
-			}
+			--columns: 6;
 		}
 	}
 
@@ -87,9 +89,7 @@
 			grid-template-columns: 1fr 1fr;
 			gap: var(--gap);
 			border-radius: 0.5rem;
-			transition:
-				scale 0.5s,
-				display 0.5s ease-in-out allow-discrete;
+			transition: scale 0.5s, display 0.5s ease-in-out allow-discrete;
 			animation-fill-mode: forwards;
 			background: none;
 			overflow: visible;
