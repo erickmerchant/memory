@@ -28,7 +28,7 @@ export default (settings) =>
 		resetState();
 
 		let btns = each(state.characters).map((current, index) => {
-			let btn = buttons[index()] ?? button();
+			let btn = buttons[index()] ?? button;
 			let faces = div.class("faces").styles({
 				"--turns": () => current.total,
 				"--duration": () => current.latest,
