@@ -4,7 +4,6 @@ import "handcraft/dom/observe.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/once.js";
 import "handcraft/dom/styles.js";
-import "handcraft/dom/text.js";
 import {define} from "handcraft/define.js";
 import {h} from "handcraft/dom.js";
 import {watch} from "handcraft/reactivity.js";
@@ -28,14 +27,14 @@ export default (settings) =>
 		resetState();
 
 		let btns = each(state.characters).map((current, index) => {
-			let btn = buttons[index()] ?? button;
+			let btn = buttons[index()] ?? button();
 			let faces = div.class("faces").styles({
 				"--turns": () => current.total,
 				"--duration": () => current.latest,
 				"--background": () => `var(--${current.color})`,
 			})(
-				span.class("front face").text("🦉"),
-				span.class("back face")(span.class("text").text(() => current.text))
+				span.class("front face")("🦉"),
+				span.class("back face")(span.class("text")(() => current.text))
 			);
 			let clickCard = () => {
 				if (!current.interactive) {
@@ -123,12 +122,10 @@ export default (settings) =>
 		};
 		let reloadDialog = () =>
 			dialog.class("reload-dialog").effect(reloadEffect)(
-				div.class("card")(
-					div.class("faces")(span.class("front face").text("🦉"))
-				),
+				div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
 				div.class("bubble")(
-					p.text("Hoo-ray! You found all my owl friends."),
-					button.class("play-again").text("Play Again!").on("click", resetState)
+					p("Hoo-ray! You found all my owl friends."),
+					button.class("play-again").on("click", resetState)("Play Again!")
 				)
 			);
 		host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
