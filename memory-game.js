@@ -84,7 +84,7 @@ export default (settings) =>
 									previous.interactive = true;
 
 									trySong(settings.songs.cover);
-								}, 1000);
+								}, 1_000);
 							});
 						}
 

@@ -60,7 +60,7 @@
 		button {
 			appearance: none;
 			border: none;
-			border-radius: 0.5rem;
+			border-radius: 0.125rem;
 			display: block;
 			position: relative;
 			inline-size: auto;
@@ -69,7 +69,7 @@
 		}
 
 		button:where(:empty) {
-			border-radius: 0.5rem;
+			border-radius: 0.125rem;
 			block-size: 100%;
 			inline-size: 100%;
 			display: block;
@@ -88,8 +88,10 @@
 			display: grid;
 			grid-template-columns: 1fr 1fr;
 			gap: var(--gap);
-			border-radius: 0.5rem;
-			transition: scale 0.5s, display 0.5s ease-in-out allow-discrete;
+			border-radius: 0.125rem;
+			transition:
+				scale 0.5s,
+				display 0.5s ease-in-out allow-discrete;
 			animation-fill-mode: forwards;
 			background: none;
 			overflow: visible;
@@ -127,7 +129,7 @@
 				position: relative;
 				font-size: calc(55cqi / var(--columns));
 				aspect-ratio: 5 / 7;
-				border-radius: 0.5rem;
+				border-radius: 0.125rem;
 				display: grid;
 				place-content: center;
 				min-inline-size: calc((100cqi / var(--columns) * 1.25));
@@ -182,7 +184,7 @@
 				appearance: none;
 				border: none;
 				padding: 0.5rem;
-				border-radius: 0.25rem;
+				border-radius: 0.125rem;
 				border: 0.125rem solid currentColor;
 				background: oklch(from var(--purple) calc(l + 0.6) c h);
 				color: inherit;
@@ -199,7 +201,7 @@
 			position: absolute;
 			inset-inline-start: 0;
 			inset-block-start: 0;
-			border-radius: 0.5rem;
+			border-radius: 0.125rem;
 			block-size: 100%;
 			inline-size: 100%;
 			animation-timing-function: linear;
@@ -220,7 +222,7 @@
 			inset-block-start: 0;
 			block-size: 100%;
 			inline-size: 100%;
-			border-radius: 0.5rem;
+			border-radius: 0.125rem;
 			user-select: none;
 			-webkit-user-select: none;
 		}
@@ -246,7 +248,7 @@
 				display: block;
 				position: absolute;
 				inset: 0.2rem;
-				border-radius: 0.3rem;
+				border-radius: 0;
 				border: 0.1rem solid oklch(from var(--background) calc(l - 0.1) c h);
 			}
 		}
