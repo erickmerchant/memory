@@ -6,14 +6,14 @@ import "handcraft/dom/observer.js";
 import "handcraft/dom/on.js";
 import "handcraft/dom/once.js";
 import "handcraft/dom/styles.js";
-import {define} from "handcraft/define.js";
-import {h} from "handcraft/dom.js";
-import {watch} from "handcraft/reactivity.js";
-import {each} from "handcraft/each.js";
-import {when} from "handcraft/when.js";
-import {trySong, scheduleSong} from "./audio.js";
+import { define } from "handcraft/define.js";
+import { h } from "handcraft/dom.js";
+import { watch } from "handcraft/reactivity.js";
+import { each } from "handcraft/each.js";
+import { when } from "handcraft/when.js";
+import { scheduleSong, trySong } from "./audio.js";
 
-let {span, div, dialog, p, button} = h.html;
+let { span, div, dialog, p, button } = h.html;
 
 export default (settings) =>
 	define("memory-game").setup((host) => {
@@ -35,7 +35,7 @@ export default (settings) =>
 				"--background": () => `var(--${current.color})`,
 			})(
 				span.class("front face")("🦉"),
-				span.class("back face")(span.class("text")(() => current.text))
+				span.class("back face")(span.class("text")(() => current.text)),
 			);
 			let clickCard = () => {
 				if (!current.interactive) {
@@ -111,7 +111,7 @@ export default (settings) =>
 				})
 				.on(
 					"click",
-					clickCard
+					clickCard,
 				)(faces);
 		});
 		let reloadEffect = (el) => {
@@ -126,8 +126,8 @@ export default (settings) =>
 				div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
 				div.class("bubble")(
 					p("Hoo-ray! You found all my owl friends."),
-					button.class("play-again").on("click", resetState)("Play Again!")
-				)
+					button.class("play-again").on("click", resetState)("Play Again!"),
+				),
 			);
 		host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
 
@@ -149,7 +149,7 @@ export default (settings) =>
 							revealed: false,
 						})
 					)
-					.toSorted((a, b) => a.order - b.order)
+					.toSorted((a, b) => a.order - b.order),
 			);
 		}
 

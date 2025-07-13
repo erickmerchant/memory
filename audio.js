@@ -8,16 +8,68 @@ function initApi() {
 	let gainNode = new GainNode(context);
 	let wave = context.createPeriodicWave(
 		[
-			0, 1, 1, 1, 0.1, 0.1, 0.01, 0.01, 0.001, 0.001, 0.0001, 0.1, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0,
+			1,
+			1,
+			1,
+			0.1,
+			0.1,
+			0.01,
+			0.01,
+			0.001,
+			0.001,
+			0.0001,
+			0.1,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
 		],
 		[
-			0, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0.01,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
+			0,
 		],
 		{
 			disableNormalization: false,
-		}
+		},
 	);
 
 	oscillatorNode.connect(gainNode).connect(context.destination);
@@ -26,7 +78,7 @@ function initApi() {
 
 	oscillatorNode.start(context.currentTime);
 
-	return {context, gain: gainNode.gain, frequency: oscillatorNode.frequency};
+	return { context, gain: gainNode.gain, frequency: oscillatorNode.frequency };
 }
 
 export function trySong(song = []) {
@@ -38,7 +90,7 @@ export function trySong(song = []) {
 
 	audio ??= initApi();
 
-	let {context, gain, frequency} = audio;
+	let { context, gain, frequency } = audio;
 	let time = context.currentTime;
 	let length = 0;
 
@@ -54,7 +106,7 @@ export function trySong(song = []) {
 		gain.linearRampToValueAtTime(0, time);
 	}
 
-	let {promise, resolve} = Promise.withResolvers();
+	let { promise, resolve } = Promise.withResolvers();
 
 	setTimeout(resolve, 1000 * length);
 
