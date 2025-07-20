@@ -15,8 +15,8 @@ import { scheduleSong, trySong } from "./audio.js";
 
 let { span, div, dialog, p, button } = h.html;
 
-export default (settings) =>
-	define("memory-game").setup((host) => {
+export function game(settings) {
+	return define("memory-game").setup((host) => {
 		let buttons = host.find(`> button`);
 		let state = watch({
 			incomplete: null,
@@ -161,3 +161,4 @@ export default (settings) =>
 			model.revealed = model.total % 2;
 		}
 	});
+}
