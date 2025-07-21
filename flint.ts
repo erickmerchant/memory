@@ -1,11 +1,11 @@
 import css from "@flint/framework/plugins/css";
 import js from "@flint/framework/plugins/js";
-import create from "@flint/framework/create";
+import flint from "@flint/framework";
 import index from "./views/index.js";
 import halloween from "./views/halloween.js";
 
-const app = create("public")
-	.cache(["/", "/halloween/"])
+const app = flint("public")
+	.cache("/", "/halloween/")
 	.route("/", index)
 	.route("/halloween/", halloween)
 	.route("/*.css", css)
