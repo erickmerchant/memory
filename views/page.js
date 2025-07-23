@@ -14,7 +14,7 @@ const {
 	p,
 } = h.html;
 
-export default function ({ scriptOrStyles, urls }) {
+export default function ({ scriptOrStyles }, resolve) {
 	return render(
 		html.lang("en-US")(
 			head(
@@ -25,8 +25,8 @@ export default function ({ scriptOrStyles, urls }) {
 						"width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0",
 					),
 				title("Memory"),
-				link.rel("stylesheet").href(urls["/page.css"]),
-				link.rel("stylesheet").href(urls["/memory-game.css"]),
+				link.rel("stylesheet").href(resolve("/page.css")),
+				link.rel("stylesheet").href(resolve("/memory-game.css")),
 				scriptOrStyles,
 			),
 			body.class("page")(

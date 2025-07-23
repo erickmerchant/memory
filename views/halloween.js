@@ -3,12 +3,11 @@ import page from "./page.js";
 
 const { link, script } = h.html;
 
-export default function ({ urls }) {
+export default function (_, resolve) {
 	return page({
 		scriptOrStyles: [
-			link.rel("stylesheet").href(urls["/halloween.css"]),
-			script.type("module").src(urls["/halloween.js"]),
+			link.rel("stylesheet").href(resolve("/halloween.css")),
+			script.type("module").src(resolve("/halloween.js")),
 		],
-		urls,
-	});
+	}, resolve);
 }
