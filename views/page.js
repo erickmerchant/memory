@@ -8,10 +8,10 @@ const {
 	title,
 	body,
 	div,
-	["memory-game"]: memoryGame,
 	button,
 	footer,
 	p,
+	"memory-game": memoryGame,
 } = h.html;
 
 export default function ({ scriptOrStyles }, resolve) {

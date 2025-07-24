@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@flint/framework@0.2": "0.2.2",
+    "jsr:@flint/framework@0.2": "0.2.3",
     "jsr:@std/async@^1.0.13": "1.0.13",
     "jsr:@std/cli@^1.0.21": "1.0.21",
     "jsr:@std/crypto@^1.0.4": "1.0.5",
@@ -17,12 +17,12 @@
     "jsr:@std/path@^1.0.9": "1.1.1",
     "jsr:@std/path@^1.1.1": "1.1.1",
     "jsr:@std/streams@^1.0.10": "1.0.10",
-    "npm:handcraft@0.19": "0.19.0",
+    "npm:handcraft@0.19": "0.19.1",
     "npm:lightningcss@^1.29.3": "1.30.1"
   },
   "jsr": {
-    "@flint/framework@0.2.2": {
-      "integrity": "ac2115892f6c2f0cf8432b95a7f27bf1cf333c7eb74e83060e601abbf5ee51a5",
+    "@flint/framework@0.2.3": {
+      "integrity": "b1964d514705993954248c786e73caf73b63e8981e97fa60fd4b26bce7d06acb",
       "dependencies": [
         "jsr:@std/async",
         "jsr:@std/crypto",
@@ -96,8 +96,8 @@
     "detect-libc@2.0.4": {
       "integrity": "sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA=="
     },
-    "handcraft@0.19.0": {
-      "integrity": "sha512-Rf+JF2WYJgr08XKmMMItp2mj9/MDHPjmz1H8mOte26OqYrl/6MAnRg1bmV8fhg460Hh2QBVnl1TFZKJibqV42w=="
+    "handcraft@0.19.1": {
+      "integrity": "sha512-n7Er0HIIqV7l/Lw4Dq6EdOUwt/TgT5jUl3qrIZ1k+zzPajhcmuXQ/xs7hSTKCgkMTNMgx/ClZzacktBYQkcQlA=="
     },
     "lightningcss-darwin-arm64@1.30.1": {
       "integrity": "sha512-c8JK7hyE65X1MHMN+Viq9n11RRC7hgin3HhYKhrMyaXflk5GVplZ60IxyoVtzILeKr+xAJwg6zK6sjTBJ0FKYQ==",
