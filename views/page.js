@@ -14,7 +14,7 @@ const {
 	"memory-game": memoryGame,
 } = h.html;
 
-export default function ({ scriptOrStyles }, resolve) {
+export default function ({ scriptOrStyles, resolve }) {
 	return render(
 		html.lang("en-US")(
 			head(

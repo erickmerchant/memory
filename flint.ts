@@ -4,14 +4,13 @@ import flint from "@flint/framework";
 import index from "./views/index.js";
 import halloween from "./views/halloween.js";
 
-const app = flint("public")
+const app = flint("public", "dist")
 	.cache("/", "/halloween/")
 	.route("/", index)
 	.route("/halloween/", halloween)
-	.route("/*.css", css)
-	.route("/index.js", js)
-	.route("/halloween.js", js)
-	.output("dist");
+	.use("/*.css", css)
+	.use("/index.js", js)
+	.use("/halloween.js", js);
 
 export default app;
 
