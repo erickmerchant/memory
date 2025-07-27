@@ -26,7 +26,6 @@ export default function ({ scriptOrStyles, resolve }) {
 					),
 				title("Memory"),
 				link.rel("stylesheet").href(resolve("/page.css")),
-				link.rel("stylesheet").href(resolve("/memory-game.css")),
 				scriptOrStyles,
 			),
 			body.class("page")(

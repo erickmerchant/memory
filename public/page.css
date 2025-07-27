@@ -1,3 +1,7 @@
+@layer page, component;
+
+@import "./memory-game.css";
+
 @layer page {
 	*,
 	::before,
