@@ -50,9 +50,7 @@
 
 			--columns: 6;
 		}
-	}
 
-	:where(memory-game) {
 		> * {
 			font-size: calc(45cqi / var(--columns));
 		}
@@ -68,7 +66,7 @@
 			background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
 		}
 
-		button:where(:empty) {
+		button:empty {
 			border-radius: 0.125rem;
 			block-size: 100%;
 			inline-size: 100%;
@@ -109,7 +107,7 @@
 				background-color: oklch(from var(--purple) calc(l + 0.7) c h / 0.25);
 			}
 
-			&:where([open]) {
+			&[open] {
 				scale: 1;
 
 				@starting-style {
@@ -121,11 +119,11 @@
 				}
 			}
 
-			&:where(:not([open])) {
+			&:not([open]) {
 				scale: 0;
 			}
 
-			& :where(.card) {
+			& .card {
 				position: relative;
 				font-size: calc(55cqi / var(--columns));
 				aspect-ratio: 5 / 7;
@@ -136,7 +134,7 @@
 				--background: var(--purple);
 			}
 
-			& :where(.bubble) {
+			& .bubble {
 				background: white;
 				border-radius: 0.5rem;
 				filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
@@ -175,7 +173,7 @@
 				}
 			}
 
-			& :where(button) {
+			& button {
 				font-size: inherit;
 				font-weight: 900;
 				display: inline grid;
@@ -191,7 +189,7 @@
 				aspect-ratio: unset;
 			}
 
-			& :where(svg) {
+			& svg {
 				block-size: 1.5rem;
 				fill: currentColor;
 			}
@@ -240,7 +238,7 @@
 			transform: rotateY(180deg);
 		}
 
-		:is(.face, button:where(:empty)) {
+		:is(.face, button:empty) {
 			background: var(--background);
 
 			&::after {
