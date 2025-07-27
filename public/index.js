@@ -1,8 +1,8 @@
 const { game } = await import("./memory-game.js");
 
 const A = [220, 0.1];
-const AA = [220, 0.2];
-const B = [246, 0.1];
+// const AA = [220, 0.2];
+// const B = [246, 0.1];
 const C = [261, 0.1];
 const CC = [261, 0.2];
 const D = [293, 0.1];
