@@ -4,7 +4,6 @@ const {
 	html,
 	head,
 	meta,
-	link,
 	title,
 	body,
 	div,
@@ -14,7 +13,7 @@ const {
 	"memory-game": memoryGame,
 } = h.html;
 
-export default function ({ scriptOrStyles, resolve }) {
+export default function ({ scriptOrStyles }) {
 	return render(
 		html.lang("en-US")(
 			head(
@@ -25,7 +24,6 @@ export default function ({ scriptOrStyles, resolve }) {
 						"width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0",
 					),
 				title("Memory"),
-				link.rel("stylesheet").href(resolve("/page.css")),
 				scriptOrStyles,
 			),
 			body.class("page")(

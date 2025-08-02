@@ -1,7 +1,3 @@
-@layer page, component;
-
-@import "./memory-game.css";
-
 @layer page {
 	*,
 	::before,
@@ -19,16 +15,7 @@
 		font-family:
 			Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
 		font-weight: 700;
-		color-scheme: light;
 		font-size: 125%;
-
-		--gray: oklch(90% 0 0);
-		--purple: oklch(90% 0.15 300);
-		--blue: oklch(90% 0.15 210);
-		--green: oklch(90% 0.15 150);
-		--yellow: oklch(90% 0.15 90);
-		--orange: oklch(90% 0.15 60);
-		--red: oklch(90% 0.15 30);
 	}
 
 	.page {
@@ -40,7 +27,6 @@
 		grid-template-columns: 1fr;
 		grid-template-rows: auto min-content;
 		padding-inline: 1.5vmin;
-		background-color: oklch(from var(--purple) calc(l + 0.7) calc(c - 0.1) h);
 	}
 
 	.game {

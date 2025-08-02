@@ -1,3 +1,8 @@
+@layer page, page-variant, component;
+
+@import "./page.css";
+@import "./memory-game.css";
+
 @layer page-variant {
 	:root {
 		color-scheme: dark;

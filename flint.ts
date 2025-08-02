@@ -8,7 +8,8 @@ const app = flint("public", "dist")
 	.cache("/", "/halloween/")
 	.route("/", index)
 	.route("/halloween/", halloween)
-	.use("/*.css", css)
+	.use("/index.css", css)
+	.use("/halloween.css", css)
 	.use("/index.js", js)
 	.use("/halloween.js", js);
 

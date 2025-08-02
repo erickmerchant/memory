@@ -1,11 +1,14 @@
 import { h } from "handcraft/env/server.js";
 import page from "./page.js";
 
-const { script } = h.html;
+const { script, link } = h.html;
 
 export default function ({ resolve }) {
 	return page({
-		scriptOrStyles: script.type("module").src(resolve("/index.js")),
+		scriptOrStyles: [
+			link.rel("stylesheet").href(resolve("/index.css")),
+			script.type("module").src(resolve("/index.js")),
+		],
 		resolve,
 	});
 }
