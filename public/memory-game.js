@@ -13,12 +13,12 @@ import { each } from "handcraft/each.js";
 import { when } from "handcraft/when.js";
 import { scheduleSong, trySong } from "./audio.js";
 
-let { span, div, dialog, p, button } = h.html;
+const { span, div, dialog, p, button } = h.html;
 
 export function game(settings) {
 	return define("memory-game").setup((host) => {
-		let buttons = host.find(`> button`);
-		let state = watch({
+		const buttons = host.find(`> button`);
+		const state = watch({
 			incomplete: null,
 			modalOpen: false,
 			characters: watch([]),
@@ -27,9 +27,9 @@ export function game(settings) {
 
 		resetState();
 
-		let btns = each(state.characters).map((current, index) => {
-			let btn = buttons[index()] ?? button();
-			let faces = div.class("faces").styles({
+		const btns = each(state.characters).map((current, index) => {
+			const btn = buttons[index()] ?? button();
+			const faces = div.class("faces").styles({
 				"--turns": () => current.total,
 				"--duration": () => current.latest,
 				"--background": () => `var(--${current.color})`,
@@ -37,14 +37,14 @@ export function game(settings) {
 				span.class("front face")("🦉"),
 				span.class("back face")(span.class("text")(() => current.text)),
 			);
-			let clickCard = () => {
+			const clickCard = () => {
 				if (!current.interactive) {
 					return;
 				}
 
 				if (!current.revealed) {
 					if (state.previous) {
-						let previous = state.previous;
+						const previous = state.previous;
 
 						turn(current, 1);
 
@@ -63,7 +63,7 @@ export function game(settings) {
 								if (state.incomplete === 0) {
 									scheduleSong(settings.songs.win);
 
-									for (let character of state.characters) {
+									for (const character of state.characters) {
 										turn(character, 6);
 									}
 
@@ -114,14 +114,14 @@ export function game(settings) {
 					clickCard,
 				)(faces);
 		});
-		let reloadEffect = (el) => {
+		const reloadEffect = (el) => {
 			if (state.modalOpen) {
 				el.showModal();
 			} else {
 				el.close();
 			}
 		};
-		let reloadDialog = () =>
+		const reloadDialog = () =>
 			dialog.class("reload-dialog").effect(reloadEffect)(
 				div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
 				div.class("bubble")(

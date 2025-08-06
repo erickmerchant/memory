@@ -3,10 +3,10 @@ let lastSong = Promise.resolve();
 let isPlaying = false;
 
 function initApi() {
-	let context = new AudioContext();
-	let oscillatorNode = new OscillatorNode(context);
-	let gainNode = new GainNode(context);
-	let wave = context.createPeriodicWave(
+	const context = new AudioContext();
+	const oscillatorNode = new OscillatorNode(context);
+	const gainNode = new GainNode(context);
+	const wave = context.createPeriodicWave(
 		[
 			0,
 			1,
@@ -90,11 +90,11 @@ export function trySong(song = []) {
 
 	audio ??= initApi();
 
-	let { context, gain, frequency } = audio;
+	const { context, gain, frequency } = audio;
 	let time = context.currentTime;
 	let length = 0;
 
-	for (let [note, len] of song) {
+	for (const [note, len] of song) {
 		length += len;
 
 		frequency.setValueAtTime(note, time);
@@ -106,7 +106,7 @@ export function trySong(song = []) {
 		gain.linearRampToValueAtTime(0, time);
 	}
 
-	let { promise, resolve } = Promise.withResolvers();
+	const { promise, resolve } = Promise.withResolvers();
 
 	setTimeout(resolve, 1000 * length);
 
