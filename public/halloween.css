@@ -4,21 +4,21 @@
 @import "./memory-game.css";
 
 @layer page-variant {
-	:root {
-		color-scheme: dark;
+  :root {
+    color-scheme: dark;
 
-		--gray: oklch(85% 0 0);
-		--purple: oklch(85% 0.075 300);
-		--blue: oklch(85% 0.075 210);
-		--green: oklch(85% 0.075 150);
-		--yellow: oklch(85% 0.075 90);
-		--orange: oklch(85% 0.075 60);
-		--red: oklch(85% 0.075 30);
-	}
+    --gray: oklch(85% 0 0);
+    --purple: oklch(85% 0.075 300);
+    --blue: oklch(85% 0.075 210);
+    --green: oklch(85% 0.075 150);
+    --yellow: oklch(85% 0.075 90);
+    --orange: oklch(85% 0.075 60);
+    --red: oklch(85% 0.075 30);
+  }
 
-	.page {
-		color: #222;
-		background-image: none;
-		background-color: oklch(from var(--gray) calc(l - 0.1) c h);
-	}
+  .page {
+    color: #222;
+    background-image: none;
+    background-color: oklch(from var(--gray) calc(l - 0.1) c h);
+  }
 }

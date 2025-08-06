@@ -1,45 +1,45 @@
 @layer page {
-	*,
-	::before,
-	::after {
-		box-sizing: border-box;
-		margin: 0;
-		padding: 0;
-		font: inherit;
-		max-inline-size: 100%;
-		touch-action: none;
-	}
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    max-inline-size: 100%;
+    touch-action: none;
+  }
 
-	:root {
-		block-size: 100%;
-		font-family:
-			Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
-		font-weight: 700;
-		font-size: 125%;
-	}
+  :root {
+    block-size: 100%;
+    font-family:
+      Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
+    font-weight: 700;
+    font-size: 125%;
+  }
 
-	.page {
-		min-block-size: 100%;
-		block-size: 100%;
-		inline-size: 100%;
-		overflow: auto;
-		display: grid;
-		grid-template-columns: 1fr;
-		grid-template-rows: auto min-content;
-		padding-inline: 1.5vmin;
-	}
+  .page {
+    min-block-size: 100%;
+    block-size: 100%;
+    inline-size: 100%;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto min-content;
+    padding-inline: 1.5vmin;
+  }
 
-	.game {
-		display: grid;
-		block-size: 100%;
-		inline-size: 100%;
-		place-items: center;
-		container-type: size;
-	}
+  .game {
+    display: grid;
+    block-size: 100%;
+    inline-size: 100%;
+    place-items: center;
+    container-type: size;
+  }
 
-	.dedication {
-		font-size: 0.75rem;
-		padding: 0.5rem;
-		text-align: right;
-	}
+  .dedication {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    text-align: right;
+  }
 }

@@ -16,149 +16,149 @@ import { scheduleSong, trySong } from "./audio.js";
 const { span, div, dialog, p, button } = h.html;
 
 export function game(settings) {
-	return define("memory-game").setup((host) => {
-		const buttons = host.find(`> button`);
-		const state = watch({
-			incomplete: null,
-			modalOpen: false,
-			characters: watch([]),
-			previous: null,
-		});
+  return define("memory-game").setup((host) => {
+    const buttons = host.find(`> button`);
+    const state = watch({
+      incomplete: null,
+      modalOpen: false,
+      characters: watch([]),
+      previous: null,
+    });
 
-		resetState();
+    resetState();
 
-		const btns = each(state.characters).map((current, index) => {
-			const btn = buttons[index()] ?? button();
-			const faces = div.class("faces").styles({
-				"--turns": () => current.total,
-				"--duration": () => current.latest,
-				"--background": () => `var(--${current.color})`,
-			})(
-				span.class("front face")("🦉"),
-				span.class("back face")(span.class("text")(() => current.text)),
-			);
-			const clickCard = () => {
-				if (!current.interactive) {
-					return;
-				}
+    const btns = each(state.characters).map((current, index) => {
+      const btn = buttons[index()] ?? button();
+      const faces = div.class("faces").styles({
+        "--turns": () => current.total,
+        "--duration": () => current.latest,
+        "--background": () => `var(--${current.color})`,
+      })(
+        span.class("front face")("🦉"),
+        span.class("back face")(span.class("text")(() => current.text)),
+      );
+      const clickCard = () => {
+        if (!current.interactive) {
+          return;
+        }
 
-				if (!current.revealed) {
-					if (state.previous) {
-						const previous = state.previous;
+        if (!current.revealed) {
+          if (state.previous) {
+            const previous = state.previous;
 
-						turn(current, 1);
+            turn(current, 1);
 
-						trySong(settings.songs.reveal);
+            trySong(settings.songs.reveal);
 
-						current.interactive = false;
-						previous.interactive = false;
+            current.interactive = false;
+            previous.interactive = false;
 
-						if (current.text === state.previous.text) {
-							btn.once("transitionend", () => {
-								turn(current, 2);
-								turn(previous, 2);
+            if (current.text === state.previous.text) {
+              btn.once("transitionend", () => {
+                turn(current, 2);
+                turn(previous, 2);
 
-								state.incomplete -= 1;
+                state.incomplete -= 1;
 
-								if (state.incomplete === 0) {
-									scheduleSong(settings.songs.win);
+                if (state.incomplete === 0) {
+                  scheduleSong(settings.songs.win);
 
-									for (const character of state.characters) {
-										turn(character, 6);
-									}
+                  for (const character of state.characters) {
+                    turn(character, 6);
+                  }
 
-									state.modalOpen = true;
+                  state.modalOpen = true;
 
-									state.incomplete = -1;
-								} else {
-									scheduleSong(settings.songs.match);
-								}
-							});
-						} else {
-							btn.once("transitionend", () => {
-								setTimeout(() => {
-									turn(current, 1);
-									turn(previous, 1);
+                  state.incomplete = -1;
+                } else {
+                  scheduleSong(settings.songs.match);
+                }
+              });
+            } else {
+              btn.once("transitionend", () => {
+                setTimeout(() => {
+                  turn(current, 1);
+                  turn(previous, 1);
 
-									current.interactive = true;
-									previous.interactive = true;
+                  current.interactive = true;
+                  previous.interactive = true;
 
-									trySong(settings.songs.cover);
-								}, 1_000);
-							});
-						}
+                  trySong(settings.songs.cover);
+                }, 1_000);
+              });
+            }
 
-						state.previous = null;
-					} else {
-						turn(current, 1);
+            state.previous = null;
+          } else {
+            turn(current, 1);
 
-						trySong(settings.songs.reveal);
+            trySong(settings.songs.reveal);
 
-						state.previous = current;
-					}
-				} else {
-					turn(current, 1);
+            state.previous = current;
+          }
+        } else {
+          turn(current, 1);
 
-					state.previous = null;
+          state.previous = null;
 
-					trySong(settings.songs.cover);
-				}
-			};
+          trySong(settings.songs.cover);
+        }
+      };
 
-			return btn
-				.aria({
-					label: () => (current.total % 2 === 0 ? "owl" : current.name),
-				})
-				.on(
-					"click",
-					clickCard,
-				)(faces);
-		});
-		const reloadEffect = (el) => {
-			if (state.modalOpen) {
-				el.showModal();
-			} else {
-				el.close();
-			}
-		};
-		const reloadDialog = () =>
-			dialog.class("reload-dialog").effect(reloadEffect)(
-				div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
-				div.class("bubble")(
-					p("Hoo-ray! You found all my owl friends."),
-					button.class("play-again").on("click", resetState)("Play Again!"),
-				),
-			);
-		host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
+      return btn
+        .aria({
+          label: () => (current.total % 2 === 0 ? "owl" : current.name),
+        })
+        .on(
+          "click",
+          clickCard,
+        )(faces);
+    });
+    const reloadEffect = (el) => {
+      if (state.modalOpen) {
+        el.showModal();
+      } else {
+        el.close();
+      }
+    };
+    const reloadDialog = () =>
+      dialog.class("reload-dialog").effect(reloadEffect)(
+        div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
+        div.class("bubble")(
+          p("Hoo-ray! You found all my owl friends."),
+          button.class("play-again").on("click", resetState)("Play Again!"),
+        ),
+      );
+    host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
 
-		function resetState() {
-			state.incomplete = settings.characters.length;
-			state.modalOpen = false;
-			state.characters.splice(
-				0,
-				Infinity,
-				...settings.characters
-					.concat(settings.characters)
-					.map((character) =>
-						watch({
-							...character,
-							interactive: true,
-							order: Math.random(),
-							total: 0,
-							latest: 0,
-							revealed: false,
-						})
-					)
-					.toSorted((a, b) => a.order - b.order),
-			);
-		}
+    function resetState() {
+      state.incomplete = settings.characters.length;
+      state.modalOpen = false;
+      state.characters.splice(
+        0,
+        Infinity,
+        ...settings.characters
+          .concat(settings.characters)
+          .map((character) =>
+            watch({
+              ...character,
+              interactive: true,
+              order: Math.random(),
+              total: 0,
+              latest: 0,
+              revealed: false,
+            })
+          )
+          .toSorted((a, b) => a.order - b.order),
+      );
+    }
 
-		function turn(model, val) {
-			model.total += val;
+    function turn(model, val) {
+      model.total += val;
 
-			model.latest = val ?? 0;
+      model.latest = val ?? 0;
 
-			model.revealed = model.total % 2;
-		}
-	});
+      model.revealed = model.total % 2;
+    }
+  });
 }
