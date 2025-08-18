@@ -1,16 +1,4 @@
-import "handcraft/dom/aria.js";
-import "handcraft/dom/effect.js";
-import "handcraft/dom/find.js";
-import "handcraft/dom/nodes.js";
-import "handcraft/dom/observer.js";
-import "handcraft/dom/on.js";
-import "handcraft/dom/once.js";
-import "handcraft/dom/styles.js";
-import { define } from "handcraft/define.js";
-import { h } from "handcraft/dom.js";
-import { watch } from "handcraft/reactivity.js";
-import { each } from "handcraft/each.js";
-import { when } from "handcraft/when.js";
+import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.js";
 
 const { span, div, dialog, p, button } = h.html;
@@ -29,7 +17,8 @@ export function game(settings) {
 
     const btns = each(state.characters).map((current, index) => {
       const btn = buttons[index()] ?? button();
-      const faces = div.class("faces").styles({
+
+      const faces = div.class("faces").style({
         "--turns": () => current.total,
         "--duration": () => current.latest,
         "--background": () => `var(--${current.color})`,

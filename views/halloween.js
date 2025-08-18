@@ -1,4 +1,4 @@
-import { h } from "handcraft/env/server.js";
+import { h } from "@handcraft/lib";
 import page from "./page.js";
 
 const { link, script } = h.html;
