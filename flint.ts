@@ -1,25 +1,16 @@
-import css from "@flint/framework/plugins/css";
-import js from "@flint/framework/plugins/js";
+import css from "@flint/framework/handlers/css";
+import js from "@flint/framework/handlers/js";
 import flint from "@flint/framework";
-import index from "./views/index.js";
-import halloween from "./views/halloween.js";
-import { render } from "@handcraft/lib";
+import index from "./views/index.ts";
+import halloween from "./views/halloween.ts";
 
 const app = flint("public", "dist")
-  .cache("/", "/halloween/")
-  .route(
-    "/",
-    async (c: { resolve: (url: string) => string }) => render(await index(c)),
-  )
-  .route(
-    "/halloween/",
-    async (c: { resolve: (url: string) => string }) =>
-      render(await halloween(c)),
-  )
-  .use("/index.css", css)
-  .use("/halloween.css", css)
-  .use("/index.js", js)
-  .use("/halloween.js", js);
+  .route("/", index)
+  .route("/halloween/", halloween)
+  .file("/index.js", js)
+  .file("/halloween.js", js)
+  .file("/index.css", css)
+  .file("/halloween.css", css);
 
 export default app;
 

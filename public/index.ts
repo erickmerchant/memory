@@ -1,15 +1,15 @@
-const { game } = await import("./memory-game.js");
+const { game } = await import("./memory-game.ts");
 
-const A = [220, 0.1];
-// const AA = [220, 0.2];
-// const B = [246, 0.1];
-const C = [261, 0.1];
-const CC = [261, 0.2];
-const D = [293, 0.1];
-const E = [329, 0.1];
-const F = [349, 0.1];
-const G = [392, 0.1];
-const GG = [392, 0.2];
+const A: [number, number] = [220, 0.1];
+// const AA : [number, number] = [220, 0.2];
+// const B : [number, number] = [246, 0.1];
+const C: [number, number] = [261, 0.1];
+const CC: [number, number] = [261, 0.2];
+const D: [number, number] = [293, 0.1];
+const E: [number, number] = [329, 0.1];
+const F: [number, number] = [349, 0.1];
+const G: [number, number] = [392, 0.1];
+const GG: [number, number] = [392, 0.2];
 
 game({
   characters: [
