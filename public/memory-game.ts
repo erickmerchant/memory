@@ -1,3 +1,4 @@
+import type { CharacterAndState, Settings } from "../types.ts";
 import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 

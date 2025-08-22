@@ -1,3 +1,5 @@
+import type { Song } from "../types.ts";
+
 let audio;
 let lastSong = Promise.resolve();
 let isPlaying = false;
