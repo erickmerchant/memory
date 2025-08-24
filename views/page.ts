@@ -1,5 +1,5 @@
-import { h, render } from "@handcraft/lib";
 import type { HandcraftChildArg } from "@handcraft/lib";
+import { h, render } from "@handcraft/lib";
 
 const {
   html,

@@ -1,6 +1,6 @@
+import type { FlintRouteContext } from "@flint/framework";
 import { h } from "@handcraft/lib";
 import page from "./page.ts";
-import type { FlintRouteContext } from "@flint/framework";
 
 const { link, script } = h.html;
 
