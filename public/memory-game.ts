@@ -6,7 +6,7 @@ const { span, div, dialog, p, button } = h.html;
 
 export function game(settings: Settings) {
   return define("memory-game").setup((host) => {
-    const buttons = host.find(`> button`);
+    const buttons = host.query(`> button`);
     const state: {
       incomplete: number;
       modalOpen: boolean;
