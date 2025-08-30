@@ -1,4 +1,4 @@
-const { game } = await import("./memory-game.ts");
+import { game } from "./memory-game.ts";
 
 const A: [number, number] = [55, 0.2];
 const B: [number, number] = [61, 0.2];
