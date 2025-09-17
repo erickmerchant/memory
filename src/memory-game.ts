@@ -1,4 +1,5 @@
 import type { CharacterAndState, Settings } from "../types.ts";
+import type { HandcraftEffectMethodCallback } from "@handcraft/lib";
 import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
@@ -111,16 +112,15 @@ export function game(settings: Settings) {
           )(faces);
       },
     );
-    const reloadEffect = (el: HTMLDialogElement) => {
-      if (state.modalOpen) {
-        el.showModal();
-      } else {
-        el.close();
-      }
-    };
     const reloadDialog = () =>
       dialog.class("reload-dialog").effect(
-        reloadEffect as ((el: HTMLElement) => void),
+        ((el: HTMLDialogElement) => {
+          if (state.modalOpen) {
+            el.showModal();
+          } else {
+            el.close();
+          }
+        }) as HandcraftEffectMethodCallback,
       )(
         div.class("card")(div.class("faces")(span.class("front face")("🦉"))),
         div.class("bubble")(
