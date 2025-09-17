@@ -19,6 +19,7 @@
     "@flint/framework@0.12.2": {
       "integrity": "8148574eab365acca9839cccb7db3f7b4973c5b8d61e29ca79abc7f7b129d815",
       "dependencies": [
+        "jsr:@flint/framework",
         "jsr:@std/async",
         "jsr:@std/cli",
         "jsr:@std/crypto",
