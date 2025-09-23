@@ -5,12 +5,12 @@ import index from "./src/pages/index.ts";
 import halloween from "./src/pages/halloween.ts";
 
 const app = flint("src", "dist")
-  .route("/", index)
-  .file("/index.js", js)
-  .file("/index.css", css)
-  .route("/halloween/", halloween)
-  .file("/halloween.js", js)
-  .file("/halloween.css", css);
+  .route("/", { handler: index })
+  .file("/index.js", { handler: js })
+  .file("/index.css", { handler: css })
+  .route("/halloween/", { handler: halloween })
+  .file("/halloween.js", { handler: js })
+  .file("/halloween.css", { handler: css });
 
 export default app;
 
