@@ -1,4 +1,4 @@
-import type { Song } from "../types.ts";
+import type { Song } from "./types.ts";
 
 let audio;
 let lastSong = Promise.resolve();

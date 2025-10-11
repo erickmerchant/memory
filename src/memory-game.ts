@@ -1,4 +1,4 @@
-import type { CharacterAndState, Settings } from "../types.ts";
+import type { CharacterAndState, Settings } from "./types.ts";
 import type { HandcraftEffectMethodCallback } from "@handcraft/lib";
 import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
