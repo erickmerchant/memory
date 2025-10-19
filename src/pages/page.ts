@@ -46,9 +46,7 @@ export default function (
             button(),
           ),
         ),
-        footer.class("dedication")(
-          p("Made with ❤️ for Louise"),
-        ),
+        footer.class("dedication")(p("Made with ❤️ for Louise")),
       ),
     ),
   );

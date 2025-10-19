@@ -32,9 +32,7 @@ export function game(settings: Settings) {
           "--background": () => `var(--${current.color})`,
         })(
           span.class("front face")("🦉"),
-          span.class("back face")(
-            span.class("text")(() => current.text),
-          ),
+          span.class("back face")(span.class("text")(() => current.text)),
         );
         const clickCard = () => {
           if (!current.interactive) {
@@ -108,10 +106,7 @@ export function game(settings: Settings) {
           .aria({
             label: () => (current.total % 2 === 0 ? "owl" : current.name),
           })
-          .on(
-            "click",
-            clickCard,
-          )(faces);
+          .on("click", clickCard)(faces);
       },
     );
     const reloadDialog = () =>
@@ -125,9 +120,7 @@ export function game(settings: Settings) {
         }) as HandcraftEffectMethodCallback,
       )(
         div.class("card")(
-          div.class("faces")(
-            span.class("front face")("🦉"),
-          ),
+          div.class("faces")(span.class("front face")("🦉")),
         ),
         div.class("bubble")(
           p("Hoo-ray! You found all my owl friends."),
