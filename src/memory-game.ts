@@ -1,7 +1,22 @@
-import type { CharacterAndState, Settings } from "./types.ts";
 import type { HandcraftEffectMethodCallback } from "@handcraft/lib";
+import type { Song } from "./audio.ts";
 import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
+
+export type Character = { text: string; name: string; color: string };
+
+export type CharacterAndState = Character & {
+  interactive: boolean;
+  order: number;
+  total: number;
+  latest: number;
+  revealed: boolean;
+};
+
+export type Settings = {
+  characters: Array<Character>;
+  songs: Record<string, Song>;
+};
 
 const { span, div, dialog, p, button } = h.html;
 

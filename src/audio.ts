@@ -1,4 +1,4 @@
-import type { Song } from "./types.ts";
+export type Song = Array<[number, number]>;
 
 let audio;
 let lastSong = Promise.resolve();
