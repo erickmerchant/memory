@@ -39,7 +39,7 @@ export function game(settings: Settings) {
 
     const btns = each<CharacterAndState>(state.characters).map(
       (current, index) => {
-        const btn = buttons[index()] ?? button();
+        const btn = buttons[index()] ?? button;
 
         const faces = div.class("faces").style({
           "--turns": () => current.total,
