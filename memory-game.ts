@@ -1,6 +1,9 @@
-import type { HandcraftEffectMethodCallback } from "@handcraft/lib";
+import type {
+  DefineFactory,
+  HandcraftEffectMethodCallback,
+} from "@handcraft/lib";
 import type { Song } from "./audio.ts";
-import { define, each, h, watch, when } from "@handcraft/lib";
+import { define, each, h, view, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
@@ -20,7 +23,7 @@ export type Settings = {
 
 const { span, div, dialog, p, button } = h.html;
 
-export function game(settings: Settings) {
+export const game = view<Settings, DefineFactory>((settings) => {
   return define("memory-game").setup((host) => {
     const buttons = host.query(`> button`);
     const state: {
@@ -174,4 +177,4 @@ export function game(settings: Settings) {
       model.revealed = (model.total % 2) === 1;
     }
   });
-}
+});
