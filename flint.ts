@@ -6,11 +6,11 @@ import halloween from "./pages/halloween.ts";
 
 const app = flint()
   .route("/", index)
-  .file("/index.js", js)
-  .file("/index.css", css)
+  .file("/components/index.js", js)
+  .file("/styles/index.css", css)
   .route("/halloween/", halloween)
-  .file("/halloween.js", js)
-  .file("/halloween.css", css);
+  .file("/components/halloween.js", js)
+  .file("/styles/halloween.css", css);
 
 export default app;
 

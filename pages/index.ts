@@ -6,7 +6,7 @@ const { script, link } = h.html;
 export default function () {
   return page
     .scriptOrStyles([
-      link.rel("stylesheet").href("/index.css"),
-      script.type("module").src("/index.js"),
+      link.rel("stylesheet").href("/styles/index.css"),
+      script.type("module").src("/components/index.js"),
     ])();
 }
