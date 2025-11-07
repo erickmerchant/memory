@@ -1,4 +1,3 @@
-import type { HandcraftEffectMethodCallback } from "@handcraft/lib";
 import type { Song } from "./audio.ts";
 import { define, each, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
@@ -126,13 +125,13 @@ export const game = (settings: Settings) => {
     );
     const reloadDialog = () =>
       dialog.class("reload-dialog").effect(
-        ((el: HTMLDialogElement) => {
+        (el: HTMLDialogElement) => {
           if (state.modalOpen) {
             el.showModal();
           } else {
             el.close();
           }
-        }) as HandcraftEffectMethodCallback,
+        },
       )(
         div.class("card")(
           div.class("faces")(span.class("front face")("🦉")),
