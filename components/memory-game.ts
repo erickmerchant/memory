@@ -1,5 +1,5 @@
 import type { Song } from "./audio.ts";
-import { define, each, h, watch, when } from "@handcraft/lib";
+import { define, each, h, observe, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
@@ -21,7 +21,7 @@ const { span, div, dialog, p, button } = h.html;
 
 export const game = (settings: Settings) => {
   return define("memory-game").setup((host) => {
-    const buttons = host.query(`> button`);
+    const buttons = observe(host)(`> button`);
     const state: {
       incomplete: number;
       modalOpen: boolean;
@@ -65,7 +65,7 @@ export const game = (settings: Settings) => {
               previous.interactive = false;
 
               if (current.text === state.previous.text) {
-                btn.once("transitionend", () => {
+                btn.on("transitionend", () => {
                   turn(current, 2);
                   turn(previous, 2);
 
@@ -84,9 +84,9 @@ export const game = (settings: Settings) => {
                   } else {
                     scheduleSong(settings.songs.match);
                   }
-                });
+                }, { once: true });
               } else {
-                btn.once("transitionend", () => {
+                btn.on("transitionend", () => {
                   setTimeout(() => {
                     turn(current, 1);
                     turn(previous, 1);
@@ -96,7 +96,7 @@ export const game = (settings: Settings) => {
 
                     trySong(settings.songs.cover);
                   }, 1_000);
-                });
+                }, { once: true });
               }
 
               state.previous = null;
@@ -146,23 +146,28 @@ export const game = (settings: Settings) => {
     function resetState() {
       state.incomplete = settings.characters.length;
       state.modalOpen = false;
-      state.characters.splice(
-        0,
-        Infinity,
-        ...settings.characters
-          .concat(settings.characters)
-          .map((character) =>
-            watch({
-              ...character,
-              interactive: true,
-              order: Math.random(),
-              total: 0,
-              latest: 0,
-              revealed: false,
-            })
-          )
-          .toSorted((a, b) => a.order - b.order),
-      );
+
+      const characters = settings.characters
+        .concat(settings.characters)
+        .map((character) => {
+          return {
+            ...character,
+            interactive: true,
+            order: Math.random(),
+            total: 0,
+            latest: 0,
+            revealed: false,
+          };
+        })
+        .toSorted((a, b) => a.order - b.order);
+
+      for (let i = 0; i < characters.length; i++) {
+        if (state.characters[i]) {
+          Object.assign(state.characters[i], characters[i]);
+        } else {
+          state.characters.push(watch(characters[i]));
+        }
+      }
     }
 
     function turn(model: CharacterAndState, val: number) {
