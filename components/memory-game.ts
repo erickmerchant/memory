@@ -1,5 +1,5 @@
 import type { Song } from "./audio.ts";
-import { define, each, h, observe, watch, when } from "@handcraft/lib";
+import { define, h, HandcraftElement, read, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
@@ -17,17 +17,35 @@ export type Settings = {
   songs: Record<string, Song>;
 };
 
+type State = {
+  incomplete: number;
+  modalOpen: boolean;
+  characters: Array<CharacterAndState>;
+  previous: CharacterAndState | null;
+};
+
 const { span, div, dialog, p, button } = h.html;
 
+function buttons(host?: HandcraftElement) {
+  return host ? read(host)("> button") : [
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+  ];
+}
+
 export const game = (settings: Settings) => {
-  return define("memory-game").setup((host) => {
-    const buttons = observe(host)(`> button`);
-    const state: {
-      incomplete: number;
-      modalOpen: boolean;
-      characters: Array<CharacterAndState>;
-      previous: CharacterAndState | null;
-    } = watch({
+  const tag = define("memory-game").setup((host) => {
+    const state: State = watch({
       incomplete: settings.characters.length,
       modalOpen: false,
       characters: watch<Array<CharacterAndState>>([]),
@@ -36,93 +54,6 @@ export const game = (settings: Settings) => {
 
     resetState();
 
-    const btns = each<CharacterAndState>(state.characters).map(
-      (current, index) => {
-        const btn = buttons[index()] ?? button;
-
-        const faces = div.class("faces").style({
-          "--turns": () => current.total,
-          "--duration": () => current.latest,
-          "--background": () => `var(--${current.color})`,
-        })(
-          span.class("front face")("🦉"),
-          span.class("back face")(span.class("text")(() => current.text)),
-        );
-        const clickCard = () => {
-          if (!current.interactive) {
-            return;
-          }
-
-          if (!current.revealed) {
-            if (state.previous) {
-              const previous = state.previous;
-
-              turn(current, 1);
-
-              trySong(settings.songs.reveal);
-
-              current.interactive = false;
-              previous.interactive = false;
-
-              if (current.text === state.previous.text) {
-                btn.on("transitionend", () => {
-                  turn(current, 2);
-                  turn(previous, 2);
-
-                  state.incomplete -= 1;
-
-                  if (state.incomplete === 0) {
-                    scheduleSong(settings.songs.win);
-
-                    for (const character of state.characters) {
-                      turn(character, 6);
-                    }
-
-                    state.modalOpen = true;
-
-                    state.incomplete = -1;
-                  } else {
-                    scheduleSong(settings.songs.match);
-                  }
-                }, { once: true });
-              } else {
-                btn.on("transitionend", () => {
-                  setTimeout(() => {
-                    turn(current, 1);
-                    turn(previous, 1);
-
-                    current.interactive = true;
-                    previous.interactive = true;
-
-                    trySong(settings.songs.cover);
-                  }, 1_000);
-                }, { once: true });
-              }
-
-              state.previous = null;
-            } else {
-              turn(current, 1);
-
-              trySong(settings.songs.reveal);
-
-              state.previous = current;
-            }
-          } else {
-            turn(current, 1);
-
-            state.previous = null;
-
-            trySong(settings.songs.cover);
-          }
-        };
-
-        return btn
-          .aria({
-            label: () => (current.total % 2 === 0 ? "owl" : current.name),
-          })
-          .on("click", clickCard)(faces);
-      },
-    );
     const reloadDialog = () =>
       dialog.class("reload-dialog").effect(
         (el: HTMLDialogElement) => {
@@ -141,7 +72,97 @@ export const game = (settings: Settings) => {
           button.class("play-again").on("click", resetState)("Play Again!"),
         ),
       );
-    host(btns, when((prev) => prev || state.modalOpen).show(reloadDialog));
+
+    host(
+      buttons(host).map(
+        (button, i) => {
+          const character = state.characters[i];
+
+          const faces = div.class("faces").style({
+            "--turns": () => character.total,
+            "--duration": () => character.latest,
+            "--background": () => `var(--${character.color})`,
+          })(
+            span.class("front face")("🦉"),
+            span.class("back face")(span.class("text")(() => character.text)),
+          );
+          const clickCard = () => {
+            if (!character.interactive) {
+              return;
+            }
+
+            if (!character.revealed) {
+              if (state.previous) {
+                const previous = state.previous;
+
+                turn(character, 1);
+
+                trySong(settings.songs.reveal);
+
+                character.interactive = false;
+                previous.interactive = false;
+
+                if (character.text === state.previous.text) {
+                  button.on("transitionend", () => {
+                    turn(character, 2);
+                    turn(previous, 2);
+
+                    state.incomplete -= 1;
+
+                    if (state.incomplete === 0) {
+                      scheduleSong(settings.songs.win);
+
+                      for (const character of state.characters) {
+                        turn(character, 6);
+                      }
+
+                      state.modalOpen = true;
+
+                      state.incomplete = -1;
+                    } else {
+                      scheduleSong(settings.songs.match);
+                    }
+                  }, { once: true });
+                } else {
+                  button.on("transitionend", () => {
+                    setTimeout(() => {
+                      turn(character, 1);
+                      turn(previous, 1);
+
+                      character.interactive = true;
+                      previous.interactive = true;
+
+                      trySong(settings.songs.cover);
+                    }, 1_000);
+                  }, { once: true });
+                }
+
+                state.previous = null;
+              } else {
+                turn(character, 1);
+
+                trySong(settings.songs.reveal);
+
+                state.previous = character;
+              }
+            } else {
+              turn(character, 1);
+
+              state.previous = null;
+
+              trySong(settings.songs.cover);
+            }
+          };
+
+          return button
+            .aria({
+              label: () => (character.total % 2 === 0 ? "owl" : character.name),
+            })
+            .on("click", clickCard)(faces);
+        },
+      ),
+      when((prev) => prev || state.modalOpen).show(reloadDialog),
+    );
 
     function resetState() {
       state.incomplete = settings.characters.length;
@@ -178,4 +199,6 @@ export const game = (settings: Settings) => {
       model.revealed = (model.total % 2) === 1;
     }
   });
+
+  return tag(buttons());
 };

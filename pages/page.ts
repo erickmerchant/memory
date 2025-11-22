@@ -8,14 +8,15 @@ const {
   title,
   body,
   div,
-  button,
   footer,
   p,
-  "memory-game": memoryGame,
 } = h.html;
 
 export default function (
-  { scriptOrStyles }: { scriptOrStyles: HandcraftChildArg },
+  { memoryGame, scriptOrStyles }: {
+    memoryGame: () => HandcraftChildArg;
+    scriptOrStyles: HandcraftChildArg;
+  },
 ) {
   return render(
     html.lang("en-US")(
@@ -31,20 +32,7 @@ export default function (
       ),
       body.class("page")(
         div.class("game")(
-          memoryGame(
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-          ),
+          memoryGame(),
         ),
         footer.class("dedication")(p("Made with ❤️ for Louise")),
       ),

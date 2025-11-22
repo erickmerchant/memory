@@ -9,7 +9,7 @@ const F: [number, number] = [87, 0.2];
 const G: [number, number] = [98, 0.2];
 const A2: [number, number] = [110, 0.2];
 
-game({
+export const memoryGame = game({
   characters: [
     { text: "🦇", name: "bat", color: "yellow" },
     { text: "🕷️", name: "spider", color: "gray" },
