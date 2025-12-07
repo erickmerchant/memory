@@ -1,5 +1,12 @@
 import type { Song } from "./audio.ts";
-import { define, h, HandcraftElement, read, watch, when } from "@handcraft/lib";
+import {
+  define,
+  h,
+  HandcraftElement,
+  observe,
+  watch,
+  when,
+} from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
@@ -27,7 +34,7 @@ type State = {
 const { span, div, dialog, p, button } = h.html;
 
 function buttons(host?: HandcraftElement) {
-  return host ? read(host)("> button") : [
+  return host ? observe(host)("> button") : [
     button,
     button,
     button,
