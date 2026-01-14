@@ -1,12 +1,5 @@
 import type { Song } from "./audio.ts";
-import {
-  define,
-  h,
-  HandcraftElement,
-  observe,
-  watch,
-  when,
-} from "@handcraft/lib";
+import { define, h, observe, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
