@@ -1,6 +1,6 @@
 import { h } from "@handcraft/lib";
 import page from "./page.ts";
-import { memoryGame } from "../components/index.ts";
+import memoryGame from "../components/index.ts";
 
 const { script, link } = h.html;
 

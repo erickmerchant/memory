@@ -33,24 +33,7 @@ type State = {
 
 const { span, div, dialog, p, button } = h.html;
 
-function buttons(host?: HandcraftElement) {
-  return host ? observe(host)("> button") : [
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-    button,
-  ];
-}
-
-export const game = (settings: Settings) => {
+export const memoryGame = (settings: Settings) => {
   const tag = define("memory-game").setup((host) => {
     const state: State = watch({
       incomplete: settings.characters.length,
@@ -81,7 +64,7 @@ export const game = (settings: Settings) => {
       );
 
     host(
-      buttons(host).map(
+      observe(host)("> button").map(
         (button, i) => {
           const character = state.characters[i];
 
@@ -207,5 +190,18 @@ export const game = (settings: Settings) => {
     }
   });
 
-  return tag(buttons());
+  return tag(
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+    button,
+  );
 };

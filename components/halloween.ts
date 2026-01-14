@@ -1,4 +1,4 @@
-import { game } from "./memory-game.ts";
+import { memoryGame } from "./memory-game.ts";
 
 const A: [number, number] = [55, 0.2];
 const B: [number, number] = [61, 0.2];
@@ -9,7 +9,7 @@ const F: [number, number] = [87, 0.2];
 const G: [number, number] = [98, 0.2];
 const A2: [number, number] = [110, 0.2];
 
-export const memoryGame = game({
+export default memoryGame({
   characters: [
     { text: "🦇", name: "bat", color: "yellow" },
     { text: "🕷️", name: "spider", color: "gray" },
