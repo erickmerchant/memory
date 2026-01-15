@@ -34,6 +34,7 @@ export const memoryGame = (settings: Settings) => {
       characters: watch<Array<CharacterAndState>>([]),
       previous: null,
     });
+    const observed = observe(host);
 
     resetState();
 
@@ -57,7 +58,7 @@ export const memoryGame = (settings: Settings) => {
       );
 
     host(
-      observe(host)("> button").map(
+      observed("> button").map(
         (button, i) => {
           const character = state.characters[i];
 
