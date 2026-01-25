@@ -110,7 +110,7 @@ export function trySong(song: Song = []) {
 
   const { promise, resolve } = Promise.withResolvers();
 
-  setTimeout(resolve, 1000 * length);
+  setTimeout(resolve, 1_000 * length);
 
   lastSong = promise.then(() => {
     isPlaying = false;

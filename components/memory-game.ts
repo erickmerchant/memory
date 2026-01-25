@@ -1,5 +1,5 @@
 import type { Song } from "./audio.ts";
-import { define, h, observe, watch, when } from "@handcraft/lib";
+import { $, define, h, observe, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
 export type Character = { text: string; name: string; color: string };
@@ -57,7 +57,7 @@ export const memoryGame = (settings: Settings) => {
         ),
       );
 
-    host(
+    $(host)(
       observed("> button").map(
         (button, i) => {
           const character = state.characters[i];
@@ -70,7 +70,9 @@ export const memoryGame = (settings: Settings) => {
             span.class("front face")("🦉"),
             span.class("back face")(span.class("text")(() => character.text)),
           );
-          const clickCard = () => {
+          const clickCard = (e: Event) => {
+            if (e.currentTarget == null) return;
+
             if (!character.interactive) {
               return;
             }
@@ -86,8 +88,10 @@ export const memoryGame = (settings: Settings) => {
                 character.interactive = false;
                 previous.interactive = false;
 
-                if (character.text === state.previous.text) {
-                  button.on("transitionend", () => {
+                const matching = character.text === state.previous.text;
+
+                $(e.currentTarget as Element).on("transitionend", () => {
+                  if (matching) {
                     turn(character, 2);
                     turn(previous, 2);
 
@@ -106,9 +110,7 @@ export const memoryGame = (settings: Settings) => {
                     } else {
                       scheduleSong(settings.songs.match);
                     }
-                  }, { once: true });
-                } else {
-                  button.on("transitionend", () => {
+                  } else {
                     setTimeout(() => {
                       turn(character, 1);
                       turn(previous, 1);
@@ -118,8 +120,8 @@ export const memoryGame = (settings: Settings) => {
 
                       trySong(settings.songs.cover);
                     }, 1_000);
-                  }, { once: true });
-                }
+                  }
+                }, { once: true });
 
                 state.previous = null;
               } else {
