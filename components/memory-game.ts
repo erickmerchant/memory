@@ -27,7 +27,7 @@ type State = {
 const { span, div, dialog, p, button } = h.html;
 
 export const memoryGame = (settings: Settings) => {
-  const tag = define("memory-game", {
+  return define("memory-game", {
     connected(host) {
       const state: State = watch({
         incomplete: settings.characters.length,
@@ -185,6 +185,4 @@ export const memoryGame = (settings: Settings) => {
       }
     },
   });
-
-  return tag;
 };
