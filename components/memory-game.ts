@@ -2,62 +2,43 @@ import type { Song } from "./audio.ts";
 import { $, define, h, watch, when } from "@handcraft/lib";
 import { scheduleSong, trySong } from "./audio.ts";
 
-export type Character = { text: string; name: string; color: string };
+export type CharacterStub = { text: string; name: string; color: string };
 
-export type CharacterAndState = Character & {
+export type Character = CharacterStub & {
   interactive: boolean;
   order: number;
   total: number;
   latest: number;
   revealed: boolean;
   matching: boolean;
-  previous: CharacterAndState | null;
+  previous: Character | null;
 };
 
 export type Settings = {
-  characters: Array<Character>;
+  characters: Array<CharacterStub>;
   songs: Record<string, Song>;
 };
 
 type State = {
   incomplete: number;
   modalOpen: boolean;
-  characters: Array<CharacterAndState>;
-  previous: CharacterAndState | null;
+  characters: Array<Character>;
+  previous: Character | null;
 };
 
 const { span, div, dialog, p, button } = h.html;
 
-export const memoryGame = (settings: Settings) => {
+export function memoryGame(settings: Settings) {
   return define("memory-game", {
     connected(host) {
       const state: State = watch({
         incomplete: settings.characters.length,
         modalOpen: false,
-        characters: watch<Array<CharacterAndState>>([]),
+        characters: watch<Array<Character>>([]),
         previous: null,
       });
 
       resetState();
-
-      const reloadDialog = () =>
-        dialog.class("reload-dialog").effect(
-          (el: HTMLDialogElement) => {
-            if (state.modalOpen) {
-              el.showModal();
-            } else {
-              el.close();
-            }
-          },
-        )(
-          div.class("card")(
-            div.class("faces")(span.class("front face")("🦉")),
-          ),
-          div.class("bubble")(
-            p("Hoo-ray! You found all my owl friends."),
-            button.class("play-again").on("click", resetState)("Play Again!"),
-          ),
-        );
 
       $(host)(
         state.characters.map(
@@ -70,7 +51,16 @@ export const memoryGame = (settings: Settings) => {
               span.class("front face")("🦉"),
               span.class("back face")(span.class("text")(() => character.text)),
             );
-            const clickCard = (e: Event) => {
+
+            return button
+              .aria({
+                label:
+                  () => (character.total % 2 === 0 ? "owl" : character.name),
+              })
+              .on("click", clickCard)
+              .on("transitionend", transitionEndCard)(faces);
+
+            function clickCard(e: Event) {
               if (e.currentTarget == null) return;
 
               if (!character.interactive) {
@@ -107,62 +97,76 @@ export const memoryGame = (settings: Settings) => {
 
                 trySong(settings.songs.cover);
               }
-            };
+            }
 
-            return button
-              .aria({
-                label:
-                  () => (character.total % 2 === 0 ? "owl" : character.name),
-              })
-              .on("click", clickCard)
-              .on("transitionend", () => {
-                if (!character.previous) return;
+            function transitionEndCard() {
+              if (!character.previous) return;
 
-                if (character.matching) {
-                  turn(character, 2);
-                  turn(character.previous, 2);
+              if (character.matching) {
+                turn(character, 2);
+                turn(character.previous, 2);
 
-                  state.incomplete -= 1;
+                state.incomplete -= 1;
 
-                  if (state.incomplete === 0) {
-                    scheduleSong(settings.songs.win);
+                if (state.incomplete === 0) {
+                  scheduleSong(settings.songs.win);
 
-                    for (const character of state.characters) {
-                      turn(character, 6);
-                    }
-
-                    state.modalOpen = true;
-
-                    state.incomplete = -1;
-                  } else {
-                    scheduleSong(settings.songs.match);
+                  for (const character of state.characters) {
+                    turn(character, 6);
                   }
 
-                  character.previous = null;
+                  state.modalOpen = true;
+
+                  state.incomplete = -1;
                 } else {
-                  setTimeout(
-                    () => {
-                      turn(character, 1);
-
-                      character.interactive = true;
-
-                      if (character.previous) {
-                        turn(character.previous, 1);
-                        character.previous.interactive = true;
-                      }
-
-                      trySong(settings.songs.cover);
-
-                      character.previous = null;
-                    },
-                    1_000,
-                  );
+                  scheduleSong(settings.songs.match);
                 }
-              })(faces);
+
+                character.previous = null;
+              } else {
+                setTimeout(
+                  () => {
+                    turn(character, 1);
+
+                    character.interactive = true;
+
+                    if (character.previous) {
+                      turn(character.previous, 1);
+                      character.previous.interactive = true;
+                    }
+
+                    trySong(settings.songs.cover);
+
+                    character.previous = null;
+                  },
+                  1_000,
+                );
+              }
+            }
           },
         ),
         when((prev) => prev || state.modalOpen).show(reloadDialog),
       );
+
+      function reloadDialog() {
+        return dialog.class("reload-dialog").effect(
+          (el: HTMLDialogElement) => {
+            if (state.modalOpen) {
+              el.showModal();
+            } else {
+              el.close();
+            }
+          },
+        )(
+          div.class("card")(
+            div.class("faces")(span.class("front face")("🦉")),
+          ),
+          div.class("bubble")(
+            p("Hoo-ray! You found all my owl friends."),
+            button.class("play-again").on("click", resetState)("Play Again!"),
+          ),
+        );
+      }
 
       function resetState() {
         state.incomplete = settings.characters.length;
@@ -193,7 +197,7 @@ export const memoryGame = (settings: Settings) => {
         }
       }
 
-      function turn(model: CharacterAndState, val: number) {
+      function turn(model: Character, val: number) {
         model.total += val;
 
         model.latest = val ?? 0;
@@ -202,4 +206,4 @@ export const memoryGame = (settings: Settings) => {
       }
     },
   });
-};
+}
