@@ -10,6 +10,8 @@ export type CharacterAndState = Character & {
   total: number;
   latest: number;
   revealed: boolean;
+  matching: boolean;
+  previous: CharacterAndState | null;
 };
 
 export type Settings = {
@@ -86,40 +88,9 @@ export const memoryGame = (settings: Settings) => {
                   character.interactive = false;
                   previous.interactive = false;
 
-                  const matching = character.text === state.previous.text;
+                  character.matching = character.text === state.previous.text;
 
-                  $(e.currentTarget as Element).on("transitionend", () => {
-                    if (matching) {
-                      turn(character, 2);
-                      turn(previous, 2);
-
-                      state.incomplete -= 1;
-
-                      if (state.incomplete === 0) {
-                        scheduleSong(settings.songs.win);
-
-                        for (const character of state.characters) {
-                          turn(character, 6);
-                        }
-
-                        state.modalOpen = true;
-
-                        state.incomplete = -1;
-                      } else {
-                        scheduleSong(settings.songs.match);
-                      }
-                    } else {
-                      setTimeout(() => {
-                        turn(character, 1);
-                        turn(previous, 1);
-
-                        character.interactive = true;
-                        previous.interactive = true;
-
-                        trySong(settings.songs.cover);
-                      }, 1_000);
-                    }
-                  }, { once: true });
+                  character.previous = state.previous;
 
                   state.previous = null;
                 } else {
@@ -143,7 +114,51 @@ export const memoryGame = (settings: Settings) => {
                 label:
                   () => (character.total % 2 === 0 ? "owl" : character.name),
               })
-              .on("click", clickCard)(faces);
+              .on("click", clickCard)
+              .on("transitionend", () => {
+                if (!character.previous) return;
+
+                if (character.matching) {
+                  turn(character, 2);
+                  turn(character.previous, 2);
+
+                  state.incomplete -= 1;
+
+                  if (state.incomplete === 0) {
+                    scheduleSong(settings.songs.win);
+
+                    for (const character of state.characters) {
+                      turn(character, 6);
+                    }
+
+                    state.modalOpen = true;
+
+                    state.incomplete = -1;
+                  } else {
+                    scheduleSong(settings.songs.match);
+                  }
+
+                  character.previous = null;
+                } else {
+                  setTimeout(
+                    () => {
+                      turn(character, 1);
+
+                      character.interactive = true;
+
+                      if (character.previous) {
+                        turn(character.previous, 1);
+                        character.previous.interactive = true;
+                      }
+
+                      trySong(settings.songs.cover);
+
+                      character.previous = null;
+                    },
+                    1_000,
+                  );
+                }
+              })(faces);
           },
         ),
         when((prev) => prev || state.modalOpen).show(reloadDialog),
@@ -163,6 +178,8 @@ export const memoryGame = (settings: Settings) => {
               total: 0,
               latest: 0,
               revealed: false,
+              matching: false,
+              previous: null,
             };
           })
           .toSorted((a, b) => a.order - b.order);
