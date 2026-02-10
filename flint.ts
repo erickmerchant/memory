@@ -7,8 +7,8 @@ import halloween from "./pages/halloween.ts";
 const app = flint()
   .route("/", index)
   .route("/halloween/", halloween)
-  .file(p`/components/*.js`, js)
-  .file(p`/components/*.css`, css);
+  .file(p`/components/:slug.js`, js)
+  .file(p`/components/:slug.css`, css);
 
 export default app;
 
