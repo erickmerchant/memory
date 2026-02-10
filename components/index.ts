@@ -1,4 +1,4 @@
-import { memoryGame } from "./memory-game.ts";
+import { memoryGame } from "./includes/memory-game.ts";
 
 const A: [number, number] = [220, 0.1];
 // const AA : [number, number] = [220, 0.2];
