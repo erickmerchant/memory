@@ -10,246 +10,244 @@
   initial-value: 0;
 }
 
-@layer component {
-  memory-game {
-    max-inline-size: 100cqi;
-    padding-block: var(--gap);
+memory-game {
+  max-inline-size: 100cqi;
+  padding-block: var(--gap);
+  display: grid;
+  place-content: safe center;
+  block-size: auto;
+  gap: var(--gap);
+  grid-template-columns: repeat(var(--columns), 1fr);
+
+  --gap: 1.5cqmin;
+  --columns: 1;
+
+  @container (aspect-ratio <= 15/28) and (aspect-ratio <= 10/42) {
+    aspect-ratio: 10/42;
+    inline-size: 100cqi;
+
+    --columns: 2;
+  }
+
+  @container (aspect-ratio <= 15/28) and (aspect-ratio > 10/42) {
+    aspect-ratio: 15/28;
+    inline-size: 100cqi;
+
+    --columns: 3;
+  }
+
+  @container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
+    aspect-ratio: 20/21;
+    block-size: 90cqb;
+
+    --columns: 4;
+  }
+
+  @container (aspect-ratio > 15/28) and (aspect-ratio > 20/21) {
+    aspect-ratio: 30/14;
+    block-size: 90cqb;
+
+    --columns: 6;
+  }
+
+  > * {
+    font-size: calc(45cqi / var(--columns));
+  }
+
+  button {
+    appearance: none;
+    border: none;
+    border-radius: 0.125rem;
+    display: block;
+    position: relative;
+    inline-size: auto;
+    aspect-ratio: 5 / 7;
+    background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
+  }
+
+  button:empty {
+    border-radius: 0.125rem;
+    block-size: 100%;
+    inline-size: 100%;
+    display: block;
+    place-content: center;
+    --background: var(--purple);
+
+    &::before {
+      content: "🦉";
+    }
+  }
+
+  .reload-dialog {
+    position: absolute;
+    margin: auto;
+    border: none;
     display: grid;
-    place-content: safe center;
-    block-size: auto;
+    grid-template-columns: 1fr 1fr;
     gap: var(--gap);
-    grid-template-columns: repeat(var(--columns), 1fr);
+    border-radius: 0.125rem;
+    transition: scale 0.5s, display 0.5s ease-in-out allow-discrete;
+    animation-fill-mode: forwards;
+    background: none;
+    overflow: visible;
+    align-items: center;
 
-    --gap: 1.5cqmin;
-    --columns: 1;
-
-    @container (aspect-ratio <= 15/28) and (aspect-ratio <= 10/42) {
-      aspect-ratio: 10/42;
-      inline-size: 100cqi;
-
-      --columns: 2;
+    @container (aspect-ratio <= 15/28) {
+      grid-template-columns: 1fr;
+      align-items: center;
     }
 
-    @container (aspect-ratio <= 15/28) and (aspect-ratio > 10/42) {
-      aspect-ratio: 15/28;
-      inline-size: 100cqi;
-
-      --columns: 3;
+    &::backdrop {
+      opacity: 1;
+      transition: opacity 0.5s 9s;
+      animation-fill-mode: forwards;
+      background-color: oklch(from var(--purple) calc(l + 0.7) c h / 0.25);
     }
 
-    @container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
-      aspect-ratio: 20/21;
-      block-size: 90cqb;
+    &[open] {
+      scale: 1;
 
-      --columns: 4;
+      @starting-style {
+        scale: 0;
+
+        &::backdrop {
+          opacity: 0;
+        }
+      }
     }
 
-    @container (aspect-ratio > 15/28) and (aspect-ratio > 20/21) {
-      aspect-ratio: 30/14;
-      block-size: 90cqb;
-
-      --columns: 6;
+    &:not([open]) {
+      scale: 0;
     }
 
-    > * {
-      font-size: calc(45cqi / var(--columns));
-    }
-
-    button {
-      appearance: none;
-      border: none;
-      border-radius: 0.125rem;
-      display: block;
+    & .card {
       position: relative;
-      inline-size: auto;
+      font-size: calc(55cqi / var(--columns));
       aspect-ratio: 5 / 7;
-      background: light-dark(oklch(90% 0 0), oklch(70% 0 0));
+      border-radius: 0.125rem;
+      display: grid;
+      place-content: center;
+      min-inline-size: calc(100cqi / var(--columns) * 1.25);
+      --background: var(--purple);
     }
 
-    button:empty {
-      border-radius: 0.125rem;
-      block-size: 100%;
-      inline-size: 100%;
-      display: block;
-      place-content: center;
-      --background: var(--purple);
+    & .bubble {
+      background: white;
+      border-radius: 0.5rem;
+      filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
+      display: grid;
+      grid-template-rows: max-content;
+      grid-template-columns: auto;
+      padding: 1rem 0.5rem;
+      gap: 1rem 0.5rem;
+      min-inline-size: calc(100cqi / var(--columns) * 1.25);
+      inline-size: min-content;
+      font-size: max(0.8rem, calc(10cqi / var(--columns)));
+      position: relative;
+      color: oklch(from var(--purple) calc(l - 0.6) c h);
 
       &::before {
-        content: "🦉";
-      }
-    }
-
-    .reload-dialog {
-      position: absolute;
-      margin: auto;
-      border: none;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--gap);
-      border-radius: 0.125rem;
-      transition: scale 0.5s, display 0.5s ease-in-out allow-discrete;
-      animation-fill-mode: forwards;
-      background: none;
-      overflow: visible;
-      align-items: center;
-
-      @container (aspect-ratio <= 15/28) {
-        grid-template-columns: 1fr;
-        align-items: center;
-      }
-
-      &::backdrop {
-        opacity: 1;
-        transition: opacity 0.5s 9s;
-        animation-fill-mode: forwards;
-        background-color: oklch(from var(--purple) calc(l + 0.7) c h / 0.25);
-      }
-
-      &[open] {
-        scale: 1;
-
-        @starting-style {
-          scale: 0;
-
-          &::backdrop {
-            opacity: 0;
-          }
-        }
-      }
-
-      &:not([open]) {
-        scale: 0;
-      }
-
-      & .card {
-        position: relative;
-        font-size: calc(55cqi / var(--columns));
-        aspect-ratio: 5 / 7;
-        border-radius: 0.125rem;
-        display: grid;
-        place-content: center;
-        min-inline-size: calc(100cqi / var(--columns) * 1.25);
-        --background: var(--purple);
-      }
-
-      & .bubble {
-        background: white;
-        border-radius: 0.5rem;
-        filter: drop-shadow(0 0 0.5cqmin oklch(from white calc(l - 0.75) c h));
-        display: grid;
-        grid-template-rows: max-content;
-        grid-template-columns: auto;
-        padding: 1rem 0.5rem;
-        gap: 1rem 0.5rem;
-        min-inline-size: calc(100cqi / var(--columns) * 1.25);
-        inline-size: min-content;
-        font-size: max(0.8rem, calc(10cqi / var(--columns)));
-        position: relative;
-        color: oklch(from var(--purple) calc(l - 0.6) c h);
-
-        &::before {
-          content: "";
-          display: block;
-          inline-size: 0;
-          block-size: 0;
-          border-block-start: var(--gap) solid transparent;
-          border-block-end: var(--gap) solid transparent;
-          border-inline-end: var(--gap) solid white;
-          position: absolute;
-          inset-inline-end: calc(100% - 1px);
-          inset-block-start: 2rem;
-
-          @container (aspect-ratio <= 15/28) {
-            border-inline-end: var(--gap) solid transparent;
-            border-inline-start: var(--gap) solid transparent;
-            border-block-end: var(--gap) solid white;
-            position: absolute;
-            inset-block-end: calc(100% - 1px);
-            inset-inline-start: calc(50% - var(--gap) / 2);
-            inset-block-start: unset;
-          }
-        }
-      }
-
-      & button {
-        font-size: inherit;
-        font-weight: 900;
-        display: inline grid;
-        place-content: center;
-        gap: 0.5rem;
-        appearance: none;
-        border: none;
-        padding: 0.5rem;
-        border-radius: 0.125rem;
-        border: 0.125rem solid currentColor;
-        background: oklch(from var(--purple) calc(l + 0.6) c h);
-        color: inherit;
-        aspect-ratio: unset;
-      }
-
-      & svg {
-        block-size: 1.5rem;
-        fill: currentColor;
-      }
-    }
-
-    .faces {
-      position: absolute;
-      inset-inline-start: 0;
-      inset-block-start: 0;
-      border-radius: 0.125rem;
-      block-size: 100%;
-      inline-size: 100%;
-      animation-timing-function: linear;
-      animation-fill-mode: forwards;
-      transform-style: preserve-3d;
-      rotate: y calc(var(--turns) * 180deg);
-      transition-property: rotate;
-      transition-duration: calc(var(--duration) * 250ms);
-      transition-timing-function: linear;
-    }
-
-    .front,
-    .back {
-      display: grid;
-      place-content: center;
-      position: absolute;
-      inset-inline-start: 0;
-      inset-block-start: 0;
-      block-size: 100%;
-      inline-size: 100%;
-      border-radius: 0.125rem;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .front {
-      backface-visibility: hidden;
-      filter: drop-shadow(
-        0
-        0
-        0.25cqmin
-        oklch(from var(--background) calc(l - 0.75) c h)
-      );
-      --background: var(--purple);
-    }
-
-    .back {
-      backface-visibility: hidden;
-      transform: rotateY(180deg);
-    }
-
-    :is(.face, button:empty) {
-      background: var(--background);
-
-      &::after {
         content: "";
         display: block;
+        inline-size: 0;
+        block-size: 0;
+        border-block-start: var(--gap) solid transparent;
+        border-block-end: var(--gap) solid transparent;
+        border-inline-end: var(--gap) solid white;
         position: absolute;
-        inset: 0.2rem;
-        border-radius: 0;
-        border: 0.1rem solid oklch(from var(--background) calc(l - 0.1) c h);
+        inset-inline-end: calc(100% - 1px);
+        inset-block-start: 2rem;
+
+        @container (aspect-ratio <= 15/28) {
+          border-inline-end: var(--gap) solid transparent;
+          border-inline-start: var(--gap) solid transparent;
+          border-block-end: var(--gap) solid white;
+          position: absolute;
+          inset-block-end: calc(100% - 1px);
+          inset-inline-start: calc(50% - var(--gap) / 2);
+          inset-block-start: unset;
+        }
       }
+    }
+
+    & button {
+      font-size: inherit;
+      font-weight: 900;
+      display: inline grid;
+      place-content: center;
+      gap: 0.5rem;
+      appearance: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.125rem;
+      border: 0.125rem solid currentColor;
+      background: oklch(from var(--purple) calc(l + 0.6) c h);
+      color: inherit;
+      aspect-ratio: unset;
+    }
+
+    & svg {
+      block-size: 1.5rem;
+      fill: currentColor;
+    }
+  }
+
+  .faces {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    border-radius: 0.125rem;
+    block-size: 100%;
+    inline-size: 100%;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    transform-style: preserve-3d;
+    rotate: y calc(var(--turns) * 180deg);
+    transition-property: rotate;
+    transition-duration: calc(var(--duration) * 250ms);
+    transition-timing-function: linear;
+  }
+
+  .front,
+  .back {
+    display: grid;
+    place-content: center;
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    block-size: 100%;
+    inline-size: 100%;
+    border-radius: 0.125rem;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .front {
+    backface-visibility: hidden;
+    filter: drop-shadow(
+      0
+      0
+      0.25cqmin
+      oklch(from var(--background) calc(l - 0.75) c h)
+    );
+    --background: var(--purple);
+  }
+
+  .back {
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+  }
+
+  :is(.face, button:empty) {
+    background: var(--background);
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      inset: 0.2rem;
+      border-radius: 0;
+      border: 0.1rem solid oklch(from var(--background) calc(l - 0.1) c h);
     }
   }
 }
