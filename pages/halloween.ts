@@ -1,6 +1,6 @@
 import { h } from "@handcraft/lib";
 import page from "./page.ts";
-import memoryGame from "../components/halloween.ts";
+import memoryGame from "../includes/halloween.ts";
 
 const { link, script } = h.html;
 
@@ -8,8 +8,8 @@ export default function () {
   return page({
     memoryGame,
     scriptOrStyles: [
-      link.rel("stylesheet").href("/components/halloween.css"),
-      script.type("module").src("/components/halloween.js"),
+      link.rel("stylesheet").href("/includes/halloween.css"),
+      script.type("module").src("/includes/halloween.js"),
     ],
   });
 }
