@@ -8,8 +8,8 @@ export default function () {
   return page({
     memoryGame,
     scriptOrStyles: [
-      link.rel("stylesheet").href("/includes/halloween.css"),
-      script.type("module").src("/includes/halloween.js"),
+      link.rel("stylesheet").href("/includes/halloween.css?inline"),
+      script.type("module").src("/includes/halloween.ts?inline"),
     ],
   });
 }
