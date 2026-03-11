@@ -16,10 +16,10 @@ const {
 export default function (
   { memoryGame, scriptOrStyles }: {
     memoryGame: () => HandcraftChildArg;
-    scriptOrStyles: HandcraftChildArg;
+    scriptOrStyles: () => HandcraftChildArg;
   },
 ) {
-  return render(
+  return render(() =>
     html.lang("en-US")(
       head(
         meta.charset("utf-8"),
@@ -29,7 +29,7 @@ export default function (
             "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0",
           ),
         title("Memory"),
-        scriptOrStyles,
+        scriptOrStyles(),
       ),
       body.class("page")(
         div.class("game")(
@@ -37,6 +37,6 @@ export default function (
         ),
         footer.class("dedication")(p("Made with ❤️ for Louise")),
       ),
-    ),
+    )
   );
 }

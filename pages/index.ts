@@ -7,7 +7,7 @@ const { script, link } = h.html;
 export default function () {
   return page({
     memoryGame,
-    scriptOrStyles: [
+    scriptOrStyles: () => [
       link.rel("stylesheet").href("/includes/index.css?inline"),
       script.type("module").src("/includes/index.ts?inline"),
     ],
