@@ -1,6 +1,5 @@
-import type { Song } from "./audio.ts";
 import { $, define, h, watch, when } from "@handcraft/lib";
-import { scheduleSong, trySong } from "./audio.ts";
+import { scheduleSong, type Song, trySong } from "./audio.ts";
 
 export type CharacterStub = { text: string; name: string; color: string };
 

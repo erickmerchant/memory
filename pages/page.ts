@@ -1,5 +1,4 @@
-import type { HandcraftChildArg } from "@handcraft/lib";
-import { h, VNode } from "@handcraft/lib/templating";
+import { h, type HandcraftChildArg, VNode } from "@handcraft/lib/templating";
 
 const {
   html,
