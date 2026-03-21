@@ -1,8 +1,7 @@
-import { h } from "@handcraft/lib";
+import { h } from "@handcraft/lib/templating";
 import page from "./page.ts";
-import memoryGame from "../includes/index.ts";
 
-const { script, link } = h.html;
+const { script, link, "memory-game": memoryGame } = h.html;
 
 export default function () {
   return page({
