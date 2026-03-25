@@ -1,4 +1,4 @@
-import { h, type HandcraftChildArg, VNode } from "@handcraft/lib/templating";
+import { h, type HandcraftTemplatingChild } from "@handcraft/lib/templating";
 
 const {
   html,
@@ -13,8 +13,8 @@ const {
 
 export default function (
   { memoryGame, scriptOrStyles }: {
-    memoryGame: HandcraftChildArg<VNode>;
-    scriptOrStyles: () => HandcraftChildArg<VNode>;
+    memoryGame: HandcraftTemplatingChild;
+    scriptOrStyles: () => HandcraftTemplatingChild;
   },
 ) {
   return html.lang("en-US")(
