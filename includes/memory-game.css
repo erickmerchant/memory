@@ -225,10 +225,7 @@ memory-game {
   .front {
     backface-visibility: hidden;
     filter: drop-shadow(
-      0
-      0
-      0.25cqmin
-      oklch(from var(--background) calc(l - 0.75) c h)
+      0 0 0.25cqmin oklch(from var(--background) calc(l - 0.75) c h)
     );
     --background: var(--purple);
   }
