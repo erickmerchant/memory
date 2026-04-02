@@ -171,20 +171,24 @@ export function memoryGame(settings: Settings) {
         state.incomplete = settings.characters.length;
         state.modalOpen = false;
 
-        const characters = settings.characters
-          .concat(settings.characters)
-          .map((character) => {
-            return {
-              ...character,
-              interactive: true,
-              order: Math.random(),
-              total: 0,
-              latest: 0,
-              revealed: false,
-              matching: false,
-              previous: null,
-            };
-          })
+        const stubs = settings.characters
+          .concat(settings.characters);
+        const orders = new Uint32Array(stubs.length);
+
+        globalThis.crypto.getRandomValues(orders);
+
+        const characters = stubs.map((character, i) => {
+          return {
+            ...character,
+            interactive: true,
+            order: orders[i],
+            total: 0,
+            latest: 0,
+            revealed: false,
+            matching: false,
+            previous: null,
+          };
+        })
           .toSorted((a, b) => a.order - b.order);
 
         for (let i = 0; i < characters.length; i++) {
