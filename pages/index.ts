@@ -1,11 +1,12 @@
-import { h } from "@handcraft/lib/templating";
+import { h } from "@handcraft/lib";
+import { stringify } from "@handcraft/lib/stringify";
 import page from "./page.ts";
 
 const { script, link } = h.html;
 
 export default function () {
-  return page([
+  return stringify(page([
     link.rel("stylesheet").href("/pages/index.css"),
     script.type("module").src("/elements/index.ts"),
-  ]);
+  ]));
 }

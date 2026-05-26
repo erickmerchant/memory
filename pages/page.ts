@@ -1,4 +1,4 @@
-import { h, type HandcraftTemplatingChild } from "@handcraft/lib/templating";
+import { h, type HandcraftChild } from "@handcraft/lib";
 
 const {
   html,
@@ -9,14 +9,11 @@ const {
   div,
   footer,
   p,
-  button,
-  template,
-  link,
   "memory-game": memoryGame,
 } = h.html;
 
 export default function (
-  scriptOrStyles: HandcraftTemplatingChild,
+  scriptOrStyles: HandcraftChild,
 ) {
   return html.lang("en-US")(
     head(
@@ -31,23 +28,7 @@ export default function (
     ),
     body.class("page")(
       div.class("game")(
-        memoryGame(
-          template.shadowrootmode("open")(
-            link.rel("stylesheet").href("./elements/memory-game.css"),
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-            button,
-          ),
-        ),
+        memoryGame(),
       ),
       footer.class("dedication")(p("Made with ❤️ for Louise")),
     ),

@@ -1,4 +1,4 @@
-const { memoryGame } = await import("./memory-game.ts");
+const { MemoryGame } = await import("./memory-game.ts");
 
 const A: [number, number] = [55, 0.2];
 const B: [number, number] = [61, 0.2];
@@ -9,19 +9,23 @@ const F: [number, number] = [87, 0.2];
 const G: [number, number] = [98, 0.2];
 const A2: [number, number] = [110, 0.2];
 
-export default memoryGame({
-  characters: [
-    { text: "🦇", name: "bat", color: "yellow" },
-    { text: "🕷️", name: "spider", color: "gray" },
-    { text: "🧟‍♀️", name: "zombie", color: "green" },
-    { text: "🎃", name: "jack-o'-lantern", color: "orange" },
-    { text: "🐺", name: "wolf", color: "blue" },
-    { text: "🧛‍♀️", name: "vampire", color: "red" },
-  ],
-  songs: {
-    cover: [C, B],
-    reveal: [A, B],
-    match: [A, B, C, D],
-    win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
-  },
-});
+class HalloweenMemoryGame extends MemoryGame {
+  override settings = {
+    characters: [
+      { text: "🦇", name: "bat", color: "yellow" },
+      { text: "🕷️", name: "spider", color: "gray" },
+      { text: "🧟‍♀️", name: "zombie", color: "green" },
+      { text: "🎃", name: "jack-o'-lantern", color: "orange" },
+      { text: "🐺", name: "wolf", color: "blue" },
+      { text: "🧛‍♀️", name: "vampire", color: "red" },
+    ],
+    songs: {
+      cover: [C, B],
+      reveal: [A, B],
+      match: [A, B, C, D],
+      win: [A, B, C, D, E, F, G, A2, A2, G, F, E],
+    },
+  };
+}
+
+HalloweenMemoryGame.define("memory-game");
