@@ -2,7 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@cfa/gitignore-parser@~0.1.4": "0.1.4",
-    "jsr:@flint/framework@0.35": "0.35.0",
+    "jsr:@flint/framework@0.36": "0.36.0",
     "jsr:@handcraft/lib@^4.0.2": "4.0.2",
     "jsr:@std/async@^1.4.0": "1.4.0",
     "jsr:@std/cli@^1.0.30": "1.0.30",
@@ -21,8 +21,8 @@
     "@cfa/gitignore-parser@0.1.4": {
       "integrity": "60d3563bbd7b8797f50c28585d7d74d231fbb56a1d9df7b0673c27cbdf60a23a"
     },
-    "@flint/framework@0.35.0": {
-      "integrity": "4d0034e12207bdbf2091042b5fa4ab2778cd9b45923fbc65a175a792339a8002",
+    "@flint/framework@0.36.0": {
+      "integrity": "6cb17d90dc51e949039e11c41c46bdc6c5c9742ab9359699e14627639e37105c",
       "dependencies": [
         "jsr:@cfa/gitignore-parser",
         "jsr:@std/async",
@@ -168,7 +168,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@flint/framework@0.35",
+      "jsr:@flint/framework@0.36",
       "jsr:@handcraft/lib@^4.0.2"
     ]
   }
