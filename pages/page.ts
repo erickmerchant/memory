@@ -1,4 +1,4 @@
-import { h, type HandcraftChild } from "@handcraft/lib";
+import { h, type HandcraftChild, type HandcraftNode } from "@handcraft/lib";
 
 const {
   html,
@@ -9,11 +9,11 @@ const {
   div,
   footer,
   p,
-  "memory-game": memoryGame,
 } = h.html;
 
 export default function (
   scriptOrStyles: HandcraftChild,
+  game: HandcraftNode,
 ) {
   return html.lang("en-US")(
     head(
@@ -28,7 +28,7 @@ export default function (
     ),
     body.class("page")(
       div.class("game")(
-        memoryGame(),
+        game,
       ),
       footer.class("dedication")(p("Made with ❤️ for Louise")),
     ),

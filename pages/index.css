@@ -1,7 +1,7 @@
-@layer page, page-variant, component;
+@layer page, page-variant, element;
 
 @import "./page.css" layer(page);
-@import "../elements/memory-game.css" layer(component);
+@import "../elements/memory-game.css" layer(element);
 
 @layer page-variant {
   :root {

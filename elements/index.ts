@@ -30,4 +30,4 @@ class IndexMemoryGame extends MemoryGame {
   };
 }
 
-IndexMemoryGame.define("memory-game");
+export default IndexMemoryGame.define("memory-game");

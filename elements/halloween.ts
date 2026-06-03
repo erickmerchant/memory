@@ -28,4 +28,4 @@ class HalloweenMemoryGame extends MemoryGame {
   };
 }
 
-HalloweenMemoryGame.define("memory-game");
+export default HalloweenMemoryGame.define("memory-game");
