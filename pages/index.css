@@ -1,5 +1,6 @@
-@layer page, page-variant, element;
+@layer base, page, page-variant, element;
 
+@import "./base.css" layer(base);
 @import "./page.css" layer(page);
 @import "../elements/memory-game.css" layer(element);
 
