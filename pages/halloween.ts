@@ -7,7 +7,7 @@ const { link, script } = h.html;
 
 export default function () {
   return stringify(page([
-    link.rel("stylesheet").href("/pages/halloween.css"),
+    link.rel("stylesheet").href("/styles/halloween.css"),
     script.type("module").src("/elements/halloween.ts"),
   ], memoryGame()));
 }

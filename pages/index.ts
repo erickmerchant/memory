@@ -7,7 +7,7 @@ const { script, link } = h.html;
 
 export default function () {
   return stringify(page([
-    link.rel("stylesheet").href("/pages/index.css"),
+    link.rel("stylesheet").href("/styles/index.css"),
     script.type("module").src("/elements/index.ts"),
   ], memoryGame()));
 }
