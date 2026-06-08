@@ -1,25 +1,21 @@
-@layer base, page, page-variant, element;
+@import "./base.css" layer;
+@import "./page.css" layer;
+@import "../elements/memory-game.css" layer;
 
-@import "./base.css" layer(base);
-@import "./page.css" layer(page);
-@import "../elements/memory-game.css" layer(element);
+:root {
+  color-scheme: light;
 
-@layer page-variant {
-  :root {
-    color-scheme: light;
+  --gray: oklch(90% 0 0);
+  --purple: oklch(90% 0.15 300);
+  --blue: oklch(90% 0.15 210);
+  --green: oklch(90% 0.15 150);
+  --yellow: oklch(90% 0.15 90);
+  --orange: oklch(90% 0.15 60);
+  --red: oklch(90% 0.15 30);
+}
 
-    --gray: oklch(90% 0 0);
-    --purple: oklch(90% 0.15 300);
-    --blue: oklch(90% 0.15 210);
-    --green: oklch(90% 0.15 150);
-    --yellow: oklch(90% 0.15 90);
-    --orange: oklch(90% 0.15 60);
-    --red: oklch(90% 0.15 30);
-  }
-
-  .page {
-    color: #222;
-    background-image: none;
-    background-color: oklch(from var(--purple) calc(l + 0.7) calc(c - 0.1) h);
-  }
+.page {
+  color: #222;
+  background-image: none;
+  background-color: oklch(from var(--purple) calc(l + 0.7) calc(c - 0.1) h);
 }
