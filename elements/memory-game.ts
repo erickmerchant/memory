@@ -5,7 +5,7 @@ import {
   type HandcraftNode,
   watch,
 } from "@handcraft/lib";
-import { scheduleSong, type Song, trySong } from "./audio.ts";
+import { scheduleSong, type Song, trySong } from "../utils/audio.ts";
 
 export type CharacterStub = { text: string; name: string; color: string };
 
