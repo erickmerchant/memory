@@ -8,6 +8,7 @@ import halloween from "./pages/halloween.ts";
 const app = flint()
   .route("/", view(index))
   .route("/halloween/", view(halloween))
+  .route("/robots.txt")
   .file("/elements/halloween.js", js)
   .file("/elements/index.js", js)
   .file("/styles/halloween.css", css)
