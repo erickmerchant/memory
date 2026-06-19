@@ -27,9 +27,7 @@ export default function (
       scriptOrStyles,
     ),
     body.class("page")(
-      div.class("game")(
-        game,
-      ),
+      div.class("game")(game),
       footer.class("dedication")(p("Made with ❤️ for Louise")),
     ),
   );

@@ -86,9 +86,7 @@ export abstract class MemoryGame extends HandcraftElement {
             p("Hoo-ray! You found all my owl friends."),
             button
               .class("play-again")
-              .on("click", this.resetState)(
-                "Play Again!",
-              ),
+              .on("click", this.resetState)("Play Again!"),
           ),
         ),
     );
