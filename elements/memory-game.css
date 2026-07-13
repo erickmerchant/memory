@@ -12,7 +12,7 @@
 
 @scope (memory-game) {
   :scope {
-    max-inline-size: 100cqi !important;
+    max-inline-size: 100cqi;
     padding-block: var(--gap);
     display: grid;
     place-content: safe center;
