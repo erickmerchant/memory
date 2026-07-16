@@ -12,7 +12,7 @@ const A2: [number, number] = [110, 0.2];
 class HalloweenMemoryGame extends MemoryGame {
   override settings = {
     characters: [
-      { text: "🦇", name: "bat", color: "yellow" },
+      { text: "🦇", name: "bat", color: "brown" },
       { text: "🕷️", name: "spider", color: "gray" },
       { text: "🧟‍♀️", name: "zombie", color: "green" },
       { text: "🎃", name: "jack-o'-lantern", color: "orange" },

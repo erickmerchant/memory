@@ -5,13 +5,13 @@
 :root {
   color-scheme: dark;
 
-  --gray: oklch(85% 0 0);
-  --purple: oklch(85% 0.075 300);
   --blue: oklch(85% 0.075 210);
+  --brown: oklch(85% 0.03 60);
+  --gray: oklch(85% 0 0);
   --green: oklch(85% 0.075 150);
-  --yellow: oklch(85% 0.075 90);
   --orange: oklch(85% 0.075 60);
-  --red: oklch(85% 0.075 30);
+  --purple: oklch(85% 0.075 300);
+  --red: oklch(85% 0.075 15);
 }
 
 .page {

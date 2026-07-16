@@ -11,8 +11,7 @@
 
 :root {
   block-size: 100%;
-  font-family:
-    Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
+  font-family: system-ui, sans-serif;
   font-weight: 700;
   font-size: 125%;
 }
