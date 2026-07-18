@@ -10,46 +10,44 @@
   initial-value: 0;
 }
 
-@scope (memory-game) {
-  :scope {
-    max-inline-size: 100cqi;
-    padding-block: var(--gap);
-    display: grid;
-    place-content: safe center;
-    block-size: auto;
-    gap: var(--gap);
-    grid-template-columns: repeat(var(--columns), 1fr);
+memory-game {
+  max-inline-size: 100cqi;
+  padding-block: var(--gap);
+  display: grid;
+  place-content: safe center;
+  block-size: auto;
+  gap: var(--gap);
+  grid-template-columns: repeat(var(--columns), 1fr);
 
-    --gap: 1.5cqmin;
-    --columns: 1;
+  --gap: 1.5cqmin;
+  --columns: 1;
 
-    @container (aspect-ratio <= 15/28) and (aspect-ratio <= 10/42) {
-      aspect-ratio: 10/42;
-      inline-size: 100cqi;
+  @container (aspect-ratio <= 15/28) and (aspect-ratio <= 10/42) {
+    aspect-ratio: 10/42;
+    inline-size: 100cqi;
 
-      --columns: 2;
-    }
+    --columns: 2;
+  }
 
-    @container (aspect-ratio <= 15/28) and (aspect-ratio > 10/42) {
-      aspect-ratio: 15/28;
-      inline-size: 100cqi;
+  @container (aspect-ratio <= 15/28) and (aspect-ratio > 10/42) {
+    aspect-ratio: 15/28;
+    inline-size: 100cqi;
 
-      --columns: 3;
-    }
+    --columns: 3;
+  }
 
-    @container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
-      aspect-ratio: 20/21;
-      block-size: 90cqb;
+  @container (aspect-ratio > 15/28) and (aspect-ratio <= 20/21) {
+    aspect-ratio: 20/21;
+    block-size: 90cqb;
 
-      --columns: 4;
-    }
+    --columns: 4;
+  }
 
-    @container (aspect-ratio > 15/28) and (aspect-ratio > 20/21) {
-      aspect-ratio: 30/14;
-      block-size: 90cqb;
+  @container (aspect-ratio > 15/28) and (aspect-ratio > 20/21) {
+    aspect-ratio: 30/14;
+    block-size: 90cqb;
 
-      --columns: 6;
-    }
+    --columns: 6;
   }
 
   button {
