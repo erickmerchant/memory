@@ -27,13 +27,15 @@ export type Settings = {
 const { span, div, dialog, p, button } = h.html;
 
 export abstract class MemoryGame extends HandcraftElement {
+  static observedProperties = ["characters", "modalOpen"];
+
   settings: Settings = {
     characters: [],
     songs: {},
   };
 
   modalOpen = false;
-  characters = watch<Array<Character>>([]);
+  characters: Array<Character> = [];
   previous: Character | null = null;
   incomplete = this.characters.length;
 
