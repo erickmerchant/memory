@@ -13,6 +13,6 @@
   },
   "unstable": ["bundle"],
   "compilerOptions": {
-    "lib": ["deno.ns", "deno.unstable", "dom", "dom.iterable", "es2023"]
+    "lib": ["deno.ns", "deno.unstable", "dom", "dom.iterable", "es2025"]
   }
 }
