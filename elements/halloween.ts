@@ -1,13 +1,7 @@
 import { MemoryGame } from "./memory-game.ts";
+import { generateNotes } from "../utils/audio.ts";
 
-const A: [number, number] = [55, 0.2];
-const B: [number, number] = [61, 0.2];
-const C: [number, number] = [65, 0.2];
-const D: [number, number] = [73, 0.2];
-const E: [number, number] = [82, 0.2];
-const F: [number, number] = [87, 0.2];
-const G: [number, number] = [98, 0.2];
-const A2: [number, number] = [110, 0.2];
+const [A, B, C, D, E, F, G, A2] = generateNotes(50, 7, .2);
 
 class HalloweenMemoryGame extends MemoryGame {
   override settings = {

@@ -1,15 +1,7 @@
 import { MemoryGame } from "./memory-game.ts";
+import { generateNotes } from "../utils/audio.ts";
 
-const A: [number, number] = [220, 0.1];
-// const AA : [number, number] = [220, 0.2];
-// const B : [number, number] = [246, 0.1];
-const C: [number, number] = [261, 0.1];
-const CC: [number, number] = [261, 0.2];
-const D: [number, number] = [293, 0.1];
-const E: [number, number] = [329, 0.1];
-const F: [number, number] = [349, 0.1];
-const G: [number, number] = [392, 0.1];
-const GG: [number, number] = [392, 0.2];
+const [A, B, C, D, E, F, G] = generateNotes(200, 7, 0.1);
 
 class IndexMemoryGame extends MemoryGame {
   override settings = {
@@ -22,10 +14,10 @@ class IndexMemoryGame extends MemoryGame {
       { text: "🐻", name: "bear", color: "red" },
     ],
     songs: {
-      cover: [A, A],
+      cover: [B, A],
       reveal: [C, E, G],
-      match: [CC, CC, G, F, E, CC],
-      win: [CC, CC, GG, F, E, D, E, CC, CC, GG, F, E, D, E, CC],
+      match: [C(2), C(2), G, F, E, C(2)],
+      win: [C(2), C(2), G(2), F, E, D, E, C(2), C(2), G(2), F, E, D, E, C(2)],
     },
   };
 }
