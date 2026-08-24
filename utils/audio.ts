@@ -37,57 +37,13 @@ let isPlaying = false;
 
 function initApi() {
   const context = new AudioContext();
-  const oscillatorNode = new OscillatorNode(context, { type: "triangle" });
+  const oscillatorNode = new OscillatorNode(context, { type: "sine" });
   const gainNode = new GainNode(context);
   const wave = context.createPeriodicWave(
-    [
-      0,
-      0,
-      1,
-      1,
-      1,
-      0.1,
-      0.1,
-      0.01,
-      0.01,
-      0.001,
-      0.001,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ],
-    [
-      0,
-      0,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0.01,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ],
+    [0, 0, 0.1, 1, 1, 0.1, 0, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0],
     {
-      disableNormalization: true,
+      disableNormalization: false,
     },
   );
 
