@@ -3,6 +3,7 @@ import {
   h,
   HandcraftElement,
   type HandcraftNode,
+  reactive,
   watch,
 } from "@handcraft/lib";
 import { scheduleSong, type Song, trySong } from "../utils/audio.ts";
@@ -27,15 +28,17 @@ export type Settings = {
 const { span, div, dialog, p, button } = h.html;
 
 export abstract class MemoryGame extends HandcraftElement {
-  static observedProperties = ["characters", "modalOpen"];
-
   settings: Settings = {
     characters: [],
     songs: {},
   };
 
-  modalOpen = false;
-  characters: Array<Character> = [];
+  @reactive()
+  accessor modalOpen = false;
+
+  @reactive()
+  accessor characters: Array<Character> = [];
+
   previous: Character | null = null;
   incomplete = this.characters.length;
 
