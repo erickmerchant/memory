@@ -32,9 +32,12 @@ export abstract class MemoryGame extends HandcraftElement {
     songs: {},
   };
 
-  state = watch({ characters: [] as Array<Character>, modalOpen: false });
+  state = watch({
+    characters: watch<Array<Character>>([]),
+    modalOpen: false,
+  });
   previous: Character | null = null;
-  incomplete = this.state.characters.length;
+  incomplete = this.settings.characters.length;
 
   override view(host: HandcraftNode) {
     this.resetState();
