@@ -27,23 +27,20 @@ export type Settings = {
 const { span, div, dialog, p, button } = h.html;
 
 export abstract class MemoryGame extends HandcraftElement {
-  static observedProperties = ["characters", "modalOpen"];
-
   settings: Settings = {
     characters: [],
     songs: {},
   };
 
-  modalOpen = false;
-  characters: Array<Character> = [];
+  state = watch({ characters: [] as Array<Character>, modalOpen: false });
   previous: Character | null = null;
-  incomplete = this.characters.length;
+  incomplete = this.state.characters.length;
 
   override view(host: HandcraftNode) {
     this.resetState();
 
     host(
-      each(this.characters).map(
+      each(this.state.characters).map(
         (character) => {
           const faces = div.class("faces").style({
             "--turns": () => character.total,
@@ -72,7 +69,7 @@ export abstract class MemoryGame extends HandcraftElement {
       dialog
         .effect(
           (el: HTMLDialogElement) => {
-            if (this.modalOpen) {
+            if (this.state.modalOpen) {
               el.showModal();
             } else {
               el.close();
@@ -148,11 +145,11 @@ export abstract class MemoryGame extends HandcraftElement {
         if (this.incomplete === 0) {
           scheduleSong(this.settings.songs.win);
 
-          for (const character of this.characters) {
+          for (const character of this.state.characters) {
             this.turn(character, 6);
           }
 
-          this.modalOpen = true;
+          this.state.modalOpen = true;
 
           this.incomplete = -1;
         } else {
@@ -184,7 +181,7 @@ export abstract class MemoryGame extends HandcraftElement {
 
   resetState = () => {
     this.incomplete = this.settings.characters.length;
-    this.modalOpen = false;
+    this.state.modalOpen = false;
     this.previous = null;
 
     const stubs = this.settings.characters
@@ -208,10 +205,10 @@ export abstract class MemoryGame extends HandcraftElement {
       .toSorted((a, b) => a.order - b.order);
 
     for (let i = 0; i < characters.length; i++) {
-      if (this.characters[i]) {
-        Object.assign(this.characters[i], characters[i]);
+      if (this.state.characters[i]) {
+        Object.assign(this.state.characters[i], characters[i]);
       } else {
-        this.characters.push(watch(characters[i]));
+        this.state.characters.push(watch(characters[i]));
       }
     }
   };
