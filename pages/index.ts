@@ -7,6 +7,6 @@ const { script, link } = h.html;
 export default function () {
   return page([
     link.rel("stylesheet").href("/styles/index.css"),
-    script.type("module").src("/elements/index.ts"),
+    script.type("module").src("/elements/index.js"),
   ], memoryGame());
 }
