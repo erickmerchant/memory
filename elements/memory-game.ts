@@ -45,20 +45,21 @@ export abstract class MemoryGame extends HandcraftElement {
     host(
       each(this.state.characters).map(
         (character) => {
-          const faces = div.class("faces").style({
-            "--turns": () => character.total,
-            "--duration": () => character.latest,
-            "--background": () =>
-              !this.ssr ? `var(--${character.color})` : null,
-          })(
-            span.class("front", "face")("🦉", span.class("frame")),
-            !this.ssr
-              ? span.class("back", "face")(
-                span.class("text")(() => character().text),
-                span.class("frame"),
-              )
-              : null,
-          );
+          const faces = div.class("faces")
+            .style({
+              "--turns": () => character.total,
+              "--duration": () => character.latest,
+              "--background": () =>
+                !this.ssr ? `var(--${character.color})` : null,
+            })(
+              span.class("front", "face")("🦉", span.class("frame")),
+              !this.ssr
+                ? span.class("back", "face")(
+                  span.class("text")(() => character().text),
+                  span.class("frame"),
+                )
+                : null,
+            );
 
           return button
             .aria(
