@@ -1,15 +1,6 @@
 import { h, type HandcraftChild, type HandcraftNode } from "@handcraft/lib";
 
-const {
-  html,
-  head,
-  meta,
-  title,
-  body,
-  div,
-  footer,
-  p,
-} = h.html;
+const { html, head, meta, title, body, div, footer, p } = h.html;
 
 export default function (
   scriptOrStyles: HandcraftChild,

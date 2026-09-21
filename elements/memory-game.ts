@@ -45,21 +45,22 @@ export abstract class MemoryGame extends HandcraftElement {
     host(
       each(this.state.characters).map(
         (character) => {
-          const faces = div.class("faces")
+          const faces = div(
+            span.class("front", "face")("🦉", span.class("frame")),
+            !this.ssr
+              ? span.class("back", "face")(
+                span.class("text")(() => character().text),
+                span.class("frame"),
+              )
+              : null,
+          )
+            .class("faces")
             .style({
               "--turns": () => character.total,
               "--duration": () => character.latest,
               "--background": () =>
                 !this.ssr ? `var(--${character.color})` : null,
-            })(
-              span.class("front", "face")("🦉", span.class("frame")),
-              !this.ssr
-                ? span.class("back", "face")(
-                  span.class("text")(() => character().text),
-                  span.class("frame"),
-                )
-                : null,
-            );
+            });
 
           return button
             .aria(
@@ -70,7 +71,19 @@ export abstract class MemoryGame extends HandcraftElement {
             .on("transitionend", this.transitionEndCard(character))(faces);
         },
       ),
-      dialog
+      dialog(
+        div.class("card")(
+          div.class("faces")(
+            span.class("front", "face")("🦉", span.class("frame")),
+          ),
+        ),
+        div.class("bubble")(
+          p("Hoo-ray! You found all my owl friends."),
+          button
+            .class("play-again")
+            .on("click", this.resetState)("Play Again!"),
+        ),
+      )
         .effect(
           (el: HTMLDialogElement) => {
             if (this.state.modalOpen) {
@@ -79,18 +92,6 @@ export abstract class MemoryGame extends HandcraftElement {
               el.close();
             }
           },
-        )(
-          div.class("card")(
-            div.class("faces")(
-              span.class("front", "face")("🦉", span.class("frame")),
-            ),
-          ),
-          div.class("bubble")(
-            p("Hoo-ray! You found all my owl friends."),
-            button
-              .class("play-again")
-              .on("click", this.resetState)("Play Again!"),
-          ),
         ),
     );
   }
