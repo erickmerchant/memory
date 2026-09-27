@@ -7,18 +7,18 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto min-content;
   padding-inline: 1.5vmin;
-}
 
-.game {
-  display: grid;
-  block-size: 100%;
-  inline-size: 100%;
-  place-items: center;
-  container-type: size;
-}
+  :where(.game) {
+    display: grid;
+    block-size: 100%;
+    inline-size: 100%;
+    place-items: center;
+    container-type: size;
+  }
 
-.dedication {
-  font-size: 0.75rem;
-  padding: 0.5rem;
-  text-align: right;
+  :where(.dedication) {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    text-align: right;
+  }
 }
