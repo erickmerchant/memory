@@ -1,10 +1,12 @@
-import {
-  each,
-  h,
-  HandcraftElement,
-  type HandcraftNode,
-  watch,
-} from "@handcraft/lib";
+import type { HandcraftNode, HandcraftTag } from "@handcraft/lib";
+import { HandcraftElement } from "@handcraft/lib/element";
+import { html } from "@handcraft/lib/h";
+import { watch } from "@handcraft/lib/reactivity";
+import each from "@handcraft/lib/each";
+import attr from "@handcraft/lib/attr";
+import text from "@handcraft/lib/text";
+import on from "@handcraft/lib/on";
+import effect from "@handcraft/lib/effect";
 import { scheduleSong, type Song, trySong } from "../utils/audio.ts";
 
 export type CharacterStub = { text: string; name: string; color: string };
@@ -24,8 +26,6 @@ export type Settings = {
   songs: Record<string, Song>;
 };
 
-const { span, div, dialog, p, button } = h.html;
-
 export abstract class MemoryGame extends HandcraftElement {
   settings: Settings = {
     characters: [],
@@ -39,60 +39,76 @@ export abstract class MemoryGame extends HandcraftElement {
   previous: Character | null = null;
   incomplete = this.settings.characters.length;
 
-  override view(host: HandcraftNode) {
+  override view(host: HandcraftTag): HandcraftNode | void {
     this.resetState();
 
-    host(
+    return host(
       each(this.state.characters).map(
         (character) => {
-          const faces = div(
-            span.class("front", "face")("🦉", span.class("frame")),
+          const faces = html.div(
+            attr.class("faces"),
+            attr.style(() =>
+              `--turns: ${character.total}; --duration: ${character.latest}; --background: ${
+                !this.ssr ? `var(--${character.color})` : null
+              }`
+            ),
+            html.span(
+              attr.class("front face"),
+              text("🦉"),
+              html.span(attr.class("frame")),
+            ),
             !this.ssr
-              ? span.class("back", "face")(
-                span.class("text")(() => character().text),
-                span.class("frame"),
+              ? html.span(
+                attr.class("back face"),
+                html.span(attr.class("text"), text(() => character().text)),
+                html.span(attr.class("frame")),
               )
               : null,
-          )
-            .class("faces")
-            .style({
-              "--turns": () => character.total,
-              "--duration": () => character.latest,
-              "--background": () =>
-                !this.ssr ? `var(--${character.color})` : null,
-            });
+          );
 
-          return button
-            .aria(
-              "label",
+          return html.button(
+            attr["aria-label"](
               () => (character.total % 2 === 0 ? "owl" : character.name),
-            )
-            .on("click", this.clickCard(character))
-            .on("transitionend", this.transitionEndCard(character))(faces);
+            ),
+            on.click(this.clickCard(character)),
+            on.transitionend(this.transitionEndCard(character)),
+            faces,
+          );
         },
       ),
-      dialog(
-        div.class("card")(
-          div.class("faces")(
-            span.class("front", "face")("🦉", span.class("frame")),
+      !this.ssr
+        ? html.dialog(
+          effect(
+            (el: HTMLDialogElement) => {
+              if (this.state.modalOpen) {
+                el.showModal();
+              } else {
+                el.close();
+              }
+            },
           ),
-        ),
-        div.class("bubble")(
-          p("Hoo-ray! You found all my owl friends."),
-          button
-            .class("play-again")
-            .on("click", this.resetState)("Play Again!"),
-        ),
-      )
-        .effect(
-          (el: HTMLDialogElement) => {
-            if (this.state.modalOpen) {
-              el.showModal();
-            } else {
-              el.close();
-            }
-          },
-        ),
+          html.div(
+            attr.class("card"),
+            html.div(
+              attr.class("faces"),
+              html.span(
+                attr.class("front face"),
+                text("🦉"),
+                html.span(attr.class("frame")),
+              ),
+            ),
+            html.div(
+              attr.class("bubble"),
+              html.p(text("Hoo-ray! You found all my owl friends.")),
+              html.button(
+                attr.class("play-again"),
+                on.click(this.resetState),
+                text("Play Again!"),
+              ),
+            ),
+          ),
+        )
+        : null,
     );
   }
 

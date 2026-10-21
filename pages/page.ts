@@ -1,25 +1,32 @@
-import { h, type HandcraftChild, type HandcraftNode } from "@handcraft/lib";
-
-const { html, head, meta, title, body, div, footer, p } = h.html;
+import type { HandcraftNode } from "@handcraft/lib";
+import { html } from "@handcraft/lib/h";
+import attr from "@handcraft/lib/attr";
+import text from "@handcraft/lib/text";
 
 export default function (
-  scriptOrStyles: HandcraftChild,
+  scriptOrStyles: Array<HandcraftNode | null>,
   game: HandcraftNode,
 ) {
-  return html.lang("en-US")(
-    head(
-      meta.charset("utf-8"),
-      meta
-        .name("viewport")
-        .content(
+  return html.html(
+    attr.lang("en-US"),
+    html.head(
+      html.meta(attr.charset("utf-8")),
+      html.meta(
+        attr.name("viewport"),
+        attr.content(
           "width=device-width, maximum-scale=1.0, user-scalable=0",
         ),
-      title("Memory"),
-      scriptOrStyles,
+      ),
+      html.title(text("Memory")),
+      ...scriptOrStyles,
     ),
-    body.class("page")(
-      div.class("game")(game),
-      footer.class("dedication")(p("Made with ❤️ for Louise")),
+    html.body(
+      attr.class("page"),
+      html.div(attr.class("game"), game),
+      html.footer(
+        attr.class("dedication"),
+        html.p(text("Made with ❤️ for Louise")),
+      ),
     ),
   );
 }

@@ -1,12 +1,11 @@
-import { h } from "@handcraft/lib";
+import { html } from "@handcraft/lib/h";
+import attr from "@handcraft/lib/attr";
 import page from "./page.ts";
 import memoryGame from "../elements/halloween.ts";
 
-const { link, script } = h.html;
-
 export default function () {
   return page([
-    link.rel("stylesheet").href("/styles/halloween.css"),
-    script.type("module").src("/elements/halloween.js"),
+    html.link(attr.rel("stylesheet"), attr.href("/styles/halloween.css")),
+    html.script(attr.type("module"), attr.src("/elements/halloween.js")),
   ], memoryGame());
 }
