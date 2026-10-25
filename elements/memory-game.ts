@@ -97,14 +97,14 @@ export abstract class MemoryGame extends HandcraftElement {
                 html.span(attr.class("frame")),
               ),
             ),
-            html.div(
-              attr.class("bubble"),
-              html.p(text("Hoo-ray! You found all my owl friends.")),
-              html.button(
-                attr.class("play-again"),
-                on.click(this.resetState),
-                text("Play Again!"),
-              ),
+          ),
+          html.div(
+            attr.class("bubble"),
+            html.p(text("Hoo-ray! You found all my owl friends.")),
+            html.button(
+              attr.class("play-again"),
+              on.click(this.resetState),
+              text("Play Again!"),
             ),
           ),
         )

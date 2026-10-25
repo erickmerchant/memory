@@ -8,7 +8,7 @@
   grid-template-rows: auto min-content;
   padding-inline: 1.5vmin;
 
-  :where(.game) {
+  .game {
     display: grid;
     block-size: 100%;
     inline-size: 100%;
@@ -16,7 +16,7 @@
     container-type: size;
   }
 
-  :where(.dedication) {
+  .dedication {
     font-size: 0.75rem;
     padding: 0.5rem;
     text-align: right;
