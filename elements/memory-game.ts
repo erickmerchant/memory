@@ -4,6 +4,7 @@ import { html } from "@handcraft/lib/h";
 import { watch } from "@handcraft/lib/reactivity";
 import each from "@handcraft/lib/each";
 import attr from "@handcraft/lib/attr";
+import aria from "@handcraft/lib/aria";
 import text from "@handcraft/lib/text";
 import on from "@handcraft/lib/on";
 import effect from "@handcraft/lib/effect";
@@ -53,21 +54,21 @@ export abstract class MemoryGame extends HandcraftElement {
               }`
             ),
             html.span(
-              attr.class("front face"),
+              attr.class("back face"),
               text("🦉"),
               html.span(attr.class("frame")),
             ),
             !this.ssr
               ? html.span(
-                attr.class("back face"),
-                html.span(attr.class("text"), text(() => character().text)),
+                attr.class("front face"),
+                text(() => character().text),
                 html.span(attr.class("frame")),
               )
               : null,
           );
 
           return html.button(
-            attr["aria-label"](
+            aria.label(
               () => (character.total % 2 === 0 ? "owl" : character.name),
             ),
             on.click(this.clickCard(character)),
@@ -92,7 +93,7 @@ export abstract class MemoryGame extends HandcraftElement {
             html.div(
               attr.class("faces"),
               html.span(
-                attr.class("front face"),
+                attr.class("back face"),
                 text("🦉"),
                 html.span(attr.class("frame")),
               ),
