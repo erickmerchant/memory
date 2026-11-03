@@ -1,5 +1,5 @@
-import type { HandcraftNode } from "@handcraft/lib";
-import { html } from "@handcraft/lib/h";
+import type { HandcraftNode } from "@handcraft/lib/types";
+import html from "@handcraft/lib/html";
 import attr from "@handcraft/lib/attr";
 import text from "@handcraft/lib/text";
 

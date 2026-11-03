@@ -1,6 +1,6 @@
-import type { HandcraftNode, HandcraftTag } from "@handcraft/lib";
+import type { HandcraftNode, HandcraftTag } from "@handcraft/lib/types";
 import { HandcraftElement } from "@handcraft/lib/element";
-import { html } from "@handcraft/lib/h";
+import html from "@handcraft/lib/html";
 import { watch } from "@handcraft/lib/reactivity";
 import each from "@handcraft/lib/each";
 import attr from "@handcraft/lib/attr";
