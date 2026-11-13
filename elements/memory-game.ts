@@ -41,11 +41,137 @@ export abstract class MemoryGame extends HandcraftElement {
   incomplete = this.settings.characters.length;
 
   override view(host: HandcraftTag): HandcraftNode | void {
-    this.resetState();
+    const turn = (model: Character, val: number) => {
+      model.total += val;
+
+      model.latest = val ?? 0;
+
+      model.revealed = (model.total % 2) === 1;
+    };
+
+    const resetState = () => {
+      this.incomplete = this.settings.characters.length;
+      this.state.modalOpen = false;
+      this.previous = null;
+
+      const stubs = this.settings.characters
+        .concat(this.settings.characters);
+      const orders = new Uint32Array(stubs.length);
+
+      globalThis.crypto.getRandomValues(orders);
+
+      const characters = stubs.map((character, i) => {
+        return {
+          ...character,
+          interactive: true,
+          order: orders[i],
+          total: 0,
+          latest: 0,
+          revealed: false,
+          matching: false,
+          previous: null,
+        };
+      })
+        .toSorted((a, b) => a.order - b.order);
+
+      for (let i = 0; i < characters.length; i++) {
+        if (this.state.characters[i]) {
+          Object.assign(this.state.characters[i], characters[i]);
+        } else {
+          this.state.characters.push(watch(characters[i]));
+        }
+      }
+    };
+
+    resetState();
 
     return host(
       each(this.state.characters).map(
         (character) => {
+          const clickCard = (e: Event) => {
+            if (e.currentTarget == null) return;
+
+            if (!character.interactive) {
+              return;
+            }
+
+            if (!character.revealed) {
+              if (this.previous) {
+                const previous = this.previous;
+
+                turn(character, 1);
+
+                trySong(this.settings.songs.reveal);
+
+                character.interactive = false;
+                previous.interactive = false;
+
+                character.matching = character.text === this.previous.text;
+
+                character.previous = this.previous;
+
+                this.previous = null;
+              } else {
+                turn(character, 1);
+
+                trySong(this.settings.songs.reveal);
+
+                this.previous = character;
+              }
+            } else {
+              turn(character, 1);
+
+              this.previous = null;
+
+              trySong(this.settings.songs.cover);
+            }
+          };
+
+          const transitionEndCard = () => {
+            if (!character.previous) return;
+
+            if (character.matching) {
+              turn(character, 2);
+              turn(character.previous, 2);
+
+              this.incomplete -= 1;
+
+              if (this.incomplete === 0) {
+                scheduleSong(this.settings.songs.win);
+
+                for (const character of this.state.characters) {
+                  turn(character, 6);
+                }
+
+                this.state.modalOpen = true;
+
+                this.incomplete = -1;
+              } else {
+                scheduleSong(this.settings.songs.match);
+              }
+
+              character.previous = null;
+            } else {
+              setTimeout(
+                () => {
+                  turn(character, 1);
+
+                  character.interactive = true;
+
+                  if (character.previous) {
+                    turn(character.previous, 1);
+                    character.previous.interactive = true;
+                  }
+
+                  trySong(this.settings.songs.cover);
+
+                  character.previous = null;
+                },
+                1_000,
+              );
+            }
+          };
+
           const faces = html.div(
             attr.class("faces"),
             attr.style(() =>
@@ -71,8 +197,8 @@ export abstract class MemoryGame extends HandcraftElement {
             aria.label(
               () => (character.total % 2 === 0 ? "owl" : character.name),
             ),
-            on.click(this.clickCard(character)),
-            on.transitionend(this.transitionEndCard(character)),
+            on.click(clickCard),
+            on.transitionend(transitionEndCard),
             faces,
           );
         },
@@ -104,142 +230,12 @@ export abstract class MemoryGame extends HandcraftElement {
             html.p(text("Hoo-ray! You found all my owl friends.")),
             html.button(
               attr.class("play-again"),
-              on.click(this.resetState),
+              on.click(resetState),
               text("Play Again!"),
             ),
           ),
         )
         : null,
     );
-  }
-
-  clickCard(character: Character) {
-    return (e: Event) => {
-      if (e.currentTarget == null) return;
-
-      if (!character.interactive) {
-        return;
-      }
-
-      if (!character.revealed) {
-        if (this.previous) {
-          const previous = this.previous;
-
-          this.turn(character, 1);
-
-          trySong(this.settings.songs.reveal);
-
-          character.interactive = false;
-          previous.interactive = false;
-
-          character.matching = character.text === this.previous.text;
-
-          character.previous = this.previous;
-
-          this.previous = null;
-        } else {
-          this.turn(character, 1);
-
-          trySong(this.settings.songs.reveal);
-
-          this.previous = character;
-        }
-      } else {
-        this.turn(character, 1);
-
-        this.previous = null;
-
-        trySong(this.settings.songs.cover);
-      }
-    };
-  }
-
-  transitionEndCard(character: Character) {
-    return () => {
-      if (!character.previous) return;
-
-      if (character.matching) {
-        this.turn(character, 2);
-        this.turn(character.previous, 2);
-
-        this.incomplete -= 1;
-
-        if (this.incomplete === 0) {
-          scheduleSong(this.settings.songs.win);
-
-          for (const character of this.state.characters) {
-            this.turn(character, 6);
-          }
-
-          this.state.modalOpen = true;
-
-          this.incomplete = -1;
-        } else {
-          scheduleSong(this.settings.songs.match);
-        }
-
-        character.previous = null;
-      } else {
-        setTimeout(
-          () => {
-            this.turn(character, 1);
-
-            character.interactive = true;
-
-            if (character.previous) {
-              this.turn(character.previous, 1);
-              character.previous.interactive = true;
-            }
-
-            trySong(this.settings.songs.cover);
-
-            character.previous = null;
-          },
-          1_000,
-        );
-      }
-    };
-  }
-
-  resetState = () => {
-    this.incomplete = this.settings.characters.length;
-    this.state.modalOpen = false;
-    this.previous = null;
-
-    const stubs = this.settings.characters
-      .concat(this.settings.characters);
-    const orders = new Uint32Array(stubs.length);
-
-    globalThis.crypto.getRandomValues(orders);
-
-    const characters = stubs.map((character, i) => {
-      return {
-        ...character,
-        interactive: true,
-        order: orders[i],
-        total: 0,
-        latest: 0,
-        revealed: false,
-        matching: false,
-        previous: null,
-      };
-    })
-      .toSorted((a, b) => a.order - b.order);
-
-    for (let i = 0; i < characters.length; i++) {
-      if (this.state.characters[i]) {
-        Object.assign(this.state.characters[i], characters[i]);
-      } else {
-        this.state.characters.push(watch(characters[i]));
-      }
-    }
-  };
-
-  turn(model: Character, val: number) {
-    model.total += val;
-
-    model.latest = val ?? 0;
-
-    model.revealed = (model.total % 2) === 1;
   }
 }
