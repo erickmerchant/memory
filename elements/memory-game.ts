@@ -33,14 +33,15 @@ export abstract class MemoryGame extends HandcraftElement {
     songs: {},
   };
 
-  state = watch({
-    characters: watch<Array<Character>>([]),
-    modalOpen: false,
-  });
-  previous: Character | null = null;
-  incomplete = this.settings.characters.length;
-
   override view(host: HandcraftTag): HandcraftNode | void {
+    const state = watch({
+      characters: watch<Array<Character>>([]),
+      modalOpen: false,
+    });
+    let previous: Character | null = null;
+    let incomplete = this.settings.characters.length;
+    const queue: Array<() => void> = [];
+
     const turn = (model: Character, val: number) => {
       model.total += val;
 
@@ -50,9 +51,9 @@ export abstract class MemoryGame extends HandcraftElement {
     };
 
     const resetState = () => {
-      this.incomplete = this.settings.characters.length;
-      this.state.modalOpen = false;
-      this.previous = null;
+      incomplete = this.settings.characters.length;
+      state.modalOpen = false;
+      previous = null;
 
       const stubs = this.settings.characters
         .concat(this.settings.characters);
@@ -75,139 +76,146 @@ export abstract class MemoryGame extends HandcraftElement {
         .toSorted((a, b) => a.order - b.order);
 
       for (let i = 0; i < characters.length; i++) {
-        if (this.state.characters[i]) {
-          Object.assign(this.state.characters[i], characters[i]);
+        if (state.characters[i]) {
+          Object.assign(state.characters[i], characters[i]);
         } else {
-          this.state.characters.push(watch(characters[i]));
+          state.characters.push(watch(characters[i]));
         }
       }
+    };
+
+    const clearQueue = () => {
+      for (const item of queue.splice(0, Infinity)) {
+        item();
+      }
+    };
+
+    const character = (character: Character) => {
+      const clickCard = (e: Event) => {
+        clearQueue();
+
+        if (e.currentTarget == null) return;
+
+        if (!character.interactive) {
+          return;
+        }
+
+        if (!character.revealed) {
+          if (previous) {
+            const prev = previous;
+
+            turn(character, 1);
+
+            trySong(this.settings.songs.reveal);
+
+            character.interactive = false;
+            prev.interactive = false;
+
+            character.matching = character.text === previous.text;
+
+            character.previous = previous;
+
+            previous = null;
+          } else {
+            turn(character, 1);
+
+            trySong(this.settings.songs.reveal);
+
+            previous = character;
+          }
+        } else {
+          turn(character, 1);
+
+          previous = null;
+
+          trySong(this.settings.songs.cover);
+        }
+      };
+
+      const transitionEndCard = () => {
+        if (!character.previous) return;
+
+        if (character.matching) {
+          turn(character, 2);
+          turn(character.previous, 2);
+
+          incomplete -= 1;
+
+          if (incomplete === 0) {
+            scheduleSong(this.settings.songs.win);
+
+            for (const character of state.characters) {
+              turn(character, 6);
+            }
+
+            state.modalOpen = true;
+
+            incomplete = -1;
+          } else {
+            scheduleSong(this.settings.songs.match);
+          }
+
+          character.previous = null;
+        } else {
+          queue.push(() => {
+            turn(character, 1);
+
+            character.interactive = true;
+
+            if (character.previous) {
+              turn(character.previous, 1);
+              character.previous.interactive = true;
+            }
+
+            trySong(this.settings.songs.cover);
+
+            character.previous = null;
+          });
+
+          setTimeout(clearQueue, 1_000);
+        }
+      };
+
+      const faces = html.div(
+        attr.class("faces"),
+        attr.style(() =>
+          `--turns: ${character.total}; --duration: ${character.latest}; --background: ${
+            !this.ssr ? `var(--${character.color})` : null
+          }`
+        ),
+        html.span(
+          attr.class("back face"),
+          text("🦉"),
+          html.span(attr.class("frame")),
+        ),
+        !this.ssr
+          ? html.span(
+            attr.class("front face"),
+            text(() => character.text),
+            html.span(attr.class("frame")),
+          )
+          : null,
+      );
+
+      return html.button(
+        aria.label(
+          () => (character.total % 2 === 0 ? "owl" : character.name),
+        ),
+        on.click(clickCard),
+        on.transitionend(transitionEndCard),
+        faces,
+      );
     };
 
     resetState();
 
     return host(
-      each(this.state.characters).map(
-        (character) => {
-          const clickCard = (e: Event) => {
-            if (e.currentTarget == null) return;
-
-            if (!character.interactive) {
-              return;
-            }
-
-            if (!character.revealed) {
-              if (this.previous) {
-                const previous = this.previous;
-
-                turn(character, 1);
-
-                trySong(this.settings.songs.reveal);
-
-                character.interactive = false;
-                previous.interactive = false;
-
-                character.matching = character.text === this.previous.text;
-
-                character.previous = this.previous;
-
-                this.previous = null;
-              } else {
-                turn(character, 1);
-
-                trySong(this.settings.songs.reveal);
-
-                this.previous = character;
-              }
-            } else {
-              turn(character, 1);
-
-              this.previous = null;
-
-              trySong(this.settings.songs.cover);
-            }
-          };
-
-          const transitionEndCard = () => {
-            if (!character.previous) return;
-
-            if (character.matching) {
-              turn(character, 2);
-              turn(character.previous, 2);
-
-              this.incomplete -= 1;
-
-              if (this.incomplete === 0) {
-                scheduleSong(this.settings.songs.win);
-
-                for (const character of this.state.characters) {
-                  turn(character, 6);
-                }
-
-                this.state.modalOpen = true;
-
-                this.incomplete = -1;
-              } else {
-                scheduleSong(this.settings.songs.match);
-              }
-
-              character.previous = null;
-            } else {
-              setTimeout(
-                () => {
-                  turn(character, 1);
-
-                  character.interactive = true;
-
-                  if (character.previous) {
-                    turn(character.previous, 1);
-                    character.previous.interactive = true;
-                  }
-
-                  trySong(this.settings.songs.cover);
-
-                  character.previous = null;
-                },
-                1_000,
-              );
-            }
-          };
-
-          const faces = html.div(
-            attr.class("faces"),
-            attr.style(() =>
-              `--turns: ${character.total}; --duration: ${character.latest}; --background: ${
-                !this.ssr ? `var(--${character.color})` : null
-              }`
-            ),
-            html.span(
-              attr.class("back face"),
-              text("🦉"),
-              html.span(attr.class("frame")),
-            ),
-            !this.ssr
-              ? html.span(
-                attr.class("front face"),
-                text(() => character().text),
-                html.span(attr.class("frame")),
-              )
-              : null,
-          );
-
-          return html.button(
-            aria.label(
-              () => (character.total % 2 === 0 ? "owl" : character.name),
-            ),
-            on.click(clickCard),
-            on.transitionend(transitionEndCard),
-            faces,
-          );
-        },
-      ),
+      each(state.characters).map(character),
       !this.ssr
         ? html.dialog(
           effect(
             (el: HTMLDialogElement) => {
-              if (this.state.modalOpen) {
+              if (state.modalOpen) {
                 el.showModal();
               } else {
                 el.close();
